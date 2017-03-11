@@ -2,7 +2,7 @@
 vHackAPI written in Python 2.7.
 
 [![Discord](https://img.shields.io/badge/Chat-%20on%20Discord-738bd7.svg?style=flat-square)](https://discord.gg/PHgESQn)
-!(https://img.shields.io/github/issues/OlympicCode/vHackAPI-Python.svg?style=flat-square&raw=true)
+![](https://img.shields.io/github/issues/OlympicCode/vHackAPI-Python.svg?style=flat-square&raw=true)
 
 #### thanx for FluffySteamCat are record the bot
 [![VhackBot video here](https://img.youtube.com/vi/7Ot4xqhh4T8/1.jpg)](https://www.youtube.com/watch?v=ccWs7Fa9GUI&feature=youtu.be)  
