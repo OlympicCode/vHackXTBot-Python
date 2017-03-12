@@ -258,7 +258,7 @@ class Console:
 		selection = o.getPassword(imgs)
 		print selection
 
-	def attack(self, amount, max, wait, mode):
+	def attack(self, amount, max, wait, mode, api):
 		with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
 			for i in range(1,amount):
 				FBI, ips = self.getIP(True)
