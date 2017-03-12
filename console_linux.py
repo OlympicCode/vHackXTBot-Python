@@ -5,6 +5,7 @@ from classes import API
 from classes import IP
 from classes import Passwords
 from utils import Utils
+from update import Update
 from ocr import OCR
 import time
 import json
@@ -16,7 +17,7 @@ import cStringIO
 import requests
 import re
 import concurrent.futures
-from random import randint
+import random
 import sys
 import signal
 
@@ -78,10 +79,11 @@ class Console:
 			else:
 				return False
 	
-	def returncrawler(self, lineexec):
-		print lineexec.result()
+	def returncrawler(fd, lineexec):
+		fd.write('{0}\n'.format(lineexec.result()))
+		fd.flush()
 
-	def calc_img(self, ut, imgstring, uhash, hostname, max, mode):
+	def calc_img(self, ut, imgstring, uhash, hostname, max, mode, api):
 		ut = Utils()
 		pic = cStringIO.StringIO()
 		image_string = cStringIO.StringIO(base64.b64decode(imgstring))
@@ -91,37 +93,60 @@ class Console:
 		#bg = Image.new("RGB", image.size, (255,255,255))
 		#bg.paste(image,image)
 		if "Hatched by the FBI" in pytesseract.image_to_string(image) or "Watched by the FBI" in pytesseract.image_to_string(image):
+			print "Matched FBI"
 			return 1, hostname
 		else:
-			temp = ut.requestStringNoWait("user::::pass::::uhash::::hostname", self.api.getUsername() + "::::" + self.api.getPassword() + "::::" + str(uhash) + "::::" + str(hostname), "vh_scanHost.php")
+			firewall = pytesseract.image_to_string(image).split(":")
 			try:
-				jsons = json.loads(temp)
-				#print jsons
-				if not ".vHack.cc" in str(jsons['ipaddress']) and int(jsons['vuln']) == 1:
-					time.sleep(1)
-					executor = concurrent.futures.ThreadPoolExecutor(max_workers=1)
-					livexec = executor.submit(self.attackIP, jsons['ipaddress'], max, mode)
-					return livexec.result(), jsons['ipaddress']
+				if int(firewall[2].strip()) < max:
+					try:
+						time.sleep(random.randint(1,3))
+						temp = ut.requestStringNoWait("user::::pass::::uhash::::hostname", self.api.getUsername() + "::::" + self.api.getPassword() + "::::" + str(uhash) + "::::" + str(hostname), "vh_scanHost.php")
+						jsons = json.loads(temp)
+						if not ".vHack.cc" in str(jsons['ipaddress']) and int(jsons['vuln']) == 1:
+							if mode == "Secure":
+								time.sleep(random.randint(1,3))
+							elif mode == "Potator":
+								time.sleep(random.randint(0,1))
+							result = self.attackIP(jsons['ipaddress'], max, mode)
 
-				#else:
-				#	temp = ut.requestString("user::::pass::::uhash::::hostname", self.api.getUsername() + "::::" + self.api.getPassword() + "::::" + str(uhash) + "::::" + jsons['ipaddress'], "vh_scanHost.php")
-				#	if not ".vHack.cc" in str(jsons['ipaddress']) and int(jsons['vuln']) == 1:
-				#		time.sleep(1)
-				#		self.attackIP(jsons['ipaddress'], max, mode)
+							# remove spyware
+							u = Update(api)
+							spyware = u.SpywareInfo()
+							if int(spyware[0].split(":")[-1]) > 0 and not int(spyware[0].split(":")[-1]) == 0:
+								u.removeSpyware()
+								print "I'm remove " + str(spyware[0].split(":")[-1]) + " Spyware for your account."
 
-			except TypeError:
+							return result, jsons['ipaddress']
+
+						#else:
+						#	temp = ut.requestString("user::::pass::::uhash::::hostname", self.api.getUsername() + "::::" + self.api.getPassword() + "::::" + str(uhash) + "::::" + jsons['ipaddress'], "vh_scanHost.php")
+						#	if not ".vHack.cc" in str(jsons['ipaddress']) and int(jsons['vuln']) == 1:
+						#		time.sleep(1)
+						#		self.attackIP(jsons['ipaddress'], max, mode)
+
+					except TypeError:
+						return 0, 0
+				else:
+					print "Firewall is to Hight"
+					return 0, 0
+
+			except ValueError:
 				return 0, 0
 
-	def getIP(self, blank, max, mode):
+	def getIP(self, blank, max, mode, api):
 		ut = Utils()
 		info = self.myinfo()
 		try:
 			info = json.loads(info)
 			uhash = info['uhash']
 		except TypeError:
+			time_sleep = int(random.randint(300, 400))
+			print "error you are blocking waiting " + str(time_sleep/60) + " Minutes"
+			time.sleep(time_sleep)
 			return False
 
-		temp = ut.requestStringNoWait("user::::pass::::uhash::::by", self.api.getUsername() + "::::" + self.api.getPassword() + "::::" + str(uhash) + "::::" + str(randint(0,1)), "vh_getImg.php")
+		temp = ut.requestStringNoWait("user::::pass::::uhash::::by", self.api.getUsername() + "::::" + self.api.getPassword() + "::::" + str(uhash) + "::::" + str(random.randint(0,1)), "vh_getImg.php")
 		jsons = json.loads(temp)
 		list_image = []
 		list_hostname = []
@@ -134,31 +159,31 @@ class Console:
 			list_hostname.append(hostname)
 		
 		white_list = []
-		with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
+		print "Packing IP list " + str(len(list_image))
+		fd = open("database.txt", "a")
+		with concurrent.futures.ThreadPoolExecutor(max_workers=6) as executor:
 			for i, image in enumerate(list_image):
-				lineexec = executor.submit(self.calc_img, ut, image, uhash, list_hostname[i], max, mode)
+				wait_for = executor.submit(self.calc_img, ut, list_image[i], uhash, list_hostname[i], max, mode, api)
 				try:
-					result, ip = lineexec.result()
-				except:
+					result, ip = wait_for.result()
+				except TypeError:
 					result = False
-					pass
+
 				if result == True:
-					with open("database.txt", "a") as f:
-						f.write(ip+"\n")
-				time.sleep(1)
-
-
+					with open("database.text", "a") as f:
+						f.write(ip +"\n")
 
 	def attackIP(self, ip, max, mode):
 		ut = Utils()
 		info = self.myinfo()
 		info = json.loads(info)
 		uhash = info['uhash']
-		time.sleep(1)
-		temp = ut.requestString("user::::pass::::uhash::::target", self.api.getUsername() + "::::" + self.api.getPassword() + "::::" + str(uhash) + "::::" + ip, "vh_loadRemoteData.php")
+		if mode == "Secure":
+			time.sleep(1)
 
+		temp = ut.requestStringNoWait("user::::pass::::uhash::::target", self.api.getUsername() + "::::" + self.api.getPassword() + "::::" + str(uhash) + "::::" + ip, "vh_loadRemoteData.php")
 		jsons = json.loads(temp)
-		
+
 		o = OCR() 
 		imgs = o.getSolution(str(temp))
 		if imgs != None:
@@ -208,16 +233,16 @@ class Console:
 					return False
 
 			if mode == "Potator":
-				if winchance > 49:
+				if winchance > 20:
 					password = self.enterPassword(imgs, ip, uhash)
 					jsons = json.loads(password)
 					if password:
 						try:
 							if not "?" in str(money) and str(jsons['result']) == 0:
-								print "\n[TargetIP: " + str(ip) +"]\n\nMade " + "{:11,}".format(int(jsons['amount'])) + " and " + "{:2d}".format(int(jsons['eloch'])) + " Rep." + "\n Antivirus: "+ str(avlevel) + " Firewall: " + str(fwlevel) + " Sdk: " + str(sdklevel) + " TotalMoney: " + "{:11,}".format(int(money)) + "\n YourWinChance: " + str(winchance) + " Anonymous: "+ str(anonymous) +" username: "+ str(username) + " saving: " + str(saving)
+								print "\n[TargetIP: " + str(ip) +"]\n\nMade " + "{:11,}".format(int(jsons['amount'])) + " and " + "{:2d}".format(int(jsons['eloch'])) + " Rep." + "\n Antivirus: "+ str(avlevel) + " Firewall: " + str(fwlevel) + " Sdk: " + str(sdklevel) + " TotalMoney: " + "{:11,}".format(int(money)) + "\n YourWinChance: " + str(winchance) + " Anonymous: "+ str(anonymous) +" username: "+ str(username) + " saving: " + str(saving) + "\n"
 								return True
 							else:
-								print "\n[TargetIP: " + str(ip) + "]\n\nMade " + "{:11,}".format(int(jsons['amount'])) + " and " + "{:2d}".format(int(jsons['eloch'])) + " Rep." + "\n Antivirus: "+ str(avlevel) + " Firewall: " + str(fwlevel) + " Sdk: " + str(sdklevel) + " TotalMoney: " + "{:11,}".format(int(money)) + "\n YourWinChance: " + str(winchance) + " Anonymous: " + str(anonymous) +" username: "+ str(username) + " saving: " + str(saving)
+								print "\n[TargetIP: " + str(ip) + "]\n\nMade " + "{:11,}".format(int(jsons['amount'])) + " and " + "{:2d}".format(int(jsons['eloch'])) + " Rep." + "\n Antivirus: "+ str(avlevel) + " Firewall: " + str(fwlevel) + " Sdk: " + str(sdklevel) + " TotalMoney: " + str(money) + "\n YourWinChance: " + str(winchance) + " Anonymous: " + str(anonymous) +" username: "+ str(username) + " saving: " + str(saving) + "\n"
 								return True
 
 						except KeyError:
@@ -225,26 +250,30 @@ class Console:
 							return False
 
 						except ValueError as e:
+							print "error"
 							return True
 					else:
 						print "Password Wrong"
 						return False
 				else:
 					print "winchance is poor: " + str(winchance)
+					return False
 
 
-
-			if not "?" in str(avlevel) and mode == "Secure":
+			if not "?" in str(avlevel) and not "?" in str(winchance) and mode == "Secure":
 				if int(avlevel) < max and int(winchance) > 75 and str(anonymous) == "YES":
+					time.sleep(random.randint(2,3))
 					password = self.enterPassword(imgs, ip, uhash)
 					jsons = json.loads(password)
 					if password:
 						try:
 							if not "?" in str(money) and str(jsons['result']) == 0:
-								print "\n[TargetIP: " + str(ip) +"]\n\nMade " + "{:11,}".format(int(jsons['amount'])) + " and " + "{:2d}".format(int(jsons['eloch'])) + " Rep." + "\n Antivirus: "+ str(avlevel) + " Firewall: " + str(fwlevel) + " Sdk: " + str(sdklevel) + " TotalMoney: " + "{:11,}".format(int(money)) + "\n YourWinChance: " + str(winchance) + " Anonymous: "+ str(anonymous) +" username: "+ str(username) + " saving: " + str(saving)
+								print "\n[TargetIP: " + str(ip) +"]\n\nMade " + "{:11,}".format(int(jsons['amount'])) + " and " + "{:2d}".format(int(jsons['eloch'])) + " Rep." + "\n Antivirus: "+ str(avlevel) + " Firewall: " + str(fwlevel) + " Sdk: " + str(sdklevel) + " TotalMoney: " + "{:11,}".format(int(money)) + "\n YourWinChance: " + str(winchance) + " Anonymous: "+ str(anonymous) +" username: "+ str(username) + " saving: " + str(saving) + "\n"
 								return True
 							else:
-								print "\n[TargetIP: " + str(ip) + "]\n\nMade " + "{:11,}".format(int(jsons['amount'])) + " and " + "{:2d}".format(int(jsons['eloch'])) + " Rep." + "\n Antivirus: "+ str(avlevel) + " Firewall: " + str(fwlevel) + " Sdk: " + str(sdklevel) + " TotalMoney: " + "{:11,}".format(int(money)) + "\n YourWinChance: " + str(winchance) + " Anonymous: " + str(anonymous) +" username: "+ str(username) + " saving: " + str(saving)
+								print "\n[TargetIP: " + str(ip) + "]\n\nMade " + "{:11,}".format(int(jsons['amount'])) + " and " + "{:2d}".format(int(jsons['eloch'])) + " Rep." + "\n Antivirus: "+ str(avlevel) + " Firewall: " + str(fwlevel) + " Sdk: " + str(sdklevel) + " TotalMoney: " + str(money) + "\n YourWinChance: " + str(winchance) + " Anonymous: " + str(anonymous) +" username: "+ str(username) + " saving: " + str(saving) + "\n"
+								return True
+
 						except KeyError:
 							print "Bad attack"
 							return False
@@ -283,11 +312,14 @@ class Console:
 		selection = o.getPassword(imgs)
 		print selection
 
-	def attack(self, amount, max, wait, mode):
-		for i in range(0, (amount*6)):
-			data = self.getIP(True, max, mode)
+	def attack(self, amount, max, wait, mode, api):
+		for i in range(0, (amount*random.randint(1,2))):
+			data = self.getIP(True, max, mode, api)
 			print "wait anti-blocking..."
-			time.sleep(5)
+			if mode == "Secure":
+				time.sleep(5)
+			elif mode == "Potator":
+				time.sleep(3)
 
 	def exit_gracefully(self, signum, frame):
 	    # restore the original signal handler as otherwise evil things will happen
