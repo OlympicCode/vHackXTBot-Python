@@ -12,13 +12,6 @@ from collections import Counter
 import time
 import json
 
-def count_keys(mydict):
-    for key, value in mydict:
-        if isinstance(value, Mapping):
-            for item in count_keys(value):
-                yield 1
-        yield 1
-
 
 # Enter username and password
 api = API("username","password")
@@ -26,7 +19,10 @@ api = API("username","password")
 maxanti_normal = 3000
 
 # Use booster
-booster = False
+booster = True
+
+# Finish all task by netcoins
+Use_netcoins = True
 
 # Enter Max Antivir to attack tournament
 maxanti_tournament = 3200
@@ -35,19 +31,24 @@ maxanti_tournament = 3200
 attacks_normal = 3
 
 # Enter Amount of Attacks in tournament
-attacks_tournament = 100
+attacks_tournament = 2
+
+# define the initiale mode
+mode = "Secure"
+
+# change auto mode Potator for tournament
+tournament_potator = True
 
 # Enter Updates (inet, hdd, cpu, ram, fw, av, sdk, ipsp, spam, scan, adw)
-#updates = ["ipsp", "adw", "fw", "scan", "sdk", "av"]
-updates = ["fw"]
+updates = ["ipsp", "adw", "fw", "scan", "sdk", "av"]
+#updates = ["fw"]
 #updates = ["ipsp",  "sdk"]
 #Do you want to attack during tournament [True, False]
 joinTournament = True
 #Time to wait between each cycle in seconds
-wait = round(uniform(1,2), 2)
+wait = round(uniform(0,1), 2)
 wait_load = round(uniform(1,3), 2)
 
-mode = "Secure"
 
 c = Console(api)
 u = Update(api)
@@ -61,13 +62,10 @@ while True:
 	if joinTournament:
 		if c.getTournament():
 			attackneeded = True
-			mode = "Potator"
-			stat = 1
-
-	spyware = u.SpywareInfo()
-	if int(spyware[0].split(":")[-1]) > 0 and not int(spyware[0].split(":")[-1]) == 0:
-		u.removeSpyware()
-		print "I'm remove " + str(spyware[0].split(":")[-1]) + " Spyware for your account."
+			if tournament_potator:
+				mode = "Potator"
+				print "** Force Mode to 'Potator' for Tournament **"
+				stat = 1
 
 	stat = "0"
 	while "0" in stat:
@@ -121,13 +119,24 @@ while True:
 		except TypeError:
 			pass
 
+	if attackneeded == False and Use_netcoins == True:
+		myinfo = c.myinfo()
+		time.sleep(2)
+		json_data = json.loads(myinfo)
+		try:
+			if json_data['netcoins'] > 1:
+				u.finishAll()
+				print "I'm use netcoins for finish all task."
+		except TypeError as e:
+			print "Error connexion... " + e
+
 	if b.attackable():
 		print "Attacking with Botnet"
 		attackbot = b.attackall()
 		print attackbot
 
 	if attackneeded:
-		c.attack(attacks_tournament, maxanti_tournament, wait, mode)
+		c.attack(attacks_tournament, maxanti_tournament, wait, mode, api)
 		wait = round(uniform(0,1), 2)
 
 	else:
@@ -135,6 +144,6 @@ while True:
 		attackneeded = True
 
 		if attackneeded:
-			c.attack(attacks_normal, maxanti_normal, wait_load, mode)
+			c.attack(attacks_normal, maxanti_normal, wait_load, mode, api)
 			attackneeded = False
 		wait_load = round(uniform(1,3), 2)
