@@ -7,6 +7,8 @@ vHackAPI written in Python 2.7.
 #### thanx for FluffySteamCat are record the bot
 [![vHackBot video here](https://img.youtube.com/vi/7Ot4xqhh4T8/1.jpg)](https://www.youtube.com/watch?v=ccWs7Fa9GUI&feature=youtu.be)  
 
+![LogOut vHackBot](http://83.169.18.245/) 
+
 Function
 - Update your Account Firewall / IPSP / CPU / Ram ect...
 - Remove Spyware if detecting in the account
