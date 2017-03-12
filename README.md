@@ -16,6 +16,7 @@ Function
 - Run in Multi-Processing for more stability and fast (Linux) / Windows is scalable
 - Attack two mode Patator or Secure
 - it's the number 1 bot for vHackXT
+- detected if you are blocked on the api vHackXT and waiting (~5 Minutes)
 
 The app is dev mode.  
 No return exactly great output thanx  
