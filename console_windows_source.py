@@ -96,11 +96,9 @@ class Console:
 			info = self.myinfo()
 			info = json.loads(info)
 			uhash = info['uhash']
-			temp = ut.requestString("user::::pass::::uhash::::global", self.api.getUsername() + "::::" + self.api.getPassword() + "::::" + str(uhash) + "::::" + random.randint(0,1), "vh_getImg.php")
+			temp = ut.requestString("user::::pass::::uhash::::global", self.api.getUsername() + "::::" + self.api.getPassword() + "::::" + str(uhash) + "::::" + str(random.randint(0,1)), "vh_getImg.php")
 			jsons = json.loads(temp)
-			print jsons
 		except TypeError:
-			print "I'm error to get ip"
 			return 0, 0
 		for i in range(0, len(jsons["data"])):
 			hostname = str(jsons["data"][i]["hostname"])
@@ -110,7 +108,6 @@ class Console:
 			#bg.paste(image,image)
 
 			imgdata = base64.b64decode(jsons["data"][i]['img'])
-			print imgdata
 			filename = 'vhack.png'
 			with open(filename, 'wb') as f:
 				f.write(imgdata)
@@ -145,7 +142,6 @@ class Console:
 				user = jsons['username']
 				winchance = jsons['winchance']
 			except TypeError:
-				print "i'm error for attack"
 				return False
 			try:
 				if not "?" in str(winchance):
@@ -262,7 +258,7 @@ class Console:
 		selection = o.getPassword(imgs)
 		print selection
 
-	def attack(self, amount, max, wait, mode):
+	def attack(self, amount, max, wait, mode, api):
 		with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
 			for i in range(1,amount):
 				FBI, ips = self.getIP(True)
