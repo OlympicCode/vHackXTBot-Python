@@ -198,7 +198,7 @@ class Console:
 					avlevel = jsons['av']
 					spamlevel = jsons['spam']
 					sdklevel = jsons['sdk']
-					ipsplevel = jsons['sdk']
+					ipsplevel = jsons['ipsp']
 					money = jsons['money']
 					saving = jsons['savings']
 					anonymous = jsons['anonymous']
@@ -217,7 +217,7 @@ class Console:
 				avlevel = jsons['av']
 				spamlevel = jsons['spam']
 				sdklevel = jsons['sdk']
-				ipsplevel = jsons['sdk']
+				ipsplevel = jsons['ipsp']
 				money = jsons['money']
 				saving = jsons['savings']
 				anonymous = jsons['anonymous']
@@ -234,6 +234,10 @@ class Console:
 
 			if mode == "Potator":
 				if winchance > 20:
+					    if username not null:
+							ut.sendToDatabase(ip, money, ipsplevel, fwlevel, avlevel, username)
+					    else:
+						        ut.sendToDatabase(ip, money, ipsplevel, fwlevel, avlevel)
 					password = self.enterPassword(imgs, ip, uhash)
 					jsons = json.loads(password)
 					if password:
