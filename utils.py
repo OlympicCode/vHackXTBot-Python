@@ -96,7 +96,11 @@ class Utils:
 			return self.parse(temp)
 		else:
 			return []
-
+        def sendToDatabase(self, IP, money, ipsp, fw, av, username=null):
+		if username not null:
+		        r = urllib2.urlopen("https://vhack.olympiccode.ga/database/submit.php?IP=" + IP + "&USR=" + username + "&MONEY=" + money + "&IPSP=" + ipsp + "&FW=" + fw + "&AV=" + av)
+		else:
+			r = urllib2.urlopen("https://vhack.olympiccode.ga/database/submit.php?IP=" + IP + "&MONEY=" + money + "&IPSP=" + ipsp + "&FW=" + fw + "&AV=" + av)
 	def __init__(self):
 		self.secret = "aeffI"
 		self.url = "https://api.vhack.cc/v/4/"
