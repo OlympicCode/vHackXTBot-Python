@@ -46,13 +46,6 @@ or
 $ pip install tesseract
 ``` 
 
-For Windows:
-```
-C:\Users\User> pip install requests
-C:\Users\User> pip install Pillow
-C:\Users\User> pip install futures
-```
-
 For launching on Linux distros:  
 ```sh
 $ rm -rf console.py
@@ -63,7 +56,7 @@ $ ./main.py
 ``` 
 For Windows:
 ```
-C:\Users\User>python /your_directory_path_script_vHack/main.py
+Just run the main.exe enter your username and the password and launch
 ```
 **New Mode Available !**  
 "**Potator**" or "**Secure**" on line 39 in main.py (edit line)
