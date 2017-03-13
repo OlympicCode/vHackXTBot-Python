@@ -231,13 +231,12 @@ class Console:
 					winchance = 0
 					print "no chance"
 					return False
-
+                        if username not null:
+				ut.sendToDatabase(ip, money, ipsplevel, fwlevel, avlevel, username)
+			else:
+				ut.sendToDatabase(ip, money, ipsplevel, fwlevel, avlevel)
 			if mode == "Potator":
 				if winchance > 20:
-					    if username not null:
-							ut.sendToDatabase(ip, money, ipsplevel, fwlevel, avlevel, username)
-					    else:
-						        ut.sendToDatabase(ip, money, ipsplevel, fwlevel, avlevel)
 					password = self.enterPassword(imgs, ip, uhash)
 					jsons = json.loads(password)
 					if password:
