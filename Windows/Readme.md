@@ -1,1 +1,1 @@
-
+just edit config.ini
