@@ -140,7 +140,7 @@ class Console:
 							spyware = u.SpywareInfo()
 							if int(spyware[0].split(":")[-1]) > 0 and not int(spyware[0].split(":")[-1]) == 0:
 								u.removeSpyware()
-								print "I'm remove " + str(spyware[0].split(":")[-1]) + " Spyware for your account."
+								print "I will remove " + str(spyware[0].split(":")[-1]) + " Spyware for your account."
 
 							return result, jsons['ipaddress']
 
@@ -153,7 +153,7 @@ class Console:
 					except TypeError:
 						return 0, 0
 				else:
-					print "Firewall is to Hight"
+					print "Firewall level is to High"
 					return 0, 0
 
 			except ValueError:
@@ -167,7 +167,7 @@ class Console:
 			uhash = info['uhash']
 		except TypeError:
 			time_sleep = int(random.randint(300, 400))
-			print "error you are blocking waiting " + str(time_sleep/60) + " Minutes"
+			print "error you are blocked, waiting " + str(time_sleep/60) + " Minutes"
 			time.sleep(time_sleep)
 			return False
 
@@ -373,7 +373,7 @@ class Console:
 							print "Bad attack"
 							return False
 					else:
-						print "Password Wrong"
+						print "Password Incorrect"
 						return False
 				else:
 					#print "\n"
@@ -386,7 +386,7 @@ class Console:
 						#print "passed"
 						return False
 					if str(anonymous) == "NO":
-						print "No Anonymous need"
+						print "Anonymous not needed"
 						#print "passed"
 						return False
 			else:

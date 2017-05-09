@@ -39,12 +39,12 @@ class Client(asyncore.dispatcher):
         print ('definition your user : (%7s)' % name)
         self.create_socket(socket.AF_INET, socket.SOCK_STREAM)
         self.name = name
-        print('Connecting to host at serveur...')
+        print('Connecting to host at server...')
         self.connect(host_address)
         self.outbox = collections.deque()
 
     def handle_error(self):
-        print("Serveur is down.")
+        print("Server is down.")
         exit()
 
     def handle_write(self):

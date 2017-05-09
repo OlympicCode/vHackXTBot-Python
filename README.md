@@ -19,9 +19,9 @@ Function
 - Remove Spyware if detecting in the account
 - Attack the with botnet
 - Attack for console Target and detect for FBI
-- Help for tournament get first place
+- Help for tournament to get first place
 - Run in Multi-Processing for more stability and fast (Linux) / Windows is scalable
-- Attack two mode Patator or Secure
+- Two attack modes, Patator or Secure
 - it's the number 1 bot for vHackXT
 - detected if you are blocked on the api vHackXT and waiting (~5 Minutes)
 - Auto update Botnet 
@@ -63,7 +63,7 @@ $ ./main.py
 For Windows:
 ```
 Just run the main.exe enter your username and the password and launch
-the password is blank is normal for security. just press enter for end typing
+the password is blank is normal for security. Just press enter for end typing
 ```
   
 **New Mode Available !**  
@@ -71,20 +71,20 @@ the password is blank is normal for security. just press enter for end typing
 
 **Potator**    
 ```   
-Potator mode It will not occupy firewall or stealth mode it will attack anything 
-that can with any crit criteria perfect for tournaments  
+Potator mode It will not examine firewall or stealth mode it will attack anything
+that can with any criteria perfect for tournaments
 ```
 
 **Secure**  
 ```
 Protects against attack back or you tell yourself  
-the least to secure it verifirat that you are  
+the least to secure it verifying that you are
 ```
 
 Result:  
 ![](http://www.cuby-hebergs.com/dl/vhack.png)
 
-donation for the projet  
-[![Donation for projet](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=support%40cuby%2dhebergs%2ecom&lc=US&item_name=vBlackOut%20Coder&no_note=0&cn=about%20more%20information%20for%20your%20donation&no_shipping=2&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted)
+donation for the project
+[![Donation for project](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=support%40cuby%2dhebergs%2ecom&lc=US&item_name=vBlackOut%20Coder&no_note=0&cn=about%20more%20information%20for%20your%20donation&no_shipping=2&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted)
 
 Thanx to [@flatt3rn](https://github.com/flatt3rn) ;) 

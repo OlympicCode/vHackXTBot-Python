@@ -237,7 +237,7 @@ class Console:
 						#print "passed"
 						return False
 					if str(anonymous) == "NO":
-						print "No Anonymous need"
+						print "No Anonymous needed"
 						#print "passed"
 						return False
 			else:
@@ -267,7 +267,7 @@ class Console:
 					print "Waiting..."
 					time.sleep(wait)
 				else:
-					print "Warning FBI Blocking account in " + str(ips) + " I'm not attack"
+					print "Warning FBI Blocking account on " + str(ips) + " I will not attack"
 					
 	def exit_gracefully(self, signum, frame):
 	    # restore the original signal handler as otherwise evil things will happen

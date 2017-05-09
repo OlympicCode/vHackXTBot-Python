@@ -89,7 +89,7 @@ while True:
 		checkcluster = json.loads(c.check_Cluster())
 		TournamentPosition = json.loads(c.GetTournamentPosition())
 		try:
-			# determine and attaque cluster tournament
+			# determine and attack cluster tournament
 			db = sqlite3.connect("database.db")
 			cursor = db.cursor()
 
@@ -279,7 +279,7 @@ while True:
 	if BotNet_update:
 		money = json.loads(c.myinfo())
 		json_data = json.loads(u.botnetInfo())
-		print "analyse configuration... botnet"
+		print "analysing configuration... botnet"
 		for i in range(0,int(json_data['count'])):
 			moneycheck = True
 			ireal = i+1
@@ -292,7 +292,7 @@ while True:
 				money = json.loads(c.myinfo())
 			while int(json_data['data'][i]['bLVL']) is not 100 and moneycheck == True:
 				if int(json_data['data'][i]['bPRICE']) < int(money['money']):
-					print "Update Botnet " + str(ireal) + " level : " + str(int(json_data['data'][i]['bLVL'])+1)
+					print "Updating Botnet " + str(ireal) + " level : " + str(int(json_data['data'][i]['bLVL'])+1)
 					u.upgradeBotnet(str(ireal))
 					json_data = json.loads(u.botnetInfo())
 					money = json.loads(c.myinfo())
@@ -345,19 +345,19 @@ while True:
 			usebooster = u.getTasks()
 			json_data = json.loads(usebooster)
 		except ValueError:
-			print "Connexion Error try again..."
+			print "Connection Error try again..."
 			pass
 		except TypeError:
-			print "Connexion Error try again..."
+			print "Connection Error try again..."
 			pass
 		try:
 			while len(json_data["data"]) > 1:
 				if int(json_data["boost"]) > 5:
 					u.useBooster()
-					print "Use the booster in rest " + str(int(json_data["boost"])-1)
+					print "Using booster on rest " + str(int(json_data["boost"])-1)
 					# UPDATE Value
 				else:
-					print "you are < 5 boost."
+					print "you have < 5 boost."
 					break
 				usebooster = u.getTasks()
 				json_data = json.loads(usebooster)
@@ -373,9 +373,9 @@ while True:
 		try:
 			if json_data['netcoins'] > 1:
 				u.finishAll()
-				print "I'm use netcoins for finish all task."
+				print "I used Netcoins for finish all task."
 		except TypeError as e:
-			print "Error connexion... " + str(e)
+			print "Error with connection... " + str(e)
 
 	if b.attackable():
 		print "Attacking with Botnet"
