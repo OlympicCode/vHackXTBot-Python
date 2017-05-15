@@ -1,0 +1,6 @@
+futures==3.0.5 
+olefile==0.44 
+Pillow==4.0.0 
+pytesseract==0.1.6 
+requests==2.13.0
+beautifulsoup4==4.1.3

@@ -1,0 +1,28 @@
+sudo: required
+os: linux
+dist: Fedora
+language: python
+
+python:
+  - "2.7.13"
+  
+Configured Distribution:
+ - Distribution Name: Fedora
+ - Release: 25
+ - Architecture: amd64
+ - Package System: rpm
+
+
+# command to install dependencies
+before_install:
+  #composer install --dev
+  - sudo apt-get update -qq
+  - sudo apt-get install python-imaging
+  - sudo apt-get install tesseract-ocr
+  
+
+install: 
+  - pip install -r requirements.txt
+
+# command to run tests
+script: python main.py

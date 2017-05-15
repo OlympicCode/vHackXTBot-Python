@@ -1,0 +1,1 @@
+just edit config.ini
