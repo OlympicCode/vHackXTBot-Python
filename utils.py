@@ -68,10 +68,10 @@ class Utils:
             try:
                 r = urllib2.urlopen(self.generateURL(format, data, php))
                 t = r.read()
+                return t
             except Exception as err:
                 print "network error, trying again"
                 time.sleep(1)
-        return r
 
     def requestStringNoWait(self, format, data, php):
         for i1 in range(0, 10):
