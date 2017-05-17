@@ -63,14 +63,16 @@ class Utils:
 
     def requestString(self, format, data, php):
         time.sleep(random.randint(1, 2))
-        r = None
-        while r == None:
+        t = None
+        i = 1
+        while t == None:
+            i += 1
             try:
                 r = urllib2.urlopen(self.generateURL(format, data, php))
                 t = r.read()
             except Exception as err:
-                print "network error, trying again"
-                time.sleep(1)
+                print "Blocked, trying again. Delaying {0} seconds".format(i)
+                time.sleep(1+i)
         return r
 
     def requestStringNoWait(self, format, data, php):
