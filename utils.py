@@ -60,19 +60,23 @@ class Utils:
                 temp += "}"
             n.append(self.parse(temp))
         return n
-    
-	def requestString(self, format, data, php):
-		time.sleep(random.randint(1,2))
-		for i1 in range(0,10):
-			try:
-				r = urllib2.urlopen(self.generateURL(format,data,php))
-				t = r.read()
-				#print i1
-				return t
-			except Exception as err:
-				time.sleep(1)
-		return "null"
 
+
+    def requestString(self, format, data, php):
+        time.sleep(random.randint(1, 2))
+        t = None
+        i = 1
+        while t == None:
+            i += 1
+            try:
+                r = urllib2.urlopen(self.generateURL(format, data, php))
+                t = r.read()
+                return t
+            except Exception as err:
+                print "Blocked, trying again. Delaying {0} seconds".format(i)
+                time.sleep(1+i)
+                
+    
     def requestStringNoWait(self, format, data, php):
         for i1 in range(0, 10):
             try:
