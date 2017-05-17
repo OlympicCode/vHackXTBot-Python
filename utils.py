@@ -73,7 +73,7 @@ class Utils:
                 r = urllib2.urlopen(self.generateURL(format, data, php))
                 t = r.read()
                 return t
-            except Exception as err:
+            except:
                 print "Blocked, trying again. Delaying {0} seconds".format(i)
                 time.sleep(1+i)
             i += 1
