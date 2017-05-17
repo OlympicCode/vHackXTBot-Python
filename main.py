@@ -22,7 +22,7 @@ import os
 # Enter username and password
 api = API("username", "password")
 # Enter Max Antivir to attack in normal mode
-maxanti_normal = 500
+maxanti_normal = 3000
 
 # Active or not the protection for cluster
 active_cluster_protection = True
@@ -34,7 +34,7 @@ booster = False
 Use_netcoins = True
 
 # Enter Max Antivir to attack tournament
-maxanti_tournament = 500
+maxanti_tournament = 3000
 
 # Enter Amount of Attacks normal
 attacks_normal = 3
@@ -379,7 +379,15 @@ while True:
                 u.finishAll()
                 print "I used Netcoins for finish all task."
         except TypeError as e:
-            print "Error with connection... " + str(e)
+            i = 0
+            while i <= 10:
+                print "Blocked, trying again. Delaying {0} seconds".format(i)
+                time.sleep(i)
+                i += 1
+            else:
+            	exit(0)
+
+
 
     if b.attackable():
         print "Attacking with Botnet"
