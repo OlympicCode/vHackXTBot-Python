@@ -65,10 +65,9 @@ class Utils:
     def requestString(self, format, data, php):
         time.sleep(random.randint(1, 2))
         t = None
-        i = 1
+        i = 0
         while t == None:
-            i += 1
-            if i > 3:
+            if i > 10:
                 exit(0)
             try:
                 r = urllib2.urlopen(self.generateURL(format, data, php))
@@ -77,6 +76,7 @@ class Utils:
             except Exception as err:
                 print "Blocked, trying again. Delaying {0} seconds".format(i)
                 time.sleep(1+i)
+            i += 1
                 
     
     def requestStringNoWait(self, format, data, php):
