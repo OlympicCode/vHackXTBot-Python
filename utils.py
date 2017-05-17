@@ -68,6 +68,8 @@ class Utils:
         i = 1
         while t == None:
             i += 1
+            if i > 3:
+                exit(0)
             try:
                 r = urllib2.urlopen(self.generateURL(format, data, php))
                 t = r.read()
