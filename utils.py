@@ -60,18 +60,18 @@ class Utils:
                 temp += "}"
             n.append(self.parse(temp))
         return n
-
-    def requestString(self, format, data, php):
-        time.sleep(random.randint(1, 2))
-        r = None
-        while r == None:
-            try:
-                r = urllib2.urlopen(self.generateURL(format, data, php))
-                t = r.read()
-                return t
-            except Exception as err:
-                print "network error, trying again"
-                time.sleep(1)
+    
+	def requestString(self, format, data, php):
+		time.sleep(random.randint(1,2))
+		for i1 in range(0,10):
+			try:
+				r = urllib2.urlopen(self.generateURL(format,data,php))
+				t = r.read()
+				#print i1
+				return t
+			except Exception as err:
+				time.sleep(1)
+		return "null"
 
     def requestStringNoWait(self, format, data, php):
         for i1 in range(0, 10):
