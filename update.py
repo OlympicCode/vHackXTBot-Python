@@ -1,26 +1,28 @@
-from classes import API
 from utils import Utils
 
 
 class Update:
+    ut = Utils()
 
-    ut= Utils()
+    def __init__(self, u, p):
+        self.username = u
+        self.password = p
 
     def getTasks(self):
         temp =self.ut.requestString("user::::pass::::uhash",
-                                self.api.getUsername() + "::::" + self.api.getPassword() + "::::" + "userHash_not_needed",
+                                self.username + "::::" + self.password + "::::" + "userHash_not_needed",
                                 "vh_tasks.php")
         return temp
 
     def SpywareInfo(self):
         arr = self.ut.requestArray("user::::pass::::uhash:::::",
-                              self.api.getUsername() + "::::" + self.api.getPassword() + "::::" + "UserHash_not_needed" + ":::::",
+                              self.username + "::::" + self.password + "::::" + "UserHash_not_needed" + ":::::",
                               "vh_spywareInfo.php")
         return arr
 
     def removeSpyware(self):
         arr = self.ut.requestArray("user::::pass::::uhash:::::",
-                              self.api.getUsername() + "::::" + self.api.getPassword() + "::::" + "UserHash_not_needed" + ":::::",
+                              self.username + "::::" + self.password + "::::" + "UserHash_not_needed" + ":::::",
                               "vh_removeSpyware.php")
         return arr
 
@@ -38,7 +40,7 @@ class Update:
 
     def startTask(self, type):
         temp =self.ut.requestString("user::::pass::::uhash::::utype",
-                                self.api.getUsername() + "::::" + self.api.getPassword() + "::::" + "userHash_not_needed" + "::::" + type,
+                                self.username + "::::" + self.password + "::::" + "userHash_not_needed" + "::::" + type,
                                 "vh_addUpdate.php")
         if "result" in temp:
             return temp.split('result":"')[1].split('"')[0]
@@ -46,19 +48,19 @@ class Update:
 
     def botnetInfo(self):
         temp =self.ut.requestString("user::::pass::::uhash",
-                                self.api.getUsername() + "::::" + self.api.getPassword() + "::::" + "userHash_not_needed",
+                                self.username + "::::" + self.password + "::::" + "userHash_not_needed",
                                 "vh_botnetInfo.php")
         return temp
 
     def upgradeBotnet(self, ID):
         temp =self.ut.requestString("user::::pass::::uhash::::bID",
-                                self.api.getUsername() + "::::" + self.api.getPassword() + "::::" + "userHash_not_needed" + "::::" + ID,
+                                self.username + "::::" + self.password + "::::" + "userHash_not_needed" + "::::" + ID,
                                 "vh_upgradeBotnet.php")
         return temp
 
     def finishTask(self, taskID):
         temp =self.ut.requestString("user::::pass::::uhash::::taskid",
-                                self.api.getUsername() + "::::" + self.api.getPassword() + "::::" + "userHash_not_needed" + "::::" + taskID,
+                                self.username + "::::" + self.password + "::::" + "userHash_not_needed" + "::::" + taskID,
                                 "vh_finishTask.php")
         if "4" in temp:
             return True
@@ -67,7 +69,7 @@ class Update:
 
     def finishAll(self):
         temp =self.ut.requestString("user::::pass::::uhash",
-                                self.api.getUsername() + "::::" + self.api.getPassword() + "::::" + "userHash_not_needed",
+                                self.username + "::::" + self.password + "::::" + "userHash_not_needed",
                                 "vh_finishAll.php")
         if "0" in temp:
             return True
@@ -76,9 +78,7 @@ class Update:
 
     def useBooster(self):
         temp =self.ut.requestString("user::::pass::::uhash::::boost",
-                                self.api.getUsername() + "::::" + self.api.getPassword() + "::::" + "userHash_not_needed" + "::::" + "1",
+                                self.username + "::::" + self.password + "::::" + "userHash_not_needed" + "::::" + "1",
                                 "vh_tasks.php")
         return temp
 
-    def __init__(self, api):
-        self.api = api

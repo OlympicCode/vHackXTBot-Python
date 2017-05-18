@@ -1,18 +1,6 @@
 #!/usr/bin/python2.7
 # -*- coding: utf-8
 
-class API:
-    def getUsername(self):
-        return self.username
-
-    def getPassword(self):
-        return self.password
-
-    def __init__(self, username, password):
-        self.username = username
-        self.password = password
-
-
 class Passwords:
     def getImage1(self):
         return self.img1

@@ -1,15 +1,12 @@
 #!/usr/bin/python2.7
 # -*- coding: utf-8
 
-from classes import API
-from classes import IP
 from classes import Passwords
 from utils import Utils
 from update import Update
 from ocr import OCR
 import time
 import json
-import subprocess
 from PIL import Image
 import base64
 import pytesseract
@@ -27,21 +24,22 @@ original_sigint = None
 class Console:
     ut = Utils()
 
-    def __init__(self, api):
+    def __init__(self, u, p):
         global original_sigint
-        self.api = api
+        self.username = u
+        self.password = p
         original_sigint = signal.getsignal(signal.SIGINT)
         signal.signal(signal.SIGINT, self.exit_gracefully)
 
     def myinfo(self):
         temp = self.ut.requestString("user::::pass::::gcm::::uhash",
-                                     self.api.getUsername() + "::::" + self.api.getPassword() + "::::" + "eW7lxzLY9bE:APA91bEO2sZd6aibQerL3Uy-wSp3gM7zLs93Xwoj4zIhnyNO8FLyfcODkIRC1dc7kkDymiWxy_dTQ-bXxUUPIhN6jCUBVvGqoNXkeHhRvEtqAtFuYJbknovB_0gItoXiTev7Lc5LJgP2" + "::::" + "userHash_not_needed",
+                                     self.username + "::::" + self.password + "::::" + "eW7lxzLY9bE:APA91bEO2sZd6aibQerL3Uy-wSp3gM7zLs93Xwoj4zIhnyNO8FLyfcODkIRC1dc7kkDymiWxy_dTQ-bXxUUPIhN6jCUBVvGqoNXkeHhRvEtqAtFuYJbknovB_0gItoXiTev7Lc5LJgP2" + "::::" + "userHash_not_needed",
                                      "vh_update.php")
         return temp
 
     def requestPassword(self, ip):
         arr = self.ut.requestArray("user::::pass::::target",
-                                   self.api.getUsername() + "::::" + self.api.getPassword() + "::::" + ip,
+                                   self.username + "::::" + self.password + "::::" + ip,
                                    "vh_vulnScan.php")
         imgs = Passwords(arr)
         return imgs
@@ -49,7 +47,7 @@ class Console:
     def enterPassword(self, passwd, target, uhash):
         passwd = passwd.split("p")
         temp = self.ut.requestString("user::::pass::::port::::target::::uhash",
-                                     self.api.getUsername() + "::::" + self.api.getPassword() + "::::" + str(
+                                     self.username + "::::" + self.password + "::::" + str(
                                          passwd[1].strip()) + "::::" + str(target) + "::::" + str(uhash),
                                      "vh_trTransfer.php")
         if temp == "10":
@@ -60,46 +58,46 @@ class Console:
     def check_Cluster(self, uhash=None):
         if uhash == None:
             temp = self.ut.requestString("user::::pass::::uhash",
-                                         self.api.getUsername() + "::::" + self.api.getPassword() + "::::" + "userHash_not_needed",
+                                         self.username + "::::" + self.password + "::::" + "userHash_not_needed",
                                          "vh_ClusterData.php")
         else:
             temp = self.ut.requestString("user::::pass::::uhash",
-                                         self.api.getUsername() + "::::" + self.api.getPassword() + "::::" + str(uhash),
+                                         self.username + "::::" + self.password + "::::" + str(uhash),
                                          "vh_ClusterData.php")
         return temp
 
     def scanUser(self):
         arr = self.ut.requestArray("user::::pass::::",
-                                   self.api.getUsername() + "::::" + self.api.getPassword() + "::::", "vh_scanHost.php")
+                                   self.username + "::::" + self.password + "::::", "vh_scanHost.php")
         return arr
 
     def GetTournamentPosition(self):
         temp = self.ut.requestString("user::::pass::::uhash",
-                                     self.api.getUsername() + "::::" + self.api.getPassword() + "::::" + "userHash_not_needed",
+                                     self.username + "::::" + self.password + "::::" + "userHash_not_needed",
                                      "vh_tournamentData.php")
         return temp
 
     def AttackCluster(self, tag):
         temp = self.ut.requestString("user::::pass::::uhash::::ctag",
-                                     self.api.getUsername() + "::::" + self.api.getPassword() + "::::" + "userHash_not_needed" + "::::" + str(
+                                     self.username + "::::" + self.password + "::::" + "userHash_not_needed" + "::::" + str(
                                          tag), "vh_startDDoS.php")
         return temp
 
     def ScanCluster(self, tag):
         temp = self.ut.requestString("user::::pass::::uhash::::ctag",
-                                     self.api.getUsername() + "::::" + self.api.getPassword() + "::::" + "userHash_not_needed" + "::::" + str(
+                                     self.username + "::::" + self.password + "::::" + "userHash_not_needed" + "::::" + str(
                                          tag), "vh_scanTag.php")
         return temp
 
     def transferMoney(self, ip):
         arr = self.ut.requestArray("user::::pass::::target",
-                                   self.api.getUsername() + "::::" + self.api.getPassword() + "::::" + ip,
+                                   self.username + "::::" + self.password + "::::" + ip,
                                    "vh_trTransfer.php")
         return arr
 
     def clearLog(self, ip):
         s = self.ut.requestString("user::::pass::::target",
-                                  self.api.getUsername() + "::::" + self.api.getPassword() + "::::" + ip,
+                                  self.username + "::::" + self.password + "::::" + ip,
                                   "vh_clearAccessLogs.php")
         if s == "0":
             return True
@@ -108,7 +106,7 @@ class Console:
 
     def uploadSpyware(self, ip):
         s = self.ut.requestString("user::::pass::::target",
-                                  self.api.getUsername() + "::::" + self.api.getPassword() + "::::" + ip,
+                                  self.username + "::::" + self.password + "::::" + ip,
                                   "vh_spywareUpload.php")
         if s == "0":
             return True
@@ -117,7 +115,7 @@ class Console:
 
     def getTournament(self):
         temp = self.ut.requestString("user::::pass::::uhash",
-                                     self.api.getUsername() + "::::" + self.api.getPassword() + "::::" + "UserHash_not_needed",
+                                     self.username + "::::" + self.password + "::::" + "UserHash_not_needed",
                                      "vh_update.php")
         if "tournamentActive" in temp:
             if not "2" in temp.split('tournamentActive":"')[1].split('"')[0]:
@@ -129,7 +127,7 @@ class Console:
         fd.write('{0}\n'.format(lineexec.result()))
         fd.flush()
 
-    def calc_img(self, ut, imgstring, uhash, hostname, max, mode, api):
+    def calc_img(self, ut, imgstring, uhash, hostname, max, mode):
         pic = cStringIO.StringIO()
         image_string = cStringIO.StringIO(base64.b64decode(imgstring))
         image = Image.open(image_string)
@@ -149,7 +147,7 @@ class Console:
                     try:
                         time.sleep(random.randint(1, 3))
                         temp = self.ut.requestString("user::::pass::::uhash::::hostname",
-                                                     self.api.getUsername() + "::::" + self.api.getPassword() + "::::" + str(
+                                                     self.username + "::::" + self.password + "::::" + str(
                                                          uhash) + "::::" + str(hostname), "vh_scanHost.php")
                         jsons = json.loads(temp)
                         if not ".vHack.cc" in str(jsons['ipaddress']) and int(jsons['vuln']) == 1:
@@ -160,7 +158,7 @@ class Console:
                             result = self.attackIP(jsons['ipaddress'], max, mode)
 
                             # remove spyware
-                            u = Update(api)
+                            u = Update(self.username, self.password)
                             spyware = u.SpywareInfo()
                             if int(spyware[0].split(":")[-1]) > 0 and not int(spyware[0].split(":")[-1]) == 0:
                                 u.removeSpyware()
@@ -169,7 +167,7 @@ class Console:
                             return result, jsons['ipaddress']
 
                         # else:
-                        #	temp = self.ut.requestString("user::::pass::::uhash::::hostname", self.api.getUsername() + "::::" + self.api.getPassword() + "::::" + str(uhash) + "::::" + jsons['ipaddress'], "vh_scanHost.php")
+                        #	temp = self.ut.requestString("user::::pass::::uhash::::hostname", self.username + "::::" + self.password + "::::" + str(uhash) + "::::" + jsons['ipaddress'], "vh_scanHost.php")
                         #	if not ".vHack.cc" in str(jsons['ipaddress']) and int(jsons['vuln']) == 1:
                         #		time.sleep(1)
                         #		self.attackIP(jsons['ipaddress'], max, mode)
@@ -183,7 +181,7 @@ class Console:
             except ValueError:
                 return 0, 0
 
-    def getIP(self, blank, max, mode, api, active_protecte_cluster_ddos):
+    def getIP(self, blank, max, mode, active_protecte_cluster_ddos):
         info = self.myinfo()
         try:
             info = json.loads(info)
@@ -206,7 +204,7 @@ class Console:
             time.sleep(120)
         else:
             temp = self.ut.requestString("user::::pass::::uhash::::by",
-                                         self.api.getUsername() + "::::" + self.api.getPassword() + "::::" + str(
+                                         self.username + "::::" + self.password + "::::" + str(
                                              uhash) + "::::" + str(random.randint(0, 1)), "vh_getImg.php")
             jsons = json.loads(temp)
             list_image = []
@@ -224,8 +222,7 @@ class Console:
             fd = open("database.txt", "a")
             with concurrent.futures.ThreadPoolExecutor(max_workers=6) as executor:
                 for i, image in enumerate(list_image):
-                    wait_for = executor.submit(self.calc_img, self.ut, list_image[i], uhash, list_hostname[i], max, mode,
-                                               api)
+                    wait_for = executor.submit(self.calc_img, self.ut, list_image[i], uhash, list_hostname[i], max, mode)
                     try:
                         result, ip = wait_for.result()
                     except TypeError:
@@ -243,7 +240,7 @@ class Console:
             time.sleep(1)
 
         temp = self.ut.requestString("user::::pass::::uhash::::target",
-                                     self.api.getUsername() + "::::" + self.api.getPassword() + "::::" + str(
+                                     self.username + "::::" + self.password + "::::" + str(
                                          uhash) + "::::" + ip, "vh_loadRemoteData.php")
         jsons = json.loads(temp)
 
@@ -478,9 +475,9 @@ class Console:
         selection = o.getPassword(imgs)
         print selection
 
-    def attack(self, amount, max, wait, mode, api, active_protecte_cluster_ddos):
+    def attack(self, amount, max, wait, mode, active_protecte_cluster_ddos):
         for i in range(0, (amount * random.randint(1, 2))):
-            data = self.getIP(True, max, mode, api, active_protecte_cluster_ddos)
+            data = self.getIP(True, max, mode, active_protecte_cluster_ddos)
             print "wait anti-blocking..."
             if mode == "Secure":
                 time.sleep(5)
