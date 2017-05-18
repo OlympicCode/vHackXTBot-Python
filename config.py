@@ -1,4 +1,8 @@
 from random import uniform
+
+user = "username"
+password = "password"
+
 # Enter Max Antivir to attack in normal mode
 maxanti_normal = 3000
 
@@ -20,7 +24,7 @@ attacks_normal = 3
 # Enter Amount of Attacks in tournament
 attacks_tournament = 2
 
-# define the initiale mode
+# define the initial mode
 mode = "Secure"
 
 BotNet_update = False

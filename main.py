@@ -1,36 +1,27 @@
 #!/usr/bin/python2.7
 # -*- coding: utf-8
 
-from classes import API
-from classes import IP
 from console import Console
 from update import Update
-from utils import Utils
 from botnet import Botnet
 from random import randrange, uniform
-from collections import Counter
-from bs4 import BeautifulSoup
 import operator
-import requests
 import time
 import json
 import re
-import warnings
 import sqlite3
 import os
 import config
-# Enter username and password
-api = API("username", "password")
-
-c = Console(api)
-u = Update(api)
-b = Botnet(api)
 
 
 class run:
 
     def __init__(self):
-        self.init()
+        """
+        PUll all variables from config.py file.
+        """
+        self.username = config.user
+        self.password = config.password
         self.ddos_cluster = config.ddos_cluster
         self.database = config.database
         self.Max_point_tournament = config.Max_point_tournament
@@ -44,13 +35,17 @@ class run:
         self.attacks_normal = config.attacks_normal
         self.maxanti_normal = config.maxanti_normal
         self.active_cluster_protection = self.active_cluster_protection
+        self.init()
 
+        self.c = Console(self.username, self.password)
+        self.u = Update(self.username, self.password)
+        self.b = Botnet(self.username, self.password)
 
     def init(self):
         while True:
             if self.ddos_cluster:
-                checkcluster = json.loads(c.check_Cluster())
-                TournamentPosition = json.loads(c.GetTournamentPosition())
+                checkcluster = json.loads(self.c.check_Cluster())
+                TournamentPosition = json.loads(self.c.GetTournamentPosition())
                 try:
                     # determine and attack cluster tournament
                     db = sqlite3.connect(self.database)
@@ -86,15 +81,15 @@ class run:
                             Cluster_name = newA[i][1]
                             Cluster_point = newA[i][0]
 
-                            checkcluster = json.loads(c.check_Cluster())
+                            checkcluster = json.loads(self.c.check_Cluster())
                             if "DDoS not ready" in checkcluster["ddosready"]:
                                 print checkcluster["ddosready"]
                                 break
                             else:
                                 try:
-                                    scan_cluster = json.loads(c.ScanCluster(Cluster_name.decode("utf-8")))
+                                    scan_cluster = json.loads(self.c.ScanCluster(Cluster_name.decode("utf-8")))
                                 except UnicodeEncodeError:
-                                    scan_cluster = json.loads(c.ScanCluster(Cluster_name.encode("utf-8")))
+                                    scan_cluster = json.loads(self.c.ScanCluster(Cluster_name.encode("utf-8")))
 
                                 if scan_cluster["result"] == "0":
                                     scan_cluster["ddoschance"] = scan_cluster["ddoschance"].split("%")
@@ -102,7 +97,7 @@ class run:
                                     if int(ddoschance[0]) > 50:
                                         print "attack " + Cluster_name + "(" + str(Cluster_point) + ")" + " Your chance is " + \
                                               scan_cluster["ddoschance"][0] + "%"
-                                        result = json.loads(c.AttackCluster(Cluster_name))
+                                        result = json.loads(self.c.AttackCluster(Cluster_name))
                                         os.remove(self.database)
                                         if result['result'] == 6:
                                             pass
@@ -148,15 +143,15 @@ class run:
                             Cluster_point = newA[i][1]
                             if Cluster_point < self.Max_point_tournament:
                                 # try:
-                                #	scan_cluster = json.loads(c.ScanCluster(Cluster_name.decode("utf-8")))
+                                #	scan_cluster = json.loads(self.c.ScanCluster(Cluster_name.decode("utf-8")))
                                 # except UnicodeEncodeError:
-                                #	scan_cluster = json.loads(c.ScanCluster(Cluster_name.encode("utf-8")))
+                                #	scan_cluster = json.loads(self.c.ScanCluster(Cluster_name.encode("utf-8")))
 
                                 count = count + 1
                                 print "if attack " + Cluster_name + "(" + str(Cluster_point) + ")"
                                 Cluster = [(0, Cluster_name, str(Cluster_point))]
                                 cursor.executemany("INSERT INTO Cluster VALUES (?,?,?)", Cluster)
-                                db.commit()
+                                self.b.commit()
                         else:
                             count = 0
                             for i in range(0, len(newA)):
@@ -164,15 +159,15 @@ class run:
                                 Cluster_point = newA[i][1]
                                 if Cluster_point < self.Max_point_tournament and count < 5:
                                     # try:
-                                    #	scan_cluster = json.loads(c.ScanCluster(Cluster_name.decode("utf-8")))
+                                    #	scan_cluster = json.loads(self.c.ScanCluster(Cluster_name.decode("utf-8")))
                                     # except UnicodeEncodeError:
-                                    #	scan_cluster = json.loads(c.ScanCluster(Cluster_name.encode("utf-8")))
+                                    #	scan_cluster = json.loads(self.c.ScanCluster(Cluster_name.encode("utf-8")))
 
                                     count = count + 1
                                     print "if attack " + Cluster_name + "(" + str(Cluster_point) + ")"
                                     Cluster = [(0, Cluster_name, str(Cluster_point))]
                                     cursor.executemany("INSERT INTO Cluster VALUES (?,?,?)", Cluster)
-                                    db.commit()
+                                    self.b.commit()
                             time.sleep(5)
 
 
@@ -216,23 +211,23 @@ class run:
                             Cluster_name = newA[i][0]
                             Cluster_point = newA[i][1]
                             if Cluster_point < self.Max_point_tournament:
-                                checkcluster = json.loads(c.check_Cluster())
+                                checkcluster = json.loads(self.c.check_Cluster())
                                 test = "no"
                                 if "DDoS not ready" in checkcluster["ddosready"] and test == "no":
                                     print checkcluster["ddosready"]
                                     break
                                 else:
                                     try:
-                                        scan_cluster = json.loads(c.ScanCluster(Cluster_name.decode("utf-8")))
+                                        scan_cluster = json.loads(self.c.ScanCluster(Cluster_name.decode("utf-8")))
                                     except UnicodeEncodeError:
-                                        scan_cluster = json.loads(c.ScanCluster(Cluster_name.encode("utf-8")))
+                                        scan_cluster = json.loads(self.c.ScanCluster(Cluster_name.encode("utf-8")))
                                     if scan_cluster["result"] == "0":
                                         scan_cluster["ddoschance"] = scan_cluster["ddoschance"].split("%")
                                         ddoschance = re.findall('\d+', scan_cluster["ddoschance"][0])
                                         if int(ddoschance[0]) > 50:
                                             print "attack " + Cluster_name + "(" + str(
                                                 Cluster_point) + ")" + " Your chance is " + scan_cluster["ddoschance"][0] + "%"
-                                            result = json.loads(c.AttackCluster(Cluster_name))
+                                            result = json.loads(self.c.AttackCluster(Cluster_name))
                                             if result['result'] == 6:
                                                 pass
                                             else:
@@ -246,25 +241,25 @@ class run:
             global change
             change = False
             if self.BotNet_update:
-                money = json.loads(c.myinfo())
-                json_data = json.loads(u.botnetInfo())
+                money = json.loads(self.c.myinfo())
+                json_data = json.loads(self.u.botnetInfo())
                 print "analysing configuration... botnet"
                 for i in range(0, int(json_data['count'])):
                     moneycheck = True
                     ireal = i + 1
-                    # json_data = json.loads(u.botnetInfo())
-                    # money = json.loads(c.myinfo())
+                    # json_data = json.loads(self.u.botnetInfo())
+                    # money = json.loads(self.c.myinfo())
                     if json_data['data'][i]['bLVL'] == 100:
                         break
                     elif change == True:
-                        json_data = json.loads(u.botnetInfo())
-                        money = json.loads(c.myinfo())
+                        json_data = json.loads(self.u.botnetInfo())
+                        money = json.loads(self.c.myinfo())
                     while int(json_data['data'][i]['bLVL']) is not 100 and moneycheck == True:
                         if int(json_data['data'][i]['bPRICE']) < int(money['money']):
                             print "Updating Botnet " + str(ireal) + " level : " + str(int(json_data['data'][i]['bLVL']) + 1)
-                            u.upgradeBotnet(str(ireal))
-                            json_data = json.loads(u.botnetInfo())
-                            money = json.loads(c.myinfo())
+                            self.u.upgradeBotnet(str(ireal))
+                            json_data = json.loads(self.u.botnetInfo())
+                            money = json.loads(self.c.myinfo())
                             change = True
                         else:
                             print "No money to update Botnet #" + str(ireal)
@@ -275,7 +270,7 @@ class run:
             attackneeded = False
             Tournament = False
             if self.joinTournament == True:
-                if c.getTournament():
+                if self.c.getTournament():
                     Tournament = True
                     attackneeded = True
                     if self.tournament_potator:
@@ -286,22 +281,22 @@ class run:
             stat = "0"
             while "0" in stat and attackneeded == False:
 
-                stat = u.startTask(self.updates[self.updatecount])
+                stat = self.u.startTask(self.updates[self.updatecount])
                 if "0" in stat:
                     print "updating " + self.updates[self.updatecount] + " level +1"
                     # print "Started Update
                     print "Waiting... in update"
-                    # u.useBooster()
+                    # self.u.useBooster()
                     time.sleep(wait_load)
                     self.updatecount += 1
                     if self.updatecount == 14:
                         while self.updatecount > 0:
-                            print(u.getTasks())
-                        # u.useBooster()
+                            print(self.u.getTasks())
+                        # self.u.useBooster()
 
                         if self.updatecount:
                             pass
-                        # u.finishAll()
+                        # self.u.finishAll()
 
                     if self.updatecount >= len(self.updates):
                         self.updatecount = 0
@@ -311,7 +306,7 @@ class run:
 
             if attackneeded == False and self.booster == True:
                 try:
-                    usebooster = u.getTasks()
+                    usebooster = self.u.getTasks()
                     json_data = json.loads(usebooster)
                 except ValueError:
                     print "Connection Error try again..."
@@ -322,13 +317,13 @@ class run:
                 try:
                     while len(json_data["data"]) > 1:
                         if int(json_data["boost"]) > 5:
-                            u.useBooster()
+                            self.u.useBooster()
                             print "Using booster on rest " + str(int(json_data["boost"]) - 1)
                         # UPDATE Value
                         else:
                             print "you have < 5 boost."
                             break
-                        usebooster = u.getTasks()
+                        usebooster = self.u.getTasks()
                         json_data = json.loads(usebooster)
                 except KeyError:
                     pass
@@ -336,12 +331,12 @@ class run:
                     pass
 
             if attackneeded == False and self.Use_netcoins == True:
-                myinfo = c.myinfo()
+                myinfo = self.c.myinfo()
                 time.sleep(2)
                 json_data = json.loads(myinfo)
                 try:
                     if json_data['netcoins'] > 1:
-                        u.finishAll()
+                        self.u.finishAll()
                         print "I used Netcoins for finish all task."
                 except TypeError as e:
                     i = 0
@@ -354,9 +349,9 @@ class run:
 
 
 
-            if b.attackable():
+            if self.b.attackable():
                 print "Attacking with Botnet"
-                attackbot = b.attackall()
+                attackbot = self.b.attackall()
                 print attackbot
 
                 attackneeded = True
@@ -364,7 +359,7 @@ class run:
             attackneeded = True
 
             if attackneeded and Tournament == False:
-                c.attack(self.attacks_normal, self.maxanti_normal, wait_load, mode, api, self.active_cluster_protection)
+                self.c.attack(self.attacks_normal, self.maxanti_normal, wait_load, mode, api, self.active_cluster_protection)
                 attackneeded = False
                 wait_load = round(uniform(0, 1), 2)
 
