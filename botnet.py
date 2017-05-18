@@ -37,6 +37,12 @@ class Botnet:
                 attack = True
         return attack
 
+    def attack(self):
+        if self.b.attackable():
+            print "Attacking with Botnet"
+            attackbot = self.b.attackall()
+            print attackbot
+
     def attackall(self):
         temp = self.ut.requestString("user::::pass::::uhash::::cID",
                                      self.username + "::::" + self.password + "::::" + "userHash_not_needed" + "::::" + "1",
