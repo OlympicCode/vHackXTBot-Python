@@ -347,19 +347,16 @@ class run:
                     else:
                         exit(0)
 
-
-
             if self.b.attackable():
                 print "Attacking with Botnet"
                 attackbot = self.b.attackall()
                 print attackbot
-
                 attackneeded = True
                 print "Waiting... in normal " + str(wait_load) + "s"
             attackneeded = True
 
             if attackneeded and Tournament == False:
-                self.c.attack(self.attacks_normal, self.maxanti_normal, wait_load, mode, api, self.active_cluster_protection)
+                self.c.attack(self.attacks_normal, self.maxanti_normal, wait_load, mode, self.active_cluster_protection)
                 attackneeded = False
                 wait_load = round(uniform(0, 1), 2)
 

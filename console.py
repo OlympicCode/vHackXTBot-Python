@@ -127,7 +127,7 @@ class Console:
         fd.write('{0}\n'.format(lineexec.result()))
         fd.flush()
 
-    def calc_img(self, ut, imgstring, uhash, hostname, max, mode, api):
+    def calc_img(self, ut, imgstring, uhash, hostname, max, mode):
         pic = cStringIO.StringIO()
         image_string = cStringIO.StringIO(base64.b64decode(imgstring))
         image = Image.open(image_string)
@@ -158,7 +158,7 @@ class Console:
                             result = self.attackIP(jsons['ipaddress'], max, mode)
 
                             # remove spyware
-                            u = Update(api)
+                            u = Update(self.username, self.password)
                             spyware = u.SpywareInfo()
                             if int(spyware[0].split(":")[-1]) > 0 and not int(spyware[0].split(":")[-1]) == 0:
                                 u.removeSpyware()
@@ -181,7 +181,7 @@ class Console:
             except ValueError:
                 return 0, 0
 
-    def getIP(self, blank, max, mode, api, active_protecte_cluster_ddos):
+    def getIP(self, blank, max, mode, active_protecte_cluster_ddos):
         info = self.myinfo()
         try:
             info = json.loads(info)
@@ -222,8 +222,7 @@ class Console:
             fd = open("database.txt", "a")
             with concurrent.futures.ThreadPoolExecutor(max_workers=6) as executor:
                 for i, image in enumerate(list_image):
-                    wait_for = executor.submit(self.calc_img, self.ut, list_image[i], uhash, list_hostname[i], max, mode,
-                                               api)
+                    wait_for = executor.submit(self.calc_img, self.ut, list_image[i], uhash, list_hostname[i], max, mode)
                     try:
                         result, ip = wait_for.result()
                     except TypeError:
@@ -478,7 +477,7 @@ class Console:
 
     def attack(self, amount, max, wait, mode, api, active_protecte_cluster_ddos):
         for i in range(0, (amount * random.randint(1, 2))):
-            data = self.getIP(True, max, mode, api, active_protecte_cluster_ddos)
+            data = self.getIP(True, max, mode, active_protecte_cluster_ddos)
             print "wait anti-blocking..."
             if mode == "Secure":
                 time.sleep(5)
