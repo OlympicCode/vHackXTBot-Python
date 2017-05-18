@@ -5,14 +5,11 @@ from console import Console
 from update import Update
 from botnet import Botnet
 from random import randrange, uniform
-import operator
 import time
 import json
-import re
-import sqlite3
-import os
 import config
 import ddos
+
 
 class run:
 
