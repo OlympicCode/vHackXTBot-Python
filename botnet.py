@@ -19,7 +19,6 @@ class Botnet:
         self.change = True
         self.moneycheck = True
 
-
     def getInfo(self):
         temp = self.ut.requestString("user::::pass::::uhash",
                                      self.username + "::::" + self.password + "::::" + "userHash_not_needed",
