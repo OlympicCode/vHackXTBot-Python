@@ -1,4 +1,6 @@
 from utils import Utils
+import time
+import config
 
 
 class Update:
@@ -7,6 +9,8 @@ class Update:
     def __init__(self, u, p):
         self.username = u
         self.password = p
+        self.updates = config.updates
+        self.updatecount = config.updatecount
 
     def getTasks(self):
         temp =self.ut.requestString("user::::pass::::uhash",
@@ -82,3 +86,21 @@ class Update:
                                 "vh_tasks.php")
         return temp
 
+    def doTasks(self, wait_load):
+        stat = self.startTask(self.updates[self.updatecount])
+        if "0" in stat:
+            print "updating " + self.updates[self.updatecount] + " level +1"
+            # print "Started Update
+            print "Waiting... in update"
+            # self.u.useBooster()
+            time.sleep(wait_load)
+            self.updatecount += 1
+            if self.updatecount == 14:
+                while self.updatecount > 0:
+                    print(self.getTasks())
+                # self.u.useBooster()
+                if self.updatecount:
+                    pass
+                    # self.u.finishAll()
+            if self.updatecount >= len(self.updates):
+                self.updatecount = 0

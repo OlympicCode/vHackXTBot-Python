@@ -15,7 +15,6 @@ class Botnet:
         self.password = p
         self.c = Console(self.username, self.password)
         self.u = Update(self.username, self.password)
-        self.b = Botnet(self.username, self.password)
         self.change = True
         self.moneycheck = True
 
@@ -38,7 +37,7 @@ class Botnet:
         return attack
 
     def attack(self):
-        if self.b.attackable():
+        if self.attackable():
             print "Attacking with Botnet"
             attackbot = self.b.attackall()
             print attackbot

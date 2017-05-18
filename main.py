@@ -24,8 +24,7 @@ class run:
         self.BotNet_update = config.BotNet_update
         self.joinTournament = config.joinTournament
         self.tournament_potator = config.tournament_potator
-        self.updates = config.updates
-        self.updatecount = config.updatecount
+
         self.booster = config.booster
         self.Use_netcoins = config.Use_netcoins
         self.attacks_normal = config.attacks_normal
@@ -56,29 +55,9 @@ class run:
                         print "** Force Mode to 'Potator' for Tournament **"
                         stat = 1
             stat = "0"
-            while "0" in stat and attackneeded == False:
-
-                stat = self.u.startTask(self.updates[self.updatecount])
-                if "0" in stat:
-                    print "updating " + self.updates[self.updatecount] + " level +1"
-                    # print "Started Update
-                    print "Waiting... in update"
-                    # self.u.useBooster()
-                    time.sleep(self.wait_load)
-                    self.updatecount += 1
-                    if self.updatecount == 14:
-                        while self.updatecount > 0:
-                            print(self.u.getTasks())
-                        # self.u.useBooster()
-
-                        if self.updatecount:
-                            pass
-                        # self.u.finishAll()
-
-                    if self.updatecount >= len(self.updates):
-                        self.updatecount = 0
-
-                elif "1" in stat:
+            while "0" in stat and attackneeded is False:
+                self.u.doTasks(self.wait_load)
+            if "1" in stat:
                     attackneeded = True
 
             if not attackneeded and self.booster:
