@@ -17,7 +17,7 @@ import concurrent.futures
 import random
 import sys
 import signal
-
+import config
 original_sigint = None
 
 
@@ -475,13 +475,13 @@ class Console:
         selection = o.getPassword(imgs)
         print selection
 
-    def attack(self, amount, max, wait, mode, active_protecte_cluster_ddos):
-        for i in range(0, (amount * random.randint(1, 2))):
-            data = self.getIP(True, max, mode, active_protecte_cluster_ddos)
+    def attack(self, obj):
+        for i in range(0, (obj.attacks_normal * random.randint(1, 2))):
+            data = self.getIP(True, obj.maxanti_normal, obj.mode, obj.active_cluster_protection)
             print "wait anti-blocking..."
-            if mode == "Secure":
+            if obj.mode == "Secure":
                 time.sleep(5)
-            elif mode == "Potator":
+            elif obj.mode == "Potator":
                 time.sleep(3)
 
     def exit_gracefully(self, signum, frame):

@@ -47,7 +47,7 @@ class run:
                 self.b.update()
             attackneeded = False
             Tournament = False
-            if self.joinTournament == True:
+            if self.joinTournament is True:
                 if self.c.getTournament():
                     Tournament = True
                     attackneeded = True
@@ -107,7 +107,7 @@ class run:
                 except TypeError:
                     pass
 
-            if attackneeded == False and self.Use_netcoins == True:
+            if attackneeded is False and self.Use_netcoins is True:
                 myinfo = self.c.myinfo()
                 time.sleep(2)
                 json_data = json.loads(myinfo)
@@ -128,7 +128,7 @@ class run:
             attackneeded = True
 
             if attackneeded and Tournament is False:
-                self.c.attack(self.attacks_normal, self.maxanti_normal, self.wait_load, self.mode, self.active_cluster_protection)
+                self.c.attack(self)
                 attackneeded = False
                 wait_load = round(uniform(0, 1), 2)
 
