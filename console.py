@@ -475,7 +475,7 @@ class Console:
         selection = o.getPassword(imgs)
         print selection
 
-    def attack(self, amount, max, wait, mode, api, active_protecte_cluster_ddos):
+    def attack(self, amount, max, wait, mode, active_protecte_cluster_ddos):
         for i in range(0, (amount * random.randint(1, 2))):
             data = self.getIP(True, max, mode, active_protecte_cluster_ddos)
             print "wait anti-blocking..."
