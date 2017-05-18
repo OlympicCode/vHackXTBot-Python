@@ -24,7 +24,6 @@ class run:
         self.BotNet_update = config.BotNet_update
         self.joinTournament = config.joinTournament
         self.tournament_potator = config.tournament_potator
-
         self.booster = config.booster
         self.Use_netcoins = config.Use_netcoins
         self.attacks_normal = config.attacks_normal
@@ -36,7 +35,6 @@ class run:
         self.u = Update(self.username, self.password)
         self.b = Botnet(self.username, self.password)
         self.ddos = ddos.Ddos()
-
         self.init()
 
     def init(self):
