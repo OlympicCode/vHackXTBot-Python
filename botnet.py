@@ -2,6 +2,9 @@
 # -*- coding: utf-8
 
 from utils import Utils
+import json
+from console import Console
+from update import Update
 
 
 class Botnet:
@@ -10,6 +13,12 @@ class Botnet:
     def __init__(self, u, p):
         self.username = u
         self.password = p
+        self.c = Console(self.username, self.password)
+        self.u = Update(self.username, self.password)
+        self.b = Botnet(self.username, self.password)
+        self.change = True
+        self.moneycheck = True
+
 
     def getInfo(self):
         temp = self.ut.requestString("user::::pass::::uhash",
@@ -44,3 +53,27 @@ class Botnet:
                                      "vh_attackCompany4.php")
         return temp
 
+    def update(self):
+        money = json.loads(self.c.myinfo())
+        json_data = json.loads(self.u.botnetInfo())
+        print "analysing configuration... botnet"
+        for i in range(0, int(json_data['count'])):
+            moneycheck = True
+            ireal = i + 1
+            if json_data['data'][i]['bLVL'] == 100:
+                break
+            elif self.change:
+                json_data = json.loads(self.u.botnetInfo())
+                money = json.loads(self.c.myinfo())
+            while int(json_data['data'][i]['bLVL']) is not 100 and moneycheck == True:
+                if int(json_data['data'][i]['bPRICE']) < int(money['money']):
+                    print "Updating Botnet " + str(ireal) + " level : " + str(int(json_data['data'][i]['bLVL']) + 1)
+                    self.u.upgradeBotnet(str(ireal))
+                    json_data = json.loads(self.u.botnetInfo())
+                    money = json.loads(self.c.myinfo())
+                    self.change = True
+                else:
+                    print "No money to update Botnet #" + str(ireal)
+                    self.moneycheck = False
+                    self.change = False
+                    break
