@@ -43,36 +43,8 @@ class run:
     def init(self):
         while True:
             self.ddos.run_ddos()
-
-            global change
-            change = False
             if self.BotNet_update:
-                money = json.loads(self.c.myinfo())
-                json_data = json.loads(self.u.botnetInfo())
-                print "analysing configuration... botnet"
-                for i in range(0, int(json_data['count'])):
-                    moneycheck = True
-                    ireal = i + 1
-                    # json_data = json.loads(self.u.botnetInfo())
-                    # money = json.loads(self.c.myinfo())
-                    if json_data['data'][i]['bLVL'] == 100:
-                        break
-                    elif change == True:
-                        json_data = json.loads(self.u.botnetInfo())
-                        money = json.loads(self.c.myinfo())
-                    while int(json_data['data'][i]['bLVL']) is not 100 and moneycheck == True:
-                        if int(json_data['data'][i]['bPRICE']) < int(money['money']):
-                            print "Updating Botnet " + str(ireal) + " level : " + str(int(json_data['data'][i]['bLVL']) + 1)
-                            self.u.upgradeBotnet(str(ireal))
-                            json_data = json.loads(self.u.botnetInfo())
-                            money = json.loads(self.c.myinfo())
-                            change = True
-                        else:
-                            print "No money to update Botnet #" + str(ireal)
-                            moneycheck = False
-                            change = False
-                            break
-
+                self.b.update()
             attackneeded = False
             Tournament = False
             if self.joinTournament == True:
@@ -83,7 +55,6 @@ class run:
                         mode = "Potator"
                         print "** Force Mode to 'Potator' for Tournament **"
                         stat = 1
-
             stat = "0"
             while "0" in stat and attackneeded == False:
 
