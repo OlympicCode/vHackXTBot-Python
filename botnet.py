@@ -39,7 +39,7 @@ class Botnet:
     def attack(self):
         if self.attackable():
             print "Attacking with Botnet"
-            attackbot = self.b.attackall()
+            attackbot = self.attackall()
             print attackbot
 
     def attackall(self):
