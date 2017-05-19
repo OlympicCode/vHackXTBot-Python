@@ -36,6 +36,7 @@ class run:
         self.b = Botnet(self.username, self.password)
         self.ddos = ddos.Ddos()
         self.init()
+        
 
     def init(self):
         while True:
@@ -53,8 +54,9 @@ class run:
                         print "** Force Mode to 'Potator' for Tournament **"
                         stat = 1
             stat = "0"
-            while "0" in stat and attackneeded is False:
-                self.u.doTasks(self.wait_load)
+            task = True
+            while "0" in stat and attackneeded is False and task is not None:
+                task = self.u.doTasks(self.wait_load)
             if "1" in stat:
                     attackneeded = True
 
@@ -103,9 +105,10 @@ class run:
             # attack botnet
             self.b.attack()
             attackneeded = True
+            Tournament = False
 
             if attackneeded and Tournament is False:
-                self.c.attack(self)
+                print self.c.attack(self)
                 attackneeded = False
                 wait_load = round(uniform(0, 1), 2)
 
