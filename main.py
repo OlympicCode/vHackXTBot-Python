@@ -9,7 +9,7 @@ import time
 import json
 import config
 import ddos
-
+from player import Player
 
 class run:
 
@@ -17,6 +17,7 @@ class run:
         """
         Pull all variables from config.py file.
         """
+        self.player =Player()
         self.username = config.user
         self.password = config.password
         self.database = config.database
@@ -33,7 +34,7 @@ class run:
         self.wait_load = config.wait_load
         self.c = Console(self.username, self.password)
         self.u = Update(self.username, self.password)
-        self.b = Botnet(self.username, self.password)
+        self.b = Botnet(self.player)
         self.ddos = ddos.Ddos()
         self.init()
         
@@ -42,7 +43,7 @@ class run:
         while True:
             self.ddos.run_ddos()
             if self.BotNet_update:
-                self.b.update()
+                self.b.upgradebotnet()
             attackneeded = False
             Tournament = False
             if self.joinTournament is True:

@@ -2,12 +2,9 @@
 # -*- coding: utf-8
 
 import base64
-import commands
 import hashlib
-import sys
 import time
 import urllib2
-from classes import Passwords
 import random
 import config
 
@@ -68,7 +65,6 @@ class Utils:
             n.append(self.parse(temp))
         return n
 
-
     def requestString(self, format, data, php):
         time.sleep(random.randint(1, 2))
         t = None
@@ -84,8 +80,7 @@ class Utils:
                 print "Blocked, trying again. Delaying {0} seconds".format(i)
                 time.sleep(1+i)
             i += 1
-                
-    
+
     def requestStringNoWait(self, format, data, php):
         for i1 in range(0, 10):
             try:
@@ -148,3 +143,19 @@ class Utils:
                               "vh_upgradeBotnet.php")
         return response
 
+    def myinfo(self):
+        """
+        looks up and returns all data associated with player. Upgrades, moneym boosters, spyware active etc.
+        See player class for detailed description
+        :return: str
+        """
+        temp = self.requestString("user::::pass::::gcm::::uhash",
+                                     self.username + "::::" + self.password + "::::" + "eW7lxzLY9bE:APA91bEO2sZd6aibQerL3Uy-wSp3gM7zLs93Xwoj4zIhnyNO8FLyfcODkIRC1dc7kkDymiWxy_dTQ-bXxUUPIhN6jCUBVvGqoNXkeHhRvEtqAtFuYJbknovB_0gItoXiTev7Lc5LJgP2" + "::::" + "userHash_not_needed",
+                                     "vh_update.php")
+        return temp
+
+    def removespyware(self):
+        arr = self.requestArray("user::::pass::::uhash:::::",
+                              self.username + "::::" + self.password + "::::" + "UserHash_not_needed" + ":::::",
+                              "vh_removeSpyware.php")
+        return arr
