@@ -17,9 +17,7 @@ class run:
         """
         Pull all variables from config.py file.
         """
-        self.player =Player()
-        self.username = config.user
-        self.password = config.password
+        self.player = Player()
         self.database = config.database
         self.Max_point_tournament = config.Max_point_tournament
         self.BotNet_update = config.BotNet_update
@@ -32,12 +30,11 @@ class run:
         self.active_cluster_protection = config.active_cluster_protection
         self.mode = config.mode
         self.wait_load = config.wait_load
-        self.c = Console(self.username, self.password)
-        self.u = Update(self.username, self.password)
+        self.c = Console(self.player.username, self.player.password)
+        self.u = Update(self.player.username, self.player.password)
         self.b = Botnet(self.player)
         self.ddos = ddos.Ddos()
         self.init()
-        
 
     def init(self):
         while True:
@@ -88,11 +85,10 @@ class run:
                     pass
 
             if not attackneeded and self.Use_netcoins:
-                myinfo = self.c.myinfo()
                 time.sleep(2)
-                json_data = json.loads(myinfo)
-                if json_data['netcoins'] > 1:
+                if self.player.netcoins > 1:
                     self.u.finishAll()
+                    self.player.init()# update player info
                     print "I used Netcoins for finish all task."
             # attack botnet
             self.b.attack()
