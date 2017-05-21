@@ -136,3 +136,15 @@ class Utils:
                                      "vh_attackCompany4.php")"""
         return response
 
+    def upgradebot(self, id):
+        """
+        Supplied with a bot net computer ID, upgrade the computer.
+        :param id: bot net computer id
+        :return: str
+        containing: {"money":"3479746","old":"13","costs":"4100000","lvl":"41","mm":"7579746","new":"42","strength":"42"}
+        """
+        response = self.requestString("user::::pass::::uhash::::bID",
+                              self.username + "::::" + self.password + "::::" + "userHash_not_needed" + "::::" + str(id),
+                              "vh_upgradeBotnet.php")
+        return response
+
