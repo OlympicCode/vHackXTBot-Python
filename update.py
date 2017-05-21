@@ -1,8 +1,8 @@
 from utils import Utils
 import json
 
-class Update:
 
+class Update:
     ut = Utils()
 
     def getrunningtasks(self):
@@ -18,8 +18,8 @@ class Update:
         :return: string, as above if tasks.
         """
         temp = self.ut.requestString("user::::pass::::uhash",
-                                self.username + "::::" + self.password + "::::" + "userHash_not_needed",
-                                "vh_tasks.php")
+                                     self.username + "::::" + self.password + "::::" + "userHash_not_needed",
+                                     "vh_tasks.php")
         return temp
 
     def SpywareInfo(self):
@@ -28,14 +28,14 @@ class Update:
                            'ip:23.93.18.103', 'next:now.}]', 'remote:1', 'result:0']
         """
         arr = self.ut.requestArray("user::::pass::::uhash:::::",
-                              self.username + "::::" + self.password + "::::" + "UserHash_not_needed" + ":::::",
-                              "vh_spywareInfo.php")
+                                   self.username + "::::" + self.password + "::::" + "UserHash_not_needed" + ":::::",
+                                   "vh_spywareInfo.php")
         return arr
 
     def removeSpyware(self):
         arr = self.ut.requestArray("user::::pass::::uhash:::::",
-                              self.username + "::::" + self.password + "::::" + "UserHash_not_needed" + ":::::",
-                              "vh_removeSpyware.php")
+                                   self.username + "::::" + self.password + "::::" + "UserHash_not_needed" + ":::::",
+                                   "vh_removeSpyware.php")
         return arr
 
     def runningtasks(self, tasks=None):
@@ -66,27 +66,35 @@ class Update:
         :param type: string variable of task type, "adw","fw" etc. See config file.
         :return:
         """
-
         temp = self.ut.requestString("user::::pass::::uhash::::utype",
-                                self.username + "::::" + self.password + "::::" + "userHash_not_needed" + "::::" + type,
-                                "vh_addUpdate.php")
+                                     self.username + "::::" + self.password + "::::" + "userHash_not_needed" + "::::" + type,
+                                     "vh_addUpdate.php")
         if "result" in temp:
             return temp.split('result":"')[1].split('"')[0]
         return "2"
 
     def finishTask(self, taskID):
+        """
+        Finish single task of taskID
+        :param taskID:
+        :return:
+        """
         temp = self.ut.requestString("user::::pass::::uhash::::taskid",
-                                self.username + "::::" + self.password + "::::" + "userHash_not_needed" + "::::" + taskID,
-                                "vh_finishTask.php")
+                                     self.username + "::::" + self.password + "::::" + "userHash_not_needed" + "::::" + taskID,
+                                     "vh_finishTask.php")
         if "4" in temp:
             return True
         else:
             return False
 
     def finishAll(self):
+        """
+        Finish all tasks currently running.
+        :return:
+        """
         temp = self.ut.requestString("user::::pass::::uhash",
-                                self.username + "::::" + self.password + "::::" + "userHash_not_needed",
-                                "vh_finishAll.php")
+                                     self.username + "::::" + self.password + "::::" + "userHash_not_needed",
+                                     "vh_finishAll.php")
         if "0" in temp:
             return True
         else:
@@ -94,8 +102,8 @@ class Update:
 
     def useBooster(self):
         temp = self.ut.requestString("user::::pass::::uhash::::boost",
-                                self.username + "::::" + self.password + "::::" + "userHash_not_needed" + "::::" + "1",
-                                "vh_tasks.php")
+                                     self.username + "::::" + self.password + "::::" + "userHash_not_needed" + "::::" + "1",
+                                     "vh_tasks.php")
         return temp
 
     def __init__(self, obj):
