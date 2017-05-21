@@ -100,6 +100,9 @@ class Utils:
         else:
             return []
 
+    def botnetserverinfo(self):
+        pass
+
     def __init__(self):
         self.secret = "aeffI"
         self.url = "https://api.vhack.cc/v/7/"
