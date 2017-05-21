@@ -13,7 +13,7 @@ class Botnet:
     def __init__(self, player):
         self.username = config.user
         self.password = config.password
-        self.botNetServers = config.botNetServers
+        self.botNetServers = 3
         self.botnet = []
         self.p = player
 
@@ -73,7 +73,7 @@ class Botnet:
         :return: none
         """
         for i in range(1, self.botNetServers+1):
-            response =self.ut.attackbotnetserver(i)
+            response = self.ut.attackbotnetserver(i)
             logging.info("Netcoins gained: {0}  To come....".format(response))
 
     def attack(self):

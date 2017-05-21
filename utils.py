@@ -9,9 +9,16 @@ import time
 import urllib2
 from classes import Passwords
 import random
-
+import config
 
 class Utils:
+
+    def __init__(self):
+        self.secret = "aeffI"
+        self.url = "https://api.vhack.cc/v/7/"
+        self.username = config.user
+        self.password = config.password
+
     def getTime(self):
         return int(round(time.time()))
 
@@ -101,8 +108,31 @@ class Utils:
             return []
 
     def botnetserverinfo(self):
-        pass
+        """
+        return botnet info including if you can attack vHack servers and bot net pcs info.
+        :return:
+        """
+        response = self.requestString("user::::pass::::uhash",
+                 self.username + "::::" + self.password + "::::" + "userHash_not_needed",
+                 "vh_botnetInfo.php")
+        return response
 
-    def __init__(self):
-        self.secret = "aeffI"
-        self.url = "https://api.vhack.cc/v/7/"
+    def attackbotnetserver(self, i):
+        """
+        Attack vHack servers
+        :return: string
+        """
+        response = self.requestString("user::::pass::::uhash::::cID",
+                                self.username + "::::" + self.password + "::::" + "userHash_not_needed" + "::::" + "1",
+                                "vh_attackCompany.php")
+        temp = self.requestString("user::::pass::::uhash::::cID",
+                                     self.username + "::::" + self.password + "::::" + "userHash_not_needed" + "::::" + "2",
+                                     "vh_attackCompany2.php")
+        temp = self.requestString("user::::pass::::uhash::::cID",
+                                     self.username + "::::" + self.password + "::::" + "userHash_not_needed" + "::::" + "3",
+                                     "vh_attackCompany3.php")
+        """temp = self.requestString("user::::pass::::uhash::::cID",
+                                  self.username + "::::" + self.password + "::::" + "userHash_not_needed" + "::::" + "4",
+                                     "vh_attackCompany4.php")"""
+        return response
+
