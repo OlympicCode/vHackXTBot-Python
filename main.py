@@ -57,16 +57,12 @@ class run:
                 task = self.u.doTasks(self.wait_load)
             if "1" in stat:
                     attackneeded = True
-
             if not attackneeded and self.booster:
                 try:
                     usebooster = self.u.getTasks()
                     json_data = json.loads(usebooster)
-                except ValueError:
-                    print "Connection Error try again..."
-                    pass
-                except TypeError:
-                    print "Connection Error try again..."
+                except Exception as e:
+                    print "Connection Error try again...{0}".format(e)
                     pass
                 try:
                     while len(json_data["data"]) > 1:
@@ -83,7 +79,6 @@ class run:
                     pass
                 except TypeError:
                     pass
-
             if not attackneeded and self.Use_netcoins:
                 time.sleep(2)
                 if self.player.netcoins > 1:
@@ -94,7 +89,6 @@ class run:
             self.b.attack()
             attackneeded = True
             Tournament = False
-
             if attackneeded and Tournament is False:
                 self.c.attack(self)
                 attackneeded = False
