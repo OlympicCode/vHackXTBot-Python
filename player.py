@@ -20,7 +20,7 @@ class Player:
         self.email = 0
         self.savedIPs = []
         self.anon_attack = config.anon
-        self.init() # 10 secs
+        self._init() # 10 secs
 
     def __repr__(self):
         return "Money: {0}, Score: {1}".format(self.money, self.score)
@@ -42,7 +42,7 @@ class Player:
     def removespy(self):
         response = self.ut.removespyware()
 
-    def init(self):
+    def _init(self):
         """
         {"id":"924198","money":"14501972","ip":"83.58.131.20",
         "inet":"10","hdd":"10","cpu":"10","ram":"14","fw":"256","av":"410","sdk":"580","ipsp":"50","spam":"71","scan":"436","adw":"76",
@@ -71,7 +71,7 @@ class Player:
         Refresh player info. Useful after a dev attack to pick up new email etc.
         :return:
         """
-        self.init()
+        self._init()
 
     def readmail(self):
         """

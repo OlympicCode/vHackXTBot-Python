@@ -83,7 +83,7 @@ class run:
                 time.sleep(2)
                 if self.player.netcoins > 1:
                     self.u.finishAll()
-                    self.player.init()# update player info
+                    self.player.refreshinfo()# update player info
                     print "I used Netcoins for finish all task."
             # attack botnet
             self.b.attack()
