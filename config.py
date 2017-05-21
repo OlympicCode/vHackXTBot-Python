@@ -48,3 +48,4 @@ wait_load = round(uniform(1, 3), 2)
 updatecount = 0
 attackneeded = False
 database = 'database.db'
+anon = True
