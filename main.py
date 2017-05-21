@@ -87,29 +87,20 @@ class run:
                 except TypeError:
                     pass
 
-            if attackneeded is False and self.Use_netcoins is True:
+            if not attackneeded and self.Use_netcoins:
                 myinfo = self.c.myinfo()
                 time.sleep(2)
                 json_data = json.loads(myinfo)
-                try:
-                    if json_data['netcoins'] > 1:
-                        self.u.finishAll()
-                        print "I used Netcoins for finish all task."
-                except TypeError as e:
-                    i = 0
-                    while i <= 10:
-                        print "Blocked, trying again. Delaying {0} seconds".format(i)
-                        time.sleep(i)
-                        i += 1
-                    else:
-                        exit(0)
+                if json_data['netcoins'] > 1:
+                    self.u.finishAll()
+                    print "I used Netcoins for finish all task."
             # attack botnet
             self.b.attack()
             attackneeded = True
             Tournament = False
 
             if attackneeded and Tournament is False:
-                print self.c.attack(self)
+                self.c.attack(self)
                 attackneeded = False
                 wait_load = round(uniform(0, 1), 2)
 

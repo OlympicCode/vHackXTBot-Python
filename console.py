@@ -17,7 +17,6 @@ import concurrent.futures
 import random
 import sys
 import signal
-import config
 original_sigint = None
 
 
