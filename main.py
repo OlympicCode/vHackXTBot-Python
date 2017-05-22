@@ -54,6 +54,7 @@ class run:
             stat = "0"
             task = True
             while "0" in stat and attackneeded is False and task is not None:
+                pass
                 #task = self.u.doTasks(self.wait_load)
             if "1" in stat:
                     attackneeded = True

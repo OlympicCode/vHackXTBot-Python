@@ -1,6 +1,8 @@
 import config
 from utils import Utils
 import json
+import logging
+import sys
 
 
 class Player:
@@ -55,6 +57,9 @@ class Player:
         :return:
         """
         data = self.ut.myinfo()
+        if len(data) == 1:
+            logging.warn('Username and password entered in config.py?')
+            sys.exit()
         j = json.loads(data)
         self.setmoney(j['money'])
         self.ip = j['ip']
