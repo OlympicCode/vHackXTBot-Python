@@ -41,31 +41,16 @@ class run:
             self.ddos.run_ddos()
             if self.BotNet_update:
                 self.b.upgradebotnet()
-            attackneeded = False
-            Tournament = False
-            if self.joinTournament is True:
-                if self.c.getTournament():
-                    Tournament = True
-                    attackneeded = True
-                    if self.tournament_potator:
-                        mode = "Potator"
-                        print "** Force Mode to 'Potator' for Tournament **"
-                        stat = 1
-            stat = "0"
-            task = True
-            while "0" in stat and attackneeded is False and task is not None:
-                pass
-                #task = self.u.doTasks(self.wait_load)
-            if "1" in stat:
-                    attackneeded = True
-            if not attackneeded and self.booster:
+            # attack botnet
+            self.b.attack()
+            if self.joinTournament and self.c.getTournament():
+                self.mode = "Potator"
+                print "** Force Mode to 'Potator' for Tournament **"
+            # task = self.u.doTasks(self.wait_load)
+            if self.booster:
                 try:
                     usebooster = self.u.getTasks()
                     json_data = json.loads(usebooster)
-                except Exception as e:
-                    print "Connection Error try again...{0}".format(e)
-                    pass
-                try:
                     while len(json_data["data"]) > 1:
                         if int(json_data["boost"]) > 5:
                             self.u.useBooster()
@@ -76,23 +61,16 @@ class run:
                             break
                         usebooster = self.u.getTasks()
                         json_data = json.loads(usebooster)
-                except KeyError:
+                except Exception as e:
+                    print "Connection Error try again...{0}".format(e)
                     pass
-                except TypeError:
-                    pass
-            if not attackneeded and self.Use_netcoins:
+            if self.Use_netcoins:
                 time.sleep(2)
                 if self.player.netcoins > 1:
                     self.u.finishAll()
-                    self.player.refreshinfo()# update player info
+                    self.player.refreshinfo()  # update player info
                     print "I used Netcoins for finish all task."
-            # attack botnet
-            self.b.attack()
-            attackneeded = True
-            Tournament = False
-            if attackneeded and Tournament is False:
-                self.c.attack(self)
-                attackneeded = False
-                wait_load = round(uniform(0, 1), 2)
+            # attack players
+            self.c.attack(self)
 
 r = run()

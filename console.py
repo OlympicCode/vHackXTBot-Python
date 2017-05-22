@@ -468,12 +468,6 @@ class Console:
             print "Password Error"
             return False
 
-    def attackIP2(self, ip, max):
-        o = OCR(False)
-        imgs = self.requestPassword(ip)
-        selection = o.getPassword(imgs)
-        print selection
-
     def attack(self, obj):
         for i in range(0, (obj.attacks_normal * random.randint(1, 2))):
             data = self.getIP(True, obj.maxanti_normal, obj.mode, obj.active_cluster_protection)
