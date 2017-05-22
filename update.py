@@ -106,6 +106,6 @@ class Update:
                                      "vh_tasks.php")
         return temp
 
-    def __init__(self, obj):
-        self.username = obj.username
-        self.password = obj.password
+    def __init__(self, user, password):
+        self.username = user
+        self.password = password
