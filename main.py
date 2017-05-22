@@ -49,7 +49,8 @@ class run:
             # task = self.u.doTasks(self.wait_load)
             if self.booster:
                 try:
-                    usebooster = self.u.getTasks()
+                    # usebooster = self.u.getTasks()
+                    usebooster = None
                     json_data = json.loads(usebooster)
                     while len(json_data["data"]) > 1:
                         if int(json_data["boost"]) > 5:
@@ -59,7 +60,8 @@ class run:
                         else:
                             print "you have < 5 boost."
                             break
-                        usebooster = self.u.getTasks()
+                        # usebooster = self.u.getTasks()
+                        usebooster = None
                         json_data = json.loads(usebooster)
                 except Exception as e:
                     print "Connection Error try again...{0}".format(e)
