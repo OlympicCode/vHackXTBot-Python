@@ -16,6 +16,7 @@ class Botnet:
         self.botNetServers = 3
         self.botnet = []
         self.p = player
+        self._initbot()
 
     def _initbot(self):
         """
@@ -148,7 +149,8 @@ class Bot:
         """
         Pass in bot class object and call upgrade function based on bot ID.
         details :
-        {u'strength': u'22', u'old': u'30', u'mm': u'68359859', u'money': u'66259859', u'costs': u'2100000', u'lvl': u'21', u'new': u'22'}
+        {u'strength': u'22', u'old': u'30', u'mm': u'68359859', u'money': u'66259859', u'costs': u'2100000',
+        u'lvl': u'21', u'new': u'22'}
         current lvl, bot number, x, x, upgrade cost, lvl, next lvl
         :return: None
         """
@@ -156,14 +158,15 @@ class Bot:
         details = json.loads(response)
         try:
             self.upgradecost = details['costs']
-            logging.info("Bot # {0} upgraded to level {1} at a cost of {2}".format(details['old'], details['lvl'], details['costs']))
+            logging.info("Bot # {0} upgraded to level {1} at a cost of {2}".format(details['old'], details['lvl'],
+                                                                                   details['costs']))
         except TypeError as e:
-            logging.info("Bot fully upgraded, should get this error. Fix me! {0}".format(e))
+            logging.info("Bot fully upgraded, should not get this error. Fix me! {0}".format(e))
             return None
         try:
             return details['money']
         except TypeError as e:
-            logging.info( "Error in upgradesinglebot: {0}".format(e))
+            logging.info("Error in upgradesinglebot: {0}".format(e))
             return None
 
     def __repr__(self):
