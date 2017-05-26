@@ -1,7 +1,8 @@
 # vHackAPI-Python
 vHackAPI written in Python 2.7.   
 
-[![Discord](https://img.shields.io/badge/Chat-%20on%20Discord-738bd7.svg?style=flat-square)](https://discord.gg/PHgESQn)
+[![Discord](https://img.shields.io/badge/Chat-%20on%20Discord-738bd7.svg?style=flat-square)](https://discord.gg/PHgESQn) 
+my Nickname for discord is vBlackOut :) thanx all
 [![GITHUB issue](https://img.shields.io/github/issues/OlympicCode/vHackAPI-Python.svg?style=flat-square&raw=true)](https://github.com/OlympicCode/vHackAPI-Python/issues)
 [![TRAVIS CI](https://travis-ci.org/OlympicCode/vHackAPI-Python.svg?branch=master)](https://travis-ci.org/OlympicCode/vHackAPI-Python)
 
