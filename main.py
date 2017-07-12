@@ -41,9 +41,10 @@ class run:
 
     def init(self):
         while True:
-            while "0" in self.stat:
+            stat = "0"
+            while "0" in stat or "3" in stat:
                 stat = self.u.startTask(self.updates[self.updatecount])
-                if "0" in self.stat:
+                if "3" in stat:
                     print "updating " + self.updates[self.updatecount] + " level +1"
                     #print "Started Update
                     print "Waiting... in update"
@@ -51,6 +52,7 @@ class run:
                     time.sleep(self.wait_load)
                     self.updatecount += 1
                     if self.updatecount == 14:
+                        stat = "0"
                         while self.updatecount > 0:
                             print(self.u.getTasks())
                             #u.useBooster()
