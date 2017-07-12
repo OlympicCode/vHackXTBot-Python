@@ -41,6 +41,7 @@ class run:
 
     def init(self):
         while True:
+            # update the player
 
             time.sleep(self.wait_load)
             stat = "0"
@@ -60,7 +61,7 @@ class run:
                         moneyforupdate = int(self.u.infoUpdate(self.updates[self.updatecount]))
 
                     time.sleep(self.wait_load)
-                    mymoney = int(self.player.getmoney())
+                    mymoney = int(json.loads(self.c.myinfo())["money"])
 
                     if mymoney < moneyforupdate:
                         self.updatecount += 1
