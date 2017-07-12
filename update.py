@@ -46,7 +46,11 @@ class Update:
         if not tasks:
             tasks = self.getrunningtasks()
         j = json.loads(tasks)
-        return len(j["data"])
+        try:
+            return len(j["data"])
+        except KeyError:
+            return "0"
+
 
     def getTaskIDs(self, tasks=None):
         """
@@ -106,12 +110,16 @@ class Update:
                                      "vh_tasks.php")
         return temp
 
-    def infoUpdate(self, name):
+    def infoUpdate(self, name, types=None):
         temp = self.ut.requestString("user::::pass::::uhash::::utype",
                                      self.username + "::::" + self.password + "::::" + "userHash_not_needed" + "::::" + name,
                                      "vh_updateInfo.php")
         j = json.loads(temp)
-        return j["costs"]
+        if (types == None):
+            return j["costs"]
+        else:
+            return j[types]
+
 
 
     def __init__(self, user, password):
