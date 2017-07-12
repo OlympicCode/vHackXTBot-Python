@@ -57,7 +57,7 @@ class run:
                         self.updatecount += 1
                         time.sleep(self.wait_load)
                         print "require " + str(moneyforupdate) + "$ for update " + self.updates[self.updatecount] + " your money " + str(mymoney) + "$"
-                        totaltask = int(self.running_all+self.updatecount)
+                        totaltask = int(self.running_all)+int(self.updatecount)
                         if totaltask == self.get_max_update:
                             stat = "0"
                     else:
@@ -69,7 +69,7 @@ class run:
                             #u.useBooster()
                             time.sleep(self.wait_load)
                             self.updatecount += 1
-                            totaltask = int(self.running_all+self.updatecount)
+                            totaltask = int(self.running_all)+int(self.updatecount)
                             if totaltask == self.get_max_update:
                                 stat = "0"
                                 while self.updatecount > 0:
