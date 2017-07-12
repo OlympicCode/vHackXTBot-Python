@@ -43,26 +43,30 @@ class run:
         while True:
             stat = "0"
             while "0" in stat or "3" in stat:
-                stat = self.u.startTask(self.updates[self.updatecount])
-                if "3" in stat:
-                    print "updating " + self.updates[self.updatecount] + " level +1"
-                    #print "Started Update
-                    print "Waiting... in update"
-                    #u.useBooster()
-                    time.sleep(self.wait_load)
+                if self.player.getmoney() > self.u.infoUpdate(self.updates[self.updatecount]):
                     self.updatecount += 1
-                    if self.updatecount == 14:
-                        stat = "0"
-                        while self.updatecount > 0:
-                            print(self.u.getTasks())
-                            #u.useBooster()
+                    time.sleep(self.wait_load)
+                else:
+                    stat = self.u.startTask(self.updates[self.updatecount])
+                    if "3" in stat:
+                        print "updating " + self.updates[self.updatecount] + " level +1"
+                        #print "Started Update
+                        print "Waiting... in update"
+                        #u.useBooster()
+                        time.sleep(self.wait_load)
+                        self.updatecount += 1
+                        if self.updatecount == 14:
+                            stat = "0"
+                            while self.updatecount > 0:
+                                print(self.u.getTasks())
+                                #u.useBooster()
 
-                        if self.updatecount: 
-                            pass
-                            #u.finishAll()
+                            if self.updatecount: 
+                                pass
+                                #u.finishAll()
 
-                    if self.updatecount >= len(self.updates):
-                        self.updatecount = 0
+                        if self.updatecount >= len(self.updates):
+                            self.updatecount = 0
 
             self.ddos.run_ddos()
             if self.BotNet_update:
@@ -73,7 +77,7 @@ class run:
                 self.mode = "Potator"
                 print "** Force Mode to 'Potator' for Tournament **"
             # task = self.u.doTasks(self.wait_load)
-            if self.booster:
+            if self.booster and self.u.runningtasks() > 1:
                 try:
                     # usebooster = self.u.getTasks()
                     usebooster = None
@@ -94,7 +98,7 @@ class run:
                     pass
             if self.Use_netcoins:
                 time.sleep(2)
-                if self.player.netcoins > 1:
+                if self.player.netcoins > 1 and self.u.runningtasks() > 1:
                     self.u.finishAll()
                     self.player.refreshinfo()  # update player info
                     print "I used Netcoins for finish all task."
