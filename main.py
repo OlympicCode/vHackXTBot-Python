@@ -45,7 +45,7 @@ class run:
             while "0" in stat or "3" in stat:
                 moneyforupdate = int(self.u.infoUpdate(self.updates[self.updatecount]))
                 mymoney = int(self.player.getmoney())
-                if mymoney < moneyforupdate:
+                if mymoney > moneyforupdate:
                     self.updatecount += 1
                     time.sleep(self.wait_load)
                     print "require " + str(moneyforupdate) + "$ for update " + self.updates[self.updatecount] + " your money " + str(mymoney) + "$"
