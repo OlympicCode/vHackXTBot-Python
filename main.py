@@ -40,12 +40,12 @@ class run:
         self.init()
 
     def init(self):
-
+        
+        self.get_max_update = int(self.u.infoUpdate("ram", "new"))
         while True:
 
             stat = "0"
             # prepare account 
-            self.get_max_update = int(self.u.infoUpdate("ram", "new"))
             self.running_all = self.u.runningtasks()
             print("your are running " + str(self.running_all) + "/" + str(self.get_max_update) + " tasks")
 
@@ -59,8 +59,8 @@ class run:
                         print "require " + str(moneyforupdate) + "$ for update " + self.updates[self.updatecount] + " your money " + str(mymoney) + "$"
                         totaltask = int(self.running_all)+int(self.updatecount)
                         print(totaltask)
-                        if totaltask == int(self.get_max_update):
-                            stat = "0"
+                        if int(totaltask) == int(self.get_max_update):
+                            stat = "1"
                     else:
                         stat = self.u.startTask(self.updates[self.updatecount])
                         if "3" in stat:
@@ -72,11 +72,8 @@ class run:
                             self.updatecount += 1
                             totaltask = int(self.running_all)+int(self.updatecount)
                             print(totaltask)
-                            if totaltask == int(self.get_max_update):
-                                stat = "0"
-
-                            if self.updatecount >= len(self.updates):
-                                self.updatecount = 0
+                            if int(totaltask) == int(self.get_max_update):
+                                stat = "1"
 
             # recheck running ask for boost and netcoins
             self.running_all = self.u.runningtasks()
