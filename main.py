@@ -26,9 +26,12 @@ class run:
         self.booster = config.booster
         self.Use_netcoins = config.Use_netcoins
         self.attacks_normal = config.attacks_normal
+        self.updates = config.updates
+        self.updatecount = config.updatecount
         self.maxanti_normal = config.maxanti_normal
         self.active_cluster_protection = config.active_cluster_protection
         self.mode = config.mode
+        self.stat = "0"
         self.wait_load = config.wait_load
         self.c = Console(self.player.username, self.player.password)
         self.u = Update(self.player.username, self.player.password)
@@ -38,6 +41,27 @@ class run:
 
     def init(self):
         while True:
+            while "0" in self.stat:
+                stat = self.u.startTask(self.updates[self.updatecount])
+                if "0" in self.stat:
+                    print "updating " + self.updates[self.updatecount] + " level +1"
+                    #print "Started Update
+                    print "Waiting... in update"
+                    #u.useBooster()
+                    time.sleep(self.wait_load)
+                    self.updatecount += 1
+                    if self.updatecount == 14:
+                        while self.updatecount > 0:
+                            print(self.u.getTasks())
+                            #u.useBooster()
+
+                        if self.updatecount: 
+                            pass
+                            #u.finishAll()
+
+                    if self.updatecount >= len(self.updates):
+                        self.updatecount = 0
+
             self.ddos.run_ddos()
             if self.BotNet_update:
                 self.b.upgradebotnet()
