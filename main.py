@@ -40,7 +40,7 @@ class run:
         self.init()
 
     def init(self):
-        
+
         self.get_max_update = int(self.u.infoUpdate("ram", "new"))
         while True:
 
@@ -51,7 +51,13 @@ class run:
 
             if int(self.running_all) < int(self.get_max_update):
                 while "0" in stat or "3" in stat:
-                    moneyforupdate = int(self.u.infoUpdate(self.updates[self.updatecount]))
+
+                    try:
+                        moneyforupdate = int(self.u.infoUpdate(self.updates[self.updatecount]))
+                    except IndexError:
+                        self.updatecount = 0
+                        moneyforupdate = int(self.u.infoUpdate(self.updates[self.updatecount]))
+                        
                     mymoney = int(self.player.getmoney())
                     if mymoney < moneyforupdate:
                         self.updatecount += 1
@@ -71,7 +77,6 @@ class run:
                             time.sleep(self.wait_load)
                             self.updatecount += 1
                             totaltask = int(self.running_all)+int(self.updatecount)
-                            print(totaltask)
                             if int(totaltask) == int(self.get_max_update):
                                 stat = "1"
 
