@@ -110,7 +110,8 @@ class Update:
         temp = self.ut.requestString("user::::pass::::uhash::::utype",
                                      self.username + "::::" + self.password + "::::" + "userHash_not_needed" + "::::" + name,
                                      "vh_updateInfo.php")
-        return temp
+        j = json.loads(temp)
+        return j["costs"]
 
 
     def __init__(self, user, password):
