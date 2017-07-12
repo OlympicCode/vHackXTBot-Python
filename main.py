@@ -40,12 +40,12 @@ class run:
         self.init()
 
     def init(self):
-
-        self.get_max_update = int(self.u.infoUpdate("ram", "new"))
         while True:
 
+            time.sleep(self.wait_load)
             stat = "0"
             # prepare account 
+            self.get_max_update = int(self.u.infoUpdate("ram", "new"))
             self.running_all = self.u.runningtasks()
             print("your are running " + str(self.running_all) + "/" + str(self.get_max_update) + " tasks")
 
@@ -55,19 +55,27 @@ class run:
                     try:
                         moneyforupdate = int(self.u.infoUpdate(self.updates[self.updatecount]))
                     except IndexError:
+                        print("reset")
                         self.updatecount = 0
                         moneyforupdate = int(self.u.infoUpdate(self.updates[self.updatecount]))
-                        
+
+                    time.sleep(self.wait_load)
                     mymoney = int(self.player.getmoney())
+
                     if mymoney < moneyforupdate:
                         self.updatecount += 1
+
+                        try:
+                            print "require " + str(moneyforupdate) + "$ for update " + self.updates[self.updatecount] + " your money " + str(mymoney) + "$"
+                        except IndexError:
+                            stat = "1"
+
+                        totaltask = int(self.u.runningtasks())+int(self.updatecount)
                         time.sleep(self.wait_load)
-                        print "require " + str(moneyforupdate) + "$ for update " + self.updates[self.updatecount] + " your money " + str(mymoney) + "$"
-                        totaltask = int(self.running_all)+int(self.updatecount)
-                        print(totaltask)
                         if int(totaltask) == int(self.get_max_update):
                             stat = "1"
                     else:
+                        time.sleep(self.wait_load)
                         stat = self.u.startTask(self.updates[self.updatecount])
                         if "3" in stat:
                             print "updating " + self.updates[self.updatecount] + " level +1"
@@ -76,7 +84,7 @@ class run:
                             #u.useBooster()
                             time.sleep(self.wait_load)
                             self.updatecount += 1
-                            totaltask = int(self.running_all)+int(self.updatecount)
+                            totaltask = int(self.u.runningtasks())+int(self.updatecount)
                             if int(totaltask) == int(self.get_max_update):
                                 stat = "1"
 
