@@ -43,9 +43,11 @@ class run:
         while True:
             stat = "0"
             while "0" in stat or "3" in stat:
-                if self.player.getmoney() > self.u.infoUpdate(self.updates[self.updatecount]):
+                if int(self.player.getmoney()) > int(self.u.infoUpdate(self.updates[self.updatecount])):
                     self.updatecount += 1
                     time.sleep(self.wait_load)
+                    if self.updatecount == 14:
+                        stat = "0"
                 else:
                     stat = self.u.startTask(self.updates[self.updatecount])
                     if "3" in stat:
