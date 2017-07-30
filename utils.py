@@ -12,7 +12,7 @@ class Utils:
 
     def __init__(self):
         self.secret = "aeffI"
-        self.url = "https://api.vhack.cc/v/7/"
+        self.url = "https://api.vhack.cc/v/8/"
         self.username = config.user
         self.password = config.password
 
