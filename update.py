@@ -77,6 +77,20 @@ class Update:
             return temp.split('result":"')[1].split('"')[0]
         return "2"
 
+
+    def fillWithTask(self, type):
+        """
+        Fill the queue with a task type.
+        :param type: string variable of task type, "adw","fw" etc. See config file.
+        :return:
+        """
+        temp = self.ut.requestString("user::::pass::::uhash::::utype",
+                                     self.username + "::::" + self.password + "::::" + "userHash_not_needed" + "::::" + type,
+                                     "vh_fillTasks.php")
+        if "result" in temp:
+            return temp.split('result":"')[1].split('"')[0]
+        return "2"
+
     def finishTask(self, taskID):
         """
         Finish single task of taskID
