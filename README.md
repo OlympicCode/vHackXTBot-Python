@@ -84,4 +84,4 @@ Result:
 donation for the project
 [![Donation for project](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=support%40cuby%2dhebergs%2ecom&lc=US&item_name=vBlackOut%20Coder&no_note=0&cn=about%20more%20information%20for%20your%20donation&no_shipping=2&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted)
 
-Thanx to [@flatt3rn](https://github.com/flatt3rn) ;) 
+Thanx to [@flatt3rn](https://github.com/flatt3rn) ;),  [@WookieNZ](https://github.com/WookieNZ)
