@@ -53,9 +53,9 @@ To install these on Linux:
 >$ ~~pip install tesseract~~  
 
 For launching on Linux distros:  
->$ python main.py 
->or 
->$ ./main.py  
+>$ python main.py  
+>or  
+>$ ./main.py   
 
 For Windows:
 ```
