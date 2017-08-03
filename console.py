@@ -9,7 +9,6 @@ import time
 import json
 from PIL import Image
 import base64
-import pytesseract
 import cStringIO
 import requests
 import re
