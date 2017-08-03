@@ -46,7 +46,7 @@ External dependencies you'll need include:
  
 To install these on Linux:  
 >$ pip install requests  
->$ pip install pytesseract 
+>$ pip install pytesseract  
 >$ pip install futures  
 >$ ~~pip install Pillow~~  
 >$ ~~pip install beautifulsoup4~~   
