@@ -49,8 +49,8 @@ To install these on Linux:
 $ pip install requests  
 $ pip install pytesseract 
 $ pip install futures  
-$ pip install Pillow
-$ pip install beautifulsoup4
+$ __pip install Pillow__
+$ __pip install beautifulsoup4__
 or  
 $ pip install tesseract
 ``` 
