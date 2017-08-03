@@ -44,22 +44,22 @@ External dependencies you'll need include:
 
  
  
-To install these on Linux:
+To install these on Linux:  
 > Blockquote
 >$ pip install requests  
 >$ pip install pytesseract 
 >$ pip install futures  
->$ __pip install Pillow__
->$ __pip install beautifulsoup4__
+>$ __pip install Pillow__  
+>$ __pip install beautifulsoup4__  
 >or  
->$ pip install tesseract
+>$ pip install tesseract  
 
 For launching on Linux distros:  
-```sh
-$ python main.py 
-or 
-$ ./main.py
-``` 
+> Blockquote
+>$ python main.py 
+>or 
+>$ ./main.py  
+
 For Windows:
 ```
 Just run the main.exe enter your username and the password and launch
