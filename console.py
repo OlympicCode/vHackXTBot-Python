@@ -126,23 +126,42 @@ class Console:
         fd.write('{0}\n'.format(lineexec.result()))
         fd.flush()
 
+    def get_main_color(self, file):
+        img = Image.open(file)
+        colors = img.getcolors(256) #put a higher value if there are many colors in your image
+        max_occurence, most_present = 0, 0
+        try:
+            for c in colors:
+                if c[0] > max_occurence:
+                    (max_occurence, most_present) = c
+                    return max_occurence
+        except TypeError:
+            raise Exception("Too many colors in the image")
+
     def calc_img(self, ut, imgstring, uhash, hostname, max, mode):
-        pic = cStringIO.StringIO()
-        image_string = cStringIO.StringIO(base64.b64decode(imgstring))
-        image = Image.open(image_string)
+        #pic = cStringIO.StringIO()
+        #image_string = cStringIO.StringIO(base64.b64decode(imgstring))
+        #image = Image.open(image_string)
 
         # Overlay on white background, see http://stackoverflow.com/a/7911663/1703216
         # bg = Image.new("RGB", image.size, (255,255,255))
         # bg.paste(image,image)
-        if "Hatched by the FBI" in pytesseract.image_to_string(
-                image) or "Watched by the FBI" in pytesseract.image_to_string(image):
+
+        imgdata = base64.b64decode(imgstring)
+        filename = 'vhack.png'
+        with open(filename, 'wb') as f:
+            f.write(imgdata)
+        image = self.get_main_color(filename)
+
+        if image < 13200:
             print "Matched FBI"
             return 1, hostname
-        else:
-            firewall = pytesseract.image_to_string(image).split(":")
+
+        else: 
+            #firewall = pytesseract.image_to_string(image).split(":")
             # print firewall[2].strip()
             try:
-                if int(firewall[2].strip()) < max:
+                # if int(firewall[2].strip()) < max:
                     try:
                         time.sleep(random.randint(1, 3))
                         temp = self.ut.requestString("user::::pass::::uhash::::hostname",
@@ -173,9 +192,9 @@ class Console:
 
                     except TypeError:
                         return 0, 0
-                else:
-                    print "Firewall level is to High"
-                    return 0, 0
+                #else:
+                #    print "Firewall level is to High"
+                #    return 0, 0
 
             except ValueError:
                 return 0, 0
@@ -492,3 +511,4 @@ class Console:
 
         # restore the exit gracefully handler here
         signal.signal(signal.SIGINT, self.exit_gracefully)
+
