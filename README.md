@@ -6,9 +6,9 @@ vHackAPI written in Python 2.7.
 [![TRAVIS CI](https://travis-ci.org/OlympicCode/vHack-Python.svg?branch=master)](https://travis-ci.org/OlympicCode/vHack-Python)
 
 #### Thanx to FluffySteamCat who recorded the bot  
-[![vHackBot video here](https://img.youtube.com/vi/7Ot4xqhh4T8/1.jpg)](https://www.youtube.com/watch?v=ccWs7Fa9GUI&feature=youtu.be) [![vHackBot video here](https://img.youtube.com/vi/vNp_T7h990s/1.jpg)](https://www.youtube.com/watch?v=vNp_T7h990s&feature=youtu.be) [![vHackBot video here](https://img.youtube.com/vi/eTw3DOeJjWw/1.jpg)](https://www.youtube.com/watch?v=eTw3DOeJjWw)  
+[![vHackBot video here](https://img.youtube.com/vi/7Ot4xqhh4T8/1.jpg)](https://www.youtube.com/watch?v=ccWs7Fa9GUI&feature=youtu.be) [![vHackBot video here](https://img.youtube.com/vi/vNp_T7h990s/1.jpg)](https://www.youtube.com/watch?v=vNp_T7h990s&feature=youtu.be) [![vHackBot video here](https://img.youtube.com/vi/eTw3DOeJjWw/1.jpg)](https://www.youtube.com/watch?v=eTw3DOeJjWw) [![vHackBot video here](https://www.youtube.com/watch?v=xI5IFJ9qMeY)  
 
-[Linux version . . . Windows Version and CHAT for vHackXT]
+[Linux version . . . Windows Version and Android version for vHackXT ]
 
 [Official Database OlympicCode ](https://vhack.olympiccode.ga/database/)
 thanx to [@checkium](https://github.com/checkium) .......................
