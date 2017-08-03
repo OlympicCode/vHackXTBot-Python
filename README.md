@@ -45,15 +45,14 @@ External dependencies you'll need include:
  
  
 To install these on Linux:
-```sh
-$ pip install requests  
-$ pip install pytesseract 
-$ pip install futures  
-$ __pip install Pillow__
-$ __pip install beautifulsoup4__
-or  
-$ pip install tesseract
-``` 
+> Blockquote
+>$ pip install requests  
+>$ pip install pytesseract 
+>$ pip install futures  
+>$ __pip install Pillow__
+>$ __pip install beautifulsoup4__
+>or  
+>$ pip install tesseract
 
 For launching on Linux distros:  
 ```sh
