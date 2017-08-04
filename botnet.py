@@ -25,9 +25,10 @@ class Botnet:
         """
         data = self._botnetInfo()
         bots = json.loads(data)
-        for i in bots['data']:
-            bot = Bot(i['bID'], i['bLVL'], i['bPRICE'])
-            self.botnet.append(bot)
+        if int(bots['count']) > 0:
+            for i in bots['data']:
+                bot = Bot(i['bID'], i['bLVL'], i['bPRICE'])
+                self.botnet.append(bot)
 
     def printbots(self):
         """

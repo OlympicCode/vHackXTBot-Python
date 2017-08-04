@@ -73,7 +73,9 @@ class Utils:
             if i > 10:
                 exit(0)
             try:
-                r = urllib2.urlopen(self.generateURL(format, data, php))
+                req = urllib2.Request(self.generateURL(format, data, php))
+                req.add_header('User-agent', 'Dalvik/2.1.0 (Linux; U; Android 6.0.1; Build/MOB31T)')
+                r = urllib2.urlopen(req)
                 t = r.read()
                 return t
             except:
@@ -84,7 +86,9 @@ class Utils:
     def requestStringNoWait(self, format, data, php):
         for i1 in range(0, 10):
             try:
-                r = urllib2.urlopen(self.generateURL(format, data, php))
+                req = urllib2.Request(self.generateURL(format, data, php))
+                req.add_header('User-agent', 'Dalvik/2.1.0 (Linux; U; Android 6.0.1; Build/MOB31T)')
+                r = urllib2.urlopen(req)
                 t = r.read()
                 # print i1
                 return t
