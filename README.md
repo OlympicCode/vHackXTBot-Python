@@ -17,7 +17,7 @@ Minimal Configuration required
   
 - CPU i3, i5, ARM64, 4 thread Minimum or (4 core for amd).  
 - Ram 128Mo.  
-- OS: Windows 7, Linux ALL version, Android 4.4 or Highter.  
+- OS: Windows 7, Win10,  Linux ALL version, Android 4.4 or Highter.  
 - Network speed: ADSL Minimal (100ko/s for download).
 
 
