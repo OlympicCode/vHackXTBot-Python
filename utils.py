@@ -7,6 +7,7 @@ import time
 import urllib2
 import random
 import config
+import ssl
 
 class Utils:
 
@@ -75,7 +76,7 @@ class Utils:
             try:
                 req = urllib2.Request(self.generateURL(format, data, php))
                 req.add_header('User-agent', 'Dalvik/2.1.0 (Linux; U; Android 6.0.1; Build/MOB31T)')
-                r = urllib2.urlopen(req)
+                r = urllib2.urlopen(req, context=ssl._create_unverified_context())
                 t = r.read()
                 return t
             except:
@@ -88,7 +89,7 @@ class Utils:
             try:
                 req = urllib2.Request(self.generateURL(format, data, php))
                 req.add_header('User-agent', 'Dalvik/2.1.0 (Linux; U; Android 6.0.1; Build/MOB31T)')
-                r = urllib2.urlopen(req)
+                r = urllib2.urlopen(req, context=ssl._create_unverified_context())
                 t = r.read()
                 # print i1
                 return t
