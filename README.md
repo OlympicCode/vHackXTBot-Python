@@ -1,4 +1,4 @@
-# vHackXTBOT-Python
+# vHackXTBot-Python
 vHackXT Bot written in Python 2.7.   
 
 [![Discord](https://img.shields.io/badge/Chat-%20on%20Discord-738bd7.svg?style=flat-square)](https://discord.gg/EZNjh7t) 
