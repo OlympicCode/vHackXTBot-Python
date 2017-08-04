@@ -1,5 +1,5 @@
-# vHackAPI-Python
-vHackAPI written in Python 2.7.   
+# vHackXTBOT-Python
+vHackXT Bot written in Python 2.7.   
 
 [![Discord](https://img.shields.io/badge/Chat-%20on%20Discord-738bd7.svg?style=flat-square)](https://discord.gg/EZNjh7t) 
 [![GITHUB issue](https://img.shields.io/github/issues/OlympicCode/vHackAPI-Python.svg?style=flat-square&raw=true)](https://github.com/OlympicCode/vHackAPI-Python/issues)
