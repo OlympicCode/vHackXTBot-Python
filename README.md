@@ -10,7 +10,7 @@ vHackXT Bot written in Python 2.7.
 
 [Linux version . . . Windows Version and Android version for vHackXT ]
 
-[Official Database OlympicCode ](https://vhack.olympiccode.ga/database/)
+[Official Database OlympicCode ](https://vhack.olympiccode.ga/)
 thanx to [@checkium](https://github.com/checkium) .......................
 
 Minimal Configuration required  
