@@ -46,48 +46,50 @@ class run:
             time.sleep(self.wait_load)
             stat = "0"
             # prepare account 
-            self.get_max_update = int(self.u.infoUpdate("ram", "new"))
+            self.get_max_update = int(self.u.infoUpdate("ram", "new"))-1
             self.running_all = self.u.runningtasks()
-            print("your are running " + str(self.running_all) + "/" + str(self.get_max_update) + " tasks")
+            print("you are running " + str(self.running_all) + "/" + str(self.get_max_update) + " tasks")
 
             if int(self.running_all) < int(self.get_max_update):
                 while "0" in stat or "3" in stat:
-
-                    try:
-                        moneyforupdate = int(self.u.infoUpdate(self.updates[self.updatecount]))
-                    except IndexError:
-                        print("reset")
-                        self.updatecount = 0
-                        moneyforupdate = int(self.u.infoUpdate(self.updates[self.updatecount]))
-
-                    time.sleep(self.wait_load)
-                    mymoney = int(json.loads(self.c.myinfo())["money"])
-
-                    if mymoney < moneyforupdate:
-                        self.updatecount += 1
-
+                    if int(self.u.runningtasks()) < int(self.u.infoUpdate("ram", "new"))-1:
                         try:
-                            print "require " + str(moneyforupdate) + "$ for update " + self.updates[self.updatecount] + " your money " + str(mymoney) + "$"
+                            moneyforupdate = int(self.u.infoUpdate(self.updates[self.updatecount]))
                         except IndexError:
+                            print("reset")
+                            self.updatecount = 0
+                            moneyforupdate = int(self.u.infoUpdate(self.updates[self.updatecount]))
                             stat = "1"
 
-                        totaltask = int(self.u.runningtasks())+int(self.updatecount)
                         time.sleep(self.wait_load)
-                        if int(totaltask) == int(self.get_max_update):
-                            stat = "1"
-                    else:
-                        time.sleep(self.wait_load)
-                        stat = self.u.startTask(self.updates[self.updatecount])
-                        if "3" in stat:
-                            print "updating " + self.updates[self.updatecount] + " level +1"
-                            #print "Started Update
-                            print "Waiting... in update"
-                            #u.useBooster()
-                            time.sleep(self.wait_load)
+                        mymoney = int(json.loads(self.c.myinfo())["money"])
+
+                        if mymoney < moneyforupdate:
                             self.updatecount += 1
+
+                            try:
+                                print "require " + str(moneyforupdate) + "$ for update " + self.updates[self.updatecount] + " your money " + str(mymoney) + "$"
+                            except IndexError:
+                                stat = "1"
+
                             totaltask = int(self.u.runningtasks())+int(self.updatecount)
+                            time.sleep(self.wait_load)
                             if int(totaltask) == int(self.get_max_update):
                                 stat = "1"
+                        else:
+                            stat = self.u.startTask(self.updates[self.updatecount])
+                            if "3" in stat or "0" in stat:
+                                print "updating " + self.updates[self.updatecount] + " level +1"
+                                #print "Started Update
+                                print "Waiting... in update"
+                                #u.useBooster()
+                                time.sleep(self.wait_load)
+                                self.updatecount += 1
+                                totaltask = int(self.u.runningtasks())+int(self.updatecount)
+                                if int(totaltask) == int(self.get_max_update):
+                                    stat = "1"
+                    else:
+                        break
 
             # recheck running ask for boost and netcoins
             self.running_all = self.u.runningtasks()
@@ -103,8 +105,9 @@ class run:
             # task = self.u.doTasks(self.wait_load)
             if self.booster and self.running_all > 1:
                 try:
-                    # usebooster = self.u.getTasks()
-                    usebooster = None
+                    usebooster = self.u.getTasks()
+                    print(usebooster)
+                    #usebooster = None
                     json_data = json.loads(usebooster)
                     while len(json_data["data"]) > 1:
                         if int(json_data["boost"]) > 5:
