@@ -60,16 +60,19 @@ class Player:
         if len(data) == 1:
             logging.warn('Username and password entered in config.py?')
             sys.exit()
-        j = json.loads(data)
-        self.setmoney(j['money'])
-        self.ip = j['ip']
-        self.score = j['score']
-        self.netcoins = j['netcoins']
-        self.localspyware = j['actspyware']
-        self.rank = j['rank']
-        self.boosters = j['boost']
-        self.remotespyware = j['actadw']
-        self.email = int(j['unreadmsg'])
+        try:
+           j = json.loads(data)
+           self.setmoney(j['money'])
+           self.ip = j['ip']
+           self.score = j['score']
+           self.netcoins = j['netcoins']
+           self.localspyware = j['actspyware']
+           self.rank = j['rank']
+           self.boosters = j['boost']
+           self.remotespyware = j['actadw']
+           self.email = int(j['unreadmsg'])
+        except:
+            exit()
 
     def refreshinfo(self):
         """

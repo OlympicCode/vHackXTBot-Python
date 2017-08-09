@@ -75,9 +75,11 @@ class Utils:
                 exit(0)
             try:
                 req = urllib2.Request(self.generateURL(format, data, php))
-                req.add_header('User-agent', 'Dalvik/2.1.0 (Linux; U; Android 6.0.1; Build/MOB31T)')
+                req.add_header('User-agent', 'Dalvik/2.1.0 (Linux; U; Android 6.0.1; Samsung Galaxy S3 Build/MOB31T)')
                 r = urllib2.urlopen(req, context=ssl._create_unverified_context())
                 t = r.read()
+                if t == "15":
+                    print "You are Banned sorry :("
                 return t
             except:
                 print "Blocked, trying again. Delaying {0} seconds".format(i)
@@ -88,7 +90,7 @@ class Utils:
         for i1 in range(0, 10):
             try:
                 req = urllib2.Request(self.generateURL(format, data, php))
-                req.add_header('User-agent', 'Dalvik/2.1.0 (Linux; U; Android 6.0.1; Build/MOB31T)')
+                req.add_header('User-agent', 'Dalvik/2.1.0 (Linux; U; Android 6.0.1; Samsung Galaxy S3 Build/MOB31T)')
                 r = urllib2.urlopen(req, context=ssl._create_unverified_context())
                 t = r.read()
                 # print i1
@@ -154,13 +156,18 @@ class Utils:
         See player class for detailed description
         :return: str
         """
-        temp = self.requestString("user::::pass::::gcm::::uhash",
-                                     self.username + "::::" + self.password + "::::" + "eW7lxzLY9bE:APA91bEO2sZd6aibQerL3Uy-wSp3gM7zLs93Xwoj4zIhnyNO8FLyfcODkIRC1dc7kkDymiWxy_dTQ-bXxUUPIhN6jCUBVvGqoNXkeHhRvEtqAtFuYJbknovB_0gItoXiTev7Lc5LJgP2" + "::::" + "userHash_not_needed",
+        temp = self.requestString("user::::pass::::uhash::::",
+                                     self.username + "::::" + self.password + "::::" + "userHash_not_needed" +":::::",
                                      "vh_update.php")
         return temp
 
     def removespyware(self):
         arr = self.requestArray("user::::pass::::uhash:::::",
-                              self.username + "::::" + self.password + "::::" + "UserHash_not_needed" + ":::::",
+                              self.username + "::::" + self.password + "::::" + "userHash_not_needed" + ":::::",
                               "vh_removeSpyware.php")
         return arr
+
+    def generate_uhash(self, number):
+        mkstring = lambda (x): "".join(map(chr, (ord('a')+(y%26) for y in range(x))))
+        return mkstring(number)
+
