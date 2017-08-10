@@ -61,7 +61,6 @@ class run:
                             moneyforupdate = int(self.u.infoUpdate(self.updates[self.updatecount]))
                             stat = "1"
 
-                        time.sleep(self.wait_load)
                         mymoney = int(json.loads(self.c.myinfo())["money"])
 
                         if mymoney < moneyforupdate:
@@ -73,7 +72,6 @@ class run:
                                 stat = "1"
 
                             totaltask = int(self.u.runningtasks())+int(self.updatecount)
-                            time.sleep(self.wait_load)
                             if int(totaltask) == int(self.get_max_update):
                                 stat = "1"
                         else:
@@ -83,7 +81,6 @@ class run:
                                 #print "Started Update
                                 print "Waiting... in update"
                                 #u.useBooster()
-                                time.sleep(self.wait_load)
                                 self.updatecount += 1
                                 totaltask = int(self.u.runningtasks())+int(self.updatecount)
                                 if int(totaltask) == int(self.get_max_update):
