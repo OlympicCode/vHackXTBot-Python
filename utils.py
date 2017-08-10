@@ -67,7 +67,7 @@ class Utils:
         return n
 
     def requestString(self, format, data, php):
-        time.sleep(random.randint(1, 2))
+        time.sleep(1)
         t = None
         i = 0
         while t == None:
