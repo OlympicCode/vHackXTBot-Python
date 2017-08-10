@@ -388,7 +388,6 @@ class Console:
 
             if not "?" in str(avlevel) and not "?" in str(winchance) and mode == "Secure":
                 if int(avlevel) < max and int(winchance) > 75 and str(anonymous) == "YES":
-                    time.sleep(random.randint(0, 1))
                     password = self.enterPassword(imgs, ip, uhash)
                     jsons = json.loads(password)
                     if password:
@@ -470,7 +469,7 @@ class Console:
                         # print "passed"
                         return False
                     if str(anonymous) == "NO":
-                        print "Anonymous not needed"
+                        print "Hack Anonymous is needed"
                         # print "passed"
                         return False
             else:
@@ -488,10 +487,6 @@ class Console:
         for i in range(0, (obj.attacks_normal * random.randint(1, 2))):
             data = self.getIP(True, obj.maxanti_normal, obj.mode, obj.active_cluster_protection)
             print "wait anti-blocking..."
-            if obj.mode == "Secure":
-                time.sleep(1)
-            elif obj.mode == "Potator":
-                time.sleep(1)
 
     def exit_gracefully(self, signum, frame):
         # restore the original signal handler as otherwise evil things will happen
