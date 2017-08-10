@@ -237,7 +237,7 @@ class Console:
             white_list = []
             print "Packing IP list " + str(len(list_image))
             fd = open("database.txt", "a")
-            with concurrent.futures.ThreadPoolExecutor(max_workers=6) as executor:
+            with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
                 for i, image in enumerate(list_image):
                     wait_for = executor.submit(self.calc_img, self.ut, list_image[i], uhash, list_hostname[i], max, mode)
                     try:
@@ -502,4 +502,3 @@ class Console:
 
         # restore the exit gracefully handler here
         signal.signal(signal.SIGINT, self.exit_gracefully)
-
