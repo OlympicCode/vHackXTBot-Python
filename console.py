@@ -163,7 +163,6 @@ class Console:
             try:
                 # if int(firewall[2].strip()) < max:
                     try:
-                        time.sleep(random.randint(1, 3))
                         temp = self.ut.requestString("user::::pass::::uhash::::hostname",
                                                      self.username + "::::" + self.password + "::::" + str(
                                                          uhash) + "::::" + str(hostname), "vh_scanHost.php")
@@ -503,3 +502,4 @@ class Console:
 
         # restore the exit gracefully handler here
         signal.signal(signal.SIGINT, self.exit_gracefully)
+
