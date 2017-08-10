@@ -9,6 +9,7 @@ import time
 import json
 from PIL import Image
 import base64
+import pytesseract
 import cStringIO
 import requests
 import re
@@ -31,7 +32,7 @@ class Console:
 
     def myinfo(self):
         temp = self.ut.requestString("user::::pass::::gcm::::uhash",
-                                     self.username + "::::" + self.password + "::::" + "eW7lxzLY9bE:APA91bEO2sZd6aibQerL3Uy-wSp3gM7zLs93Xwoj4zIhnyNO8FLyfcODkIRC1dc7kkDymiWxy_dTQ-bXxUUPIhN6jCUBVvGqoNXkeHhRvEtqAtFuYJbknovB_0gItoXiTev7Lc5LJgP2" + "::::" + "userHash_not_needed",
+                                     self.username + "::::" + self.password + "::::" + "eW7lxzLY9bE:APA91bEO2sZd6aibQerL3Uy-wSp3gM7zLs93Xwoj4zIhnyNO8FLyfcODkIRC1dc7kkDymiWxy_dTQ-bXxUUPIhN6jCUBVvGqoNXkeHhRvEtqAtFuYJbknovB_0gItoXiTev7Lc5LJgP2" + "::::" + "2773cc25b7407825393a42787753f92b39dd96d6507fb017a103b1fc51076141",
                                      "vh_update.php")
         return temp
 
@@ -56,7 +57,7 @@ class Console:
     def check_Cluster(self, uhash=None):
         if uhash == None:
             temp = self.ut.requestString("user::::pass::::uhash",
-                                         self.username + "::::" + self.password + "::::" + "userHash_not_needed",
+                                         self.username + "::::" + self.password + "::::" + "2773cc25b7407825393a42787753f92b39dd96d6507fb017a103b1fc51076141",
                                          "vh_ClusterData.php")
         else:
             temp = self.ut.requestString("user::::pass::::uhash",
@@ -71,19 +72,19 @@ class Console:
 
     def GetTournamentPosition(self):
         temp = self.ut.requestString("user::::pass::::uhash",
-                                     self.username + "::::" + self.password + "::::" + "userHash_not_needed",
+                                     self.username + "::::" + self.password + "::::" + "2773cc25b7407825393a42787753f92b39dd96d6507fb017a103b1fc51076141",
                                      "vh_tournamentData.php")
         return temp
 
     def AttackCluster(self, tag):
         temp = self.ut.requestString("user::::pass::::uhash::::ctag",
-                                     self.username + "::::" + self.password + "::::" + "userHash_not_needed" + "::::" + str(
+                                     self.username + "::::" + self.password + "::::" + "2773cc25b7407825393a42787753f92b39dd96d6507fb017a103b1fc51076141" + "::::" + str(
                                          tag), "vh_startDDoS.php")
         return temp
 
     def ScanCluster(self, tag):
         temp = self.ut.requestString("user::::pass::::uhash::::ctag",
-                                     self.username + "::::" + self.password + "::::" + "userHash_not_needed" + "::::" + str(
+                                     self.username + "::::" + self.password + "::::" + "2773cc25b7407825393a42787753f92b39dd96d6507fb017a103b1fc51076141" + "::::" + str(
                                          tag), "vh_scanTag.php")
         return temp
 
@@ -113,7 +114,7 @@ class Console:
 
     def getTournament(self):
         temp = self.ut.requestString("user::::pass::::uhash",
-                                     self.username + "::::" + self.password + "::::" + "UserHash_not_needed",
+                                     self.username + "::::" + self.password + "::::" + "2773cc25b7407825393a42787753f92b39dd96d6507fb017a103b1fc51076141",
                                      "vh_update.php")
         if "tournamentActive" in temp:
             if not "2" in temp.split('tournamentActive":"')[1].split('"')[0]:
@@ -169,7 +170,7 @@ class Console:
                         jsons = json.loads(temp)
                         if not ".vHack.cc" in str(jsons['ipaddress']) and int(jsons['vuln']) == 1:
                             if mode == "Secure":
-                                time.sleep(random.randint(1, 3))
+                                time.sleep(random.randint(0, 2))
                             elif mode == "Potator":
                                 time.sleep(random.randint(0, 1))
                             result = self.attackIP(jsons['ipaddress'], max, mode)
@@ -253,9 +254,6 @@ class Console:
         info = self.myinfo()
         info = json.loads(info)
         uhash = info['uhash']
-        if mode == "Secure":
-            time.sleep(1)
-
         temp = self.ut.requestString("user::::pass::::uhash::::target",
                                      self.username + "::::" + self.password + "::::" + str(
                                          uhash) + "::::" + ip, "vh_loadRemoteData.php")
@@ -390,7 +388,7 @@ class Console:
 
             if not "?" in str(avlevel) and not "?" in str(winchance) and mode == "Secure":
                 if int(avlevel) < max and int(winchance) > 75 and str(anonymous) == "YES":
-                    time.sleep(random.randint(2, 3))
+                    time.sleep(random.randint(0, 1))
                     password = self.enterPassword(imgs, ip, uhash)
                     jsons = json.loads(password)
                     if password:
@@ -491,9 +489,9 @@ class Console:
             data = self.getIP(True, obj.maxanti_normal, obj.mode, obj.active_cluster_protection)
             print "wait anti-blocking..."
             if obj.mode == "Secure":
-                time.sleep(5)
+                time.sleep(1)
             elif obj.mode == "Potator":
-                time.sleep(3)
+                time.sleep(1)
 
     def exit_gracefully(self, signum, frame):
         # restore the original signal handler as otherwise evil things will happen
@@ -510,4 +508,3 @@ class Console:
 
         # restore the exit gracefully handler here
         signal.signal(signal.SIGINT, self.exit_gracefully)
-
