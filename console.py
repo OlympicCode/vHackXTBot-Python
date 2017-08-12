@@ -192,11 +192,14 @@ class Console:
                 return 0, 0, "value error"
 
     def getIP(self, blank, max, mode, active_protecte_cluster_ddos):
-        stat_cluster = self.check_Cluster(self.uhash)
-        stat_cluster = json.loads(stat_cluster)
-        try:
-            stat_cluter_blocked = stat_cluster['blocked']
-        except:
+        if active_protecte_cluster_ddos:
+            stat_cluster = self.check_Cluster(self.uhash)
+            stat_cluster = json.loads(stat_cluster)
+            try:
+                stat_cluter_blocked = stat_cluster['blocked']
+            except:
+                stat_cluter_blocked = ""
+        else:
             stat_cluter_blocked = ""
 
         if "Your Cluster is blocked" in stat_cluter_blocked and active_protecte_cluster_ddos:
