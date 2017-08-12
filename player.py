@@ -17,6 +17,7 @@ class Player:
         self.netcoins = ''
         self.boosters = ''
         self.rank = ''
+        self.uhash = ''
         self.localspyware = ''
         self.remotespyware = ''
         self.email = 0
@@ -71,8 +72,12 @@ class Player:
            self.boosters = j['boost']
            self.remotespyware = j['actadw']
            self.email = int(j['unreadmsg'])
+           self.uhash = str(j['uhash'])
         except:
             exit()
+
+    def get_uhash(self):
+        return self.uhash
 
     def refreshinfo(self):
         """

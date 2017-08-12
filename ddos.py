@@ -10,13 +10,14 @@ import console
 
 class Ddos:
 
-    def __init__(self):
+    def __init__(self, uhash):
         self.ddos_cluster = config.ddos_cluster
         self.database = config.database
         self.Max_point_tournament = config.Max_point_tournament
         self.username = config.user
         self.password = config.password
-        self.c = console.Console(self.username, self.password)
+        self.uhash = uhash
+        self.c = console.Console(self.username, self.password, self.uhash)
 
     def run_ddos(self):
         if self.ddos_cluster:

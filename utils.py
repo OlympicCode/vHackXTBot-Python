@@ -13,7 +13,7 @@ class Utils:
 
     def __init__(self):
         self.secret = "aeffI"
-        self.url = "https://api.vhack.cc/v/9/"
+        self.url = "https://api.vhack.cc/v/10/"
         self.username = config.user
         self.password = config.password
 
@@ -42,10 +42,11 @@ class Utils:
         str5 = split2[0] + self.md5hash(self.md5hash(split2[1]))
         str6 = self.md5hash(currentTimeMillis + jsonString)
         a3 = self.md5hash(self.secret + self.md5hash(self.md5hash(self.generateUser(a2))))
-        str9 = self.generateUser(str5)
+        str9 = self.md5hash(a3 + self.generateUser(str5))
         str7 = self.generateUser(str6)
-        str8 = self.md5hash(self.md5hash(a3 + self.md5hash(self.md5hash(str9) + str7)))
+        str8 = self.md5hash(self.md5hash(a3 + self.md5hash(self.md5hash(str9) + str7) + str9 + self.md5hash(str7)))
         return self.url + php + "?user=" + a + "&pass=" + str8
+
 
     def parse(self, string):
         return string[1:-1].replace("\"", "").split(",")
@@ -157,7 +158,7 @@ class Utils:
         :return: str
         """
         temp = self.requestString("user::::pass::::uhash::::",
-                                     self.username + "::::" + self.password + "::::" + "userHash_not_needed" +":::::",
+                                     self.username + "::::" + self.password + "::::" + "userHash_not_needed" + ":::::",
                                      "vh_update.php")
         return temp
 

@@ -23,16 +23,17 @@ original_sigint = None
 class Console:
     ut = Utils()
 
-    def __init__(self, u, p):
+    def __init__(self, u, p, uhash):
         global original_sigint
         self.username = u
         self.password = p
+        self.uhash = uhash
         original_sigint = signal.getsignal(signal.SIGINT)
         signal.signal(signal.SIGINT, self.exit_gracefully)
 
     def myinfo(self):
         temp = self.ut.requestString("user::::pass::::gcm::::uhash",
-                                     self.username + "::::" + self.password + "::::" + "eW7lxzLY9bE:APA91bEO2sZd6aibQerL3Uy-wSp3gM7zLs93Xwoj4zIhnyNO8FLyfcODkIRC1dc7kkDymiWxy_dTQ-bXxUUPIhN6jCUBVvGqoNXkeHhRvEtqAtFuYJbknovB_0gItoXiTev7Lc5LJgP2" + "::::" + "2773cc25b7407825393a42787753f92b39dd96d6507fb017a103b1fc51076141",
+                                     self.username + "::::" + self.password + "::::" + "eW7lxzLY9bE:APA91bEO2sZd6aibQerL3Uy-wSp3gM7zLs93Xwoj4zIhnyNO8FLyfcODkIRC1dc7kkDymiWxy_dTQ-bXxUUPIhN6jCUBVvGqoNXkeHhRvEtqAtFuYJbknovB_0gItoXiTev7Lc5LJgP2" + "::::" + self.uhash,
                                      "vh_update.php")
         return temp
 
@@ -43,25 +44,25 @@ class Console:
         imgs = Passwords(arr)
         return imgs
 
-    def enterPassword(self, passwd, target, uhash):
+    def enterPassword(self, passwd, target):
         passwd = passwd.split("p")
         temp = self.ut.requestString("user::::pass::::port::::target::::uhash",
                                      self.username + "::::" + self.password + "::::" + str(
-                                         passwd[1].strip()) + "::::" + str(target) + "::::" + str(uhash),
+                                         passwd[1].strip()) + "::::" + str(target) + "::::" + self.uhash,
                                      "vh_trTransfer.php")
         if temp == "10":
             return False
         else:
             return temp
 
-    def check_Cluster(self, uhash=None):
-        if uhash == None:
+    def check_Cluster(self):
+        if self.uhash == None:
             temp = self.ut.requestString("user::::pass::::uhash",
-                                         self.username + "::::" + self.password + "::::" + "2773cc25b7407825393a42787753f92b39dd96d6507fb017a103b1fc51076141",
+                                         self.username + "::::" + self.password + "::::" + self.uhash,
                                          "vh_ClusterData.php")
         else:
             temp = self.ut.requestString("user::::pass::::uhash",
-                                         self.username + "::::" + self.password + "::::" + str(uhash),
+                                         self.username + "::::" + self.password + "::::" + self.uhash,
                                          "vh_ClusterData.php")
         return temp
 
@@ -72,19 +73,19 @@ class Console:
 
     def GetTournamentPosition(self):
         temp = self.ut.requestString("user::::pass::::uhash",
-                                     self.username + "::::" + self.password + "::::" + "2773cc25b7407825393a42787753f92b39dd96d6507fb017a103b1fc51076141",
+                                     self.username + "::::" + self.password + "::::" + self.uhash,
                                      "vh_tournamentData.php")
         return temp
 
     def AttackCluster(self, tag):
         temp = self.ut.requestString("user::::pass::::uhash::::ctag",
-                                     self.username + "::::" + self.password + "::::" + "2773cc25b7407825393a42787753f92b39dd96d6507fb017a103b1fc51076141" + "::::" + str(
+                                     self.username + "::::" + self.password + "::::" + self.uhash + "::::" + str(
                                          tag), "vh_startDDoS.php")
         return temp
 
     def ScanCluster(self, tag):
         temp = self.ut.requestString("user::::pass::::uhash::::ctag",
-                                     self.username + "::::" + self.password + "::::" + "2773cc25b7407825393a42787753f92b39dd96d6507fb017a103b1fc51076141" + "::::" + str(
+                                     self.username + "::::" + self.password + "::::" + self.uhash + "::::" + str(
                                          tag), "vh_scanTag.php")
         return temp
 
@@ -114,7 +115,7 @@ class Console:
 
     def getTournament(self):
         temp = self.ut.requestString("user::::pass::::uhash",
-                                     self.username + "::::" + self.password + "::::" + "2773cc25b7407825393a42787753f92b39dd96d6507fb017a103b1fc51076141",
+                                     self.username + "::::" + self.password + "::::" + self.uhash,
                                      "vh_update.php")
         if "tournamentActive" in temp:
             if not "2" in temp.split('tournamentActive":"')[1].split('"')[0]:
@@ -164,14 +165,10 @@ class Console:
                 # if int(firewall[2].strip()) < max:
                     try:
                         temp = self.ut.requestString("user::::pass::::uhash::::hostname",
-                                                     self.username + "::::" + self.password + "::::" + str(
-                                                         uhash) + "::::" + str(hostname), "vh_scanHost.php")
+                                                     self.username + "::::" + self.password + "::::" + self.uhash
+                                                     + "::::" + str(hostname), "vh_scanHost.php")
                         jsons = json.loads(temp)
                         if not ".vHack.cc" in str(jsons['ipaddress']) and int(jsons['vuln']) == 1:
-                            if mode == "Secure":
-                                time.sleep(random.randint(0, 2))
-                            elif mode == "Potator":
-                                time.sleep(random.randint(0, 1))
                             result = self.attackIP(jsons['ipaddress'], max, mode)
 
                             # remove spyware
@@ -237,7 +234,8 @@ class Console:
             white_list = []
             print "Packing IP list " + str(len(list_image))
             fd = open("database.txt", "a")
-            with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
+
+            with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
                 for i, image in enumerate(list_image):
                     wait_for = executor.submit(self.calc_img, self.ut, list_image[i], uhash, list_hostname[i], max, mode)
                     try:
@@ -254,8 +252,8 @@ class Console:
         info = json.loads(info)
         uhash = info['uhash']
         temp = self.ut.requestString("user::::pass::::uhash::::target",
-                                     self.username + "::::" + self.password + "::::" + str(
-                                         uhash) + "::::" + ip, "vh_loadRemoteData.php")
+                                     self.username + "::::" + self.password + "::::" + self.uhash
+                                     + "::::" + ip, "vh_loadRemoteData.php")
         jsons = json.loads(temp)
 
         o = OCR()

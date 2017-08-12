@@ -18,7 +18,7 @@ class Update:
         :return: string, as above if tasks.
         """
         temp = self.ut.requestString("user::::pass::::uhash",
-                                     self.username + "::::" + self.password + "::::" + "userHash_not_needed",
+                                     self.username + "::::" + self.password + "::::" + self.uhash,
                                      "vh_tasks.php")
         return temp
 
@@ -28,13 +28,13 @@ class Update:
                            'ip:23.93.18.103', 'next:now.}]', 'remote:1', 'result:0']
         """
         arr = self.ut.requestArray("user::::pass::::uhash:::::",
-                                   self.username + "::::" + self.password + "::::" + "UserHash_not_needed" + ":::::",
+                                   self.username + "::::" + self.password + "::::" + self.uhash + ":::::",
                                    "vh_spywareInfo.php")
         return arr
 
     def removeSpyware(self):
         arr = self.ut.requestArray("user::::pass::::uhash:::::",
-                                   self.username + "::::" + self.password + "::::" + "UserHash_not_needed" + ":::::",
+                                   self.username + "::::" + self.password + "::::" + self.uhash + ":::::",
                                    "vh_removeSpyware.php")
         return arr
 
@@ -71,7 +71,7 @@ class Update:
         :return:
         """
         temp = self.ut.requestString("user::::pass::::uhash::::utype",
-                                     self.username + "::::" + self.password + "::::" + "userHash_not_needed" + "::::" + type,
+                                     self.username + "::::" + self.password + "::::" + self.uhash + "::::" + type,
                                      "vh_addUpdate.php")
         if "result" in temp:
             return temp.split('result":"')[1].split('"')[0]
@@ -85,11 +85,12 @@ class Update:
         :return:
         """
         temp = self.ut.requestString("user::::pass::::uhash::::utype",
-                                     self.username + "::::" + self.password + "::::" + "userHash_not_needed" + "::::" + type,
+                                     self.username + "::::" + self.password + "::::" + self.uhash + "::::" + type,
                                      "vh_fillTasks.php")
         if "result" in temp:
             return temp.split('result":"')[1].split('"')[0]
         return "2"
+        
 
     def finishTask(self, taskID):
         """
@@ -98,7 +99,7 @@ class Update:
         :return:
         """
         temp = self.ut.requestString("user::::pass::::uhash::::taskid",
-                                     self.username + "::::" + self.password + "::::" + "userHash_not_needed" + "::::" + taskID,
+                                     self.username + "::::" + self.password + "::::" + self.uhash + "::::" + taskID,
                                      "vh_finishTask.php")
         if "4" in temp:
             return True
@@ -111,7 +112,7 @@ class Update:
         :return:
         """
         temp = self.ut.requestString("user::::pass::::uhash",
-                                     self.username + "::::" + self.password + "::::" + "userHash_not_needed",
+                                     self.username + "::::" + self.password + "::::" + self.uhash,
                                      "vh_finishAll.php")
         if "0" in temp:
             return True
@@ -120,13 +121,13 @@ class Update:
 
     def useBooster(self):
         temp = self.ut.requestString("user::::pass::::uhash::::boost",
-                                     self.username + "::::" + self.password + "::::" + "userHash_not_needed" + "::::" + "1",
+                                     self.username + "::::" + self.password + "::::" + self.uhash + "::::" + "1",
                                      "vh_tasks.php")
         return temp
 
     def infoUpdate(self, name, types=None):
         temp = self.ut.requestString("user::::pass::::uhash::::utype",
-                                     self.username + "::::" + self.password + "::::" + "userHash_not_needed" + "::::" + name,
+                                     self.username + "::::" + self.password + "::::" + self.uhash + "::::" + name,
                                      "vh_updateInfo.php")
         j = json.loads(temp)
         if (types == None):
@@ -136,6 +137,7 @@ class Update:
 
 
 
-    def __init__(self, user, password):
+    def __init__(self, user, password, uhash):
         self.username = user
         self.password = password
+        self.uhash = uhash

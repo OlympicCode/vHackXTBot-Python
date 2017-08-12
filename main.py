@@ -33,10 +33,11 @@ class run:
         self.mode = config.mode
         self.stat = "0"
         self.wait_load = config.wait_load
-        self.c = Console(self.player.username, self.player.password)
-        self.u = Update(self.player.username, self.player.password)
+        self.uhash = self.player.uhash
+        self.c = Console(self.player.username, self.player.password, self.uhash)
+        self.u = Update(self.player.username, self.player.password, self.uhash)
         self.b = Botnet(self.player)
-        self.ddos = ddos.Ddos()
+        self.ddos = ddos.Ddos(self.uhash)
         self.init()
 
     def init(self):
@@ -60,7 +61,6 @@ class run:
                             self.updatecount = 0
                             moneyforupdate = int(self.u.infoUpdate(self.updates[self.updatecount]))
                             stat = "1"
-
                         mymoney = int(json.loads(self.c.myinfo())["money"])
 
                         if mymoney < moneyforupdate:
