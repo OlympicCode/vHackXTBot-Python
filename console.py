@@ -124,8 +124,8 @@ class Console:
         fd.write('{0}\n'.format(lineexec.result()))
         fd.flush()
 
-    def get_main_color(self, file):
-        img = Image.open(file)
+    def get_main_color(self, image_data):
+        img = Image.open(io.BytesIO(image_data))
         colors = img.getcolors(256)  # put a higher value if there are many colors in your image
         max_occurence, most_present = 0, 0
         try:
@@ -146,10 +146,7 @@ class Console:
         # bg.paste(image,image)
 
         imgdata = base64.b64decode(imgstring)
-        filename = 'vhack.png'
-        with open(filename, 'wb') as f:
-            f.write(imgdata)
-        image = self.get_main_color(filename)
+        image = self.get_main_color(imgdata)
 
         if image < 13200:
             print "Matched FBI"
