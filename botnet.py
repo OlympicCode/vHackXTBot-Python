@@ -29,7 +29,7 @@ class Botnet:
         bots = json.loads(data)
         if int(bots['count']) > 0:
             for i in bots['data']:
-                bot = Bot(i['bID'], i['bLVL'], i['bPRICE'])
+                bot = Bot(i['bID'], i['bLVL'], i['bPRICE'], self.username, self.password, self.uhash)
                 self.botnet.append(bot)
 
     def printbots(self):
@@ -150,9 +150,12 @@ class Botnet:
 class Bot:
     ut = Utils()
 
-    def __init__(self, botid, botlvl, price):
+    def __init__(self, botid, botlvl, price, username, password, uhash):
         self.id = int(botid)
         self.lvl = int(botlvl)
+        self.username = username
+        self.uhash = uhash
+        self.password = password
         self.upgradecost = int(price)
 
     def botupgradable(self):
@@ -190,6 +193,7 @@ class Bot:
             self.upgradecost = details['costs']
             logging.info("Bot # {0} upgraded to level {1} at a cost of {2}".format(details['old'], details['lvl'],
                                                                                    details['costs']))
+            print "Bot # {0} upgraded to level {1} at a cost of {2} $".format(details['old'], details['lvl'], details['costs'])
         except TypeError as e:
             logging.info("Bot fully upgraded, should not get this error. Fix me! {0}".format(e))
             return None
