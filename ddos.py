@@ -10,14 +10,14 @@ import console
 
 class Ddos:
 
-    def __init__(self, uhash):
+    def __init__(self, player):
         self.ddos_cluster = config.ddos_cluster
         self.database = config.database
         self.Max_point_tournament = config.Max_point_tournament
-        self.username = config.user
-        self.password = config.password
-        self.uhash = uhash
-        self.c = console.Console(self.username, self.password, self.uhash)
+        self.username = player.username
+        self.password = player.password
+        self.uhash = player.uhash
+        self.c = console.Console(player)
 
     def run_ddos(self):
         if self.ddos_cluster:
@@ -120,9 +120,9 @@ class Ddos:
                         Cluster_point = newA[i][1]
                         if Cluster_point < self.Max_point_tournament:
                             # try:
-                            #	scan_cluster = json.loads(self.c.ScanCluster(Cluster_name.decode("utf-8")))
+                            #     scan_cluster = json.loads(self.c.ScanCluster(Cluster_name.decode("utf-8")))
                             # except UnicodeEncodeError:
-                            #	scan_cluster = json.loads(self.c.ScanCluster(Cluster_name.encode("utf-8")))
+                            #     scan_cluster = json.loads(self.c.ScanCluster(Cluster_name.encode("utf-8")))
 
                             count = count + 1
                             print "if attack " + Cluster_name + "(" + str(Cluster_point) + ")"
@@ -136,9 +136,9 @@ class Ddos:
                             Cluster_point = newA[i][1]
                             if Cluster_point < self.Max_point_tournament and count < 5:
                                 # try:
-                                #	scan_cluster = json.loads(self.c.ScanCluster(Cluster_name.decode("utf-8")))
+                                #     scan_cluster = json.loads(self.c.ScanCluster(Cluster_name.decode("utf-8")))
                                 # except UnicodeEncodeError:
-                                #	scan_cluster = json.loads(self.c.ScanCluster(Cluster_name.encode("utf-8")))
+                                #     scan_cluster = json.loads(self.c.ScanCluster(Cluster_name.encode("utf-8")))
 
                                 count = count + 1
                                 print "if attack " + Cluster_name + "(" + str(Cluster_point) + ")"
@@ -146,7 +146,6 @@ class Ddos:
                                 cursor.executemany("INSERT INTO Cluster VALUES (?,?,?)", Cluster)
                                 db.commit()
                         time.sleep(5)
-
 
             except KeyError:
                 # attack cluster for not in tournament

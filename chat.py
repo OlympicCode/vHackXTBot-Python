@@ -32,6 +32,7 @@ class RemoteClient(asyncore.dispatcher):
             raise ValueError('Message too long')
         self.send(message)
 
+
 class Client(asyncore.dispatcher):
 
     def __init__(self, host_address, name):
@@ -58,30 +59,33 @@ class Client(asyncore.dispatcher):
     def handle_read(self):
 
         message = self.recv(MAX_MESSAGE_LENGTH)
-        if "MODE" in message  or "JOIN" in message or "QUIT" in message or ".IP" in message or ":v[" in message or ":vHackXTGuard" in message or "ip.vhack.biz" in message or "#vHackXT" in message or "ip.vhack.biz" in message or "PING" in message:
+
+        if ["MODE", "JOIN", "QUIT", ".IP", ":v[", ":vHackXTGuard",
+           "ip.vhack.biz", "#vHackXT", "PING"] in message:
+
             message = message.split(" ")
-            
-            correcte = ['MODE', "JOIN", "QUIT", ".IP", ":v[", "admin.vhack.biz", "mod.vhack.biz", ":vHackXTGuard",
-                     "#vHackXT", ":Ping", "PING", ":chat.vhackxt.com",
-                     ":chat.vhackxt.com\r\n", "timeout:", "seconds\r\n",
-                      "vip.vhack.biz", "ip.vhack.biz", ":Read", "error"]
+
+            correcte = ['MODE', "JOIN", "QUIT", ".IP", ":v[",
+                        "admin.vhack.biz", "mod.vhack.biz", ":vHackXTGuard",
+                        "#vHackXT", ":Ping", "PING", ":chat.vhackxt.com",
+                        ":chat.vhackxt.com\r\n", "timeout:", "seconds\r\n",
+                        "vip.vhack.biz", "ip.vhack.biz", ":Read", "error"]
 
             for i, list_word in enumerate(message):
                 for list_match in correcte:
                     if list_match in list_word:
                         message.remove(message[i])
-                        
+
             if "## Cluster" in message:
-            	message = message.replace("##", "\r\n ##")
+                message = message.replace("##", "\r\n ##")
 
             print(' '.join(message))
-                    
+
         else:
             print(message)
 
 
 if __name__ == '__main__':
     print('Creating clients')
-    client = Client(("164.132.9.247", 15000), 'User_'+str(randint(0,500)))
+    client = Client(("164.132.9.247", 15000), 'User_' + str(randint(0, 500)))
     asyncore.loop()
-

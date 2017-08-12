@@ -5,12 +5,11 @@ import base64
 import hashlib
 import time
 import urllib2
-import random
 import config
 import ssl
 
-class Utils:
 
+class Utils:
     def __init__(self):
         self.secret = "aeffI"
         self.url = "https://api.vhack.cc/v/10/"
@@ -47,7 +46,6 @@ class Utils:
         str8 = self.md5hash(self.md5hash(a3 + self.md5hash(self.md5hash(str9) + str7) + str9 + self.md5hash(str7)))
         return self.url + php + "?user=" + a + "&pass=" + str8
 
-
     def parse(self, string):
         return string[1:-1].replace("\"", "").split(",")
 
@@ -71,7 +69,7 @@ class Utils:
         time.sleep(1)
         t = None
         i = 0
-        while t == None:
+        while t is None:
             if i > 10:
                 exit(0)
             try:
@@ -105,6 +103,7 @@ class Utils:
                 # print i1
                 return t
             except Exception as err:
+                print "Error: " + err
                 time.sleep(1)
         return "null"
 
@@ -117,66 +116,3 @@ class Utils:
             return self.parse(temp)
         else:
             return []
-
-    def botnetserverinfo(self):
-        """
-        return botnet info including if you can attack vHack servers and bot net pcs info.
-        :return:
-        """
-        response = self.requestString("user::::pass::::uhash",
-                 self.username + "::::" + self.password + "::::" + "userHash_not_needed",
-                 "vh_botnetInfo.php")
-        return response
-
-    def attackbotnetserver(self, i):
-        """
-        Attack vHack servers
-        :return: string
-        """
-        response = self.requestString("user::::pass::::uhash::::cID",
-                                self.username + "::::" + self.password + "::::" + "userHash_not_needed" + "::::" + "1",
-                                "vh_attackCompany.php")
-        temp = self.requestString("user::::pass::::uhash::::cID",
-                                     self.username + "::::" + self.password + "::::" + "userHash_not_needed" + "::::" + "2",
-                                     "vh_attackCompany2.php")
-        temp = self.requestString("user::::pass::::uhash::::cID",
-                                     self.username + "::::" + self.password + "::::" + "userHash_not_needed" + "::::" + "3",
-                                     "vh_attackCompany3.php")
-        """temp = self.requestString("user::::pass::::uhash::::cID",
-                                  self.username + "::::" + self.password + "::::" + "userHash_not_needed" + "::::" + "4",
-                                     "vh_attackCompany4.php")"""
-        return response
-
-    def upgradebot(self, id):
-        """
-        Supplied with a bot net computer ID, upgrade the computer.
-        :param id: bot net computer id
-        :return: str
-        containing: {"money":"3479746","old":"13","costs":"4100000","lvl":"41","mm":"7579746","new":"42","strength":"42"}
-        """
-        response = self.requestString("user::::pass::::uhash::::bID",
-                              self.username + "::::" + self.password + "::::" + "userHash_not_needed" + "::::" + str(id),
-                              "vh_upgradeBotnet.php")
-        return response
-
-    def myinfo(self):
-        """
-        looks up and returns all data associated with player. Upgrades, moneym boosters, spyware active etc.
-        See player class for detailed description
-        :return: str
-        """
-        temp = self.requestString("user::::pass::::uhash::::",
-                                     self.username + "::::" + self.password + "::::" + "userHash_not_needed" + ":::::",
-                                     "vh_update.php")
-        return temp
-
-    def removespyware(self):
-        arr = self.requestArray("user::::pass::::uhash:::::",
-                              self.username + "::::" + self.password + "::::" + "userHash_not_needed" + ":::::",
-                              "vh_removeSpyware.php")
-        return arr
-
-    def generate_uhash(self, number):
-        mkstring = lambda (x): "".join(map(chr, (ord('a')+(y%26) for y in range(x))))
-        return mkstring(number)
-

@@ -1,6 +1,7 @@
 #!/usr/bin/python2.7
 # -*- coding: utf-8
 
+
 class Passwords:
     def getImage1(self):
         return self.img1

@@ -4,15 +4,14 @@
 from console import Console
 from update import Update
 from botnet import Botnet
-from random import randrange, uniform
 import time
 import json
 import config
 import ddos
 from player import Player
 
-class run:
 
+class run:
     def __init__(self):
         """
         Pull all variables from config.py file.
@@ -33,11 +32,10 @@ class run:
         self.mode = config.mode
         self.stat = "0"
         self.wait_load = config.wait_load
-        self.uhash = self.player.uhash
-        self.c = Console(self.player.username, self.player.password, self.uhash)
-        self.u = Update(self.player.username, self.player.password, self.uhash)
+        self.c = Console(self.player)
+        self.u = Update(self.player)
         self.b = Botnet(self.player)
-        self.ddos = ddos.Ddos(self.uhash)
+        self.ddos = ddos.Ddos(self.player)
         self.init()
 
     def init(self):
@@ -46,7 +44,7 @@ class run:
 
             time.sleep(self.wait_load)
             stat = "0"
-            # prepare account 
+            # prepare account
             self.get_max_update = int(self.u.infoUpdate("ram", "new"))-1
             self.running_all = self.u.runningtasks()
             print("you are running " + str(self.running_all) + "/" + str(self.get_max_update) + " tasks")
@@ -78,9 +76,9 @@ class run:
                             stat = self.u.startTask(self.updates[self.updatecount])
                             if "3" in stat or "0" in stat:
                                 print "updating " + self.updates[self.updatecount] + " level +1"
-                                #print "Started Update
+                                # print "Started Update
                                 print "Waiting... in update"
-                                #u.useBooster()
+                                # u.useBooster()
                                 self.updatecount += 1
                                 totaltask = int(self.u.runningtasks())+int(self.updatecount)
                                 if int(totaltask) == int(self.get_max_update):
@@ -104,7 +102,7 @@ class run:
                 try:
                     usebooster = self.u.getTasks()
                     print(usebooster)
-                    #usebooster = None
+                    # usebooster = None
                     json_data = json.loads(usebooster)
                     while len(json_data["data"]) > 1:
                         if int(json_data["boost"]) > 5:
@@ -129,4 +127,6 @@ class run:
             # attack players
             self.c.attack(self)
 
-r = run()
+
+if __name__ == "__main__":
+    r = run()
