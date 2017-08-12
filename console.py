@@ -44,16 +44,18 @@ class Console:
         imgs = Passwords(arr)
         return imgs
 
-    def enterPassword(self, passwd, target):
+    def enterPassword(self, target, passwd):
         passwd = passwd.split("p")
         temp = self.ut.requestString("user::::pass::::port::::target::::uhash",
-                                     self.username + "::::" + self.password + "::::" + str(
-                                         passwd[1].strip()) + "::::" + str(target) + "::::" + self.uhash,
-                                     "vh_trTransfer.php")
-        if temp == "10":
-            return False
-        else:
+                                     self.username + "::::" + self.password + "::::" + "0" + "::::" + str(target) + "::::" + self.uhash,
+                                     "vh_trTransfer.php") # passwd[1].strip()
+        result = json.loads(temp)
+        if str(result["result"]) == "0":
             return temp
+        else:
+            return False
+
+
 
     def check_Cluster(self, uhash):
         if self.uhash == None:
@@ -67,8 +69,8 @@ class Console:
         return temp
 
     def scanUser(self):
-        arr = self.ut.requestArray("user::::pass::::",
-                                   self.username + "::::" + self.password + "::::", "vh_scanHost.php")
+        arr = self.ut.requestArray("user::::pass::::uhash",
+                                   self.username + "::::" + self.password + "::::" + self.uhash, "vh_scanHost.php")
         return arr
 
     def GetTournamentPosition(self):
@@ -139,7 +141,7 @@ class Console:
         except TypeError:
             raise Exception("Too many colors in the image")
 
-    def calc_img(self, ut, imgstring, uhash, hostname, max, mode):
+    def calc_img(self, ut, imgstring, uhash, hostname, mode):
         #pic = cStringIO.StringIO()
         #image_string = cStringIO.StringIO(base64.b64decode(imgstring))
         #image = Image.open(image_string)
@@ -167,16 +169,16 @@ class Console:
                         temp = self.ut.requestString("user::::pass::::uhash::::hostname",
                                                      self.username + "::::" + self.password + "::::" + self.uhash
                                                      + "::::" + str(hostname), "vh_scanHost.php")
-                        jsons = json.loads(temp)
-                        if not ".vHack.cc" in str(jsons['ipaddress']) and int(jsons['vuln']) == 1:
-                            result = self.attackIP(jsons['ipaddress'], max, mode)
 
+                        jsons = json.loads(temp)
+                        if not ".vHack.cc" in str(jsons['ipaddress']):
+                            result = self.attackIP(jsons['ipaddress'], mode)
                             # remove spyware
-                            u = Update(self.username, self.password)
+                            """u = Update(self.username, self.password)
                             spyware = u.SpywareInfo()
                             if int(spyware[0].split(":")[-1]) > 0 and not int(spyware[0].split(":")[-1]) == 0:
                                 u.removeSpyware()
-                                print "I will remove " + str(spyware[0].split(":")[-1]) + " Spyware for your account."
+                                print "I will remove " + str(spyware[0].split(":")[-1]) + " Spyware for your account."""
 
                             return result, jsons['ipaddress']
 
@@ -186,27 +188,19 @@ class Console:
                         #		time.sleep(1)
                         #		self.attackIP(jsons['ipaddress'], max, mode)
 
-                    except TypeError:
-                        return 0, 0
+                    except TypeError as e:
+                        return 0, 0, "type error" + e
                 #else:
                 #    print "Firewall level is to High"
                 #    return 0, 0
 
             except ValueError:
-                return 0, 0
+                return 0, 0, "value error"
 
     def getIP(self, blank, max, mode, active_protecte_cluster_ddos):
-        info = self.myinfo()
-        try:
-            info = json.loads(info)
-            uhash = info['uhash']
-        except TypeError:
-            time_sleep = int(random.randint(300, 400))
-            print "error you are blocked, waiting " + str(time_sleep / 60) + " Minutes"
-            time.sleep(time_sleep)
-            return False
 
-        stat_cluster = self.check_Cluster(uhash)
+
+        stat_cluster = self.check_Cluster(self.uhash)
         stat_cluster = json.loads(stat_cluster)
         try:
             stat_cluter_blocked = stat_cluster['blocked']
@@ -219,7 +213,7 @@ class Console:
         else:
             temp = self.ut.requestString("user::::pass::::uhash::::by",
                                          self.username + "::::" + self.password + "::::" + str(
-                                             uhash) + "::::" + str(random.randint(0, 1)), "vh_getImg.php")
+                                             self.uhash) + "::::" + str(random.randint(0, 1)), "vh_getImg.php")
             jsons = json.loads(temp)
             list_image = []
             list_hostname = []
@@ -237,9 +231,10 @@ class Console:
 
             with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
                 for i, image in enumerate(list_image):
-                    wait_for = executor.submit(self.calc_img, self.ut, list_image[i], uhash, list_hostname[i], max, mode)
+                    wait_for = executor.submit(self.calc_img, self.ut, list_image[i], self.uhash, list_hostname[i], mode)
                     try:
                         result, ip = wait_for.result()
+
                     except TypeError:
                         result = False
 
@@ -247,23 +242,23 @@ class Console:
                         with open("database.text", "a") as f:
                             f.write(ip + "\n")
 
-    def attackIP(self, ip, max, mode):
-        info = self.myinfo()
-        info = json.loads(info)
-        uhash = info['uhash']
+    def attackIP(self, ip, mode):
         temp = self.ut.requestString("user::::pass::::uhash::::target",
                                      self.username + "::::" + self.password + "::::" + self.uhash
                                      + "::::" + ip, "vh_loadRemoteData.php")
         jsons = json.loads(temp)
 
-        o = OCR()
-        imgs = o.getSolution(str(temp))
+        #o = OCR()
+        #imgs = o.getSolution(str(temp))
+        imgs = True
         if imgs != None:
             try:
                 user = jsons['username']
                 winchance = jsons['winchance']
             except TypeError:
+                print "error"
                 return False
+
             try:
                 if winchance:
                     fwlevel = jsons['fw']
@@ -306,9 +301,9 @@ class Console:
 
             if mode == "Potator":
                 if winchance > 20:
-                    password = self.enterPassword(imgs, ip, uhash)
+                    password = self.enterPassword(ip, self.uhash)
                     jsons = json.loads(password)
-                    if password:
+                    if int(jsons["result"]) == 0:
                         try:
                             if not "?" in str(money) and str(jsons['result']) == 0:
                                 print "\nYour Money: " + "{:11,}".format(
@@ -384,10 +379,10 @@ class Console:
                     return False
 
             if not "?" in str(avlevel) and not "?" in str(winchance) and mode == "Secure":
-                if int(avlevel) < max and int(winchance) > 75 and str(anonymous) == "YES":
-                    password = self.enterPassword(imgs, ip, uhash)
+                if int(winchance) > 75 and str(anonymous) == "YES":
+                    password = self.enterPassword(ip, self.uhash)
                     jsons = json.loads(password)
-                    if password:
+                    if int(jsons["result"]) == 0:
                         try:
                             if not "?" in str(money) and str(jsons['result']) == 0:
                                 print "\nYour Money: " + "{:11,}".format(
@@ -457,10 +452,6 @@ class Console:
                         return False
                 else:
                     # print "\n"
-                    if int(avlevel) > max:
-                        print "Antivir to high " + str(avlevel)
-                        # print "passed"
-                        return False
                     if int(winchance) < 75:
                         print "winchance is poor: " + str(winchance)
                         # print "passed"
