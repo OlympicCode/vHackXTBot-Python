@@ -13,6 +13,8 @@ import concurrent.futures
 import random
 import sys
 import signal
+import io
+
 
 original_sigint = None
 
