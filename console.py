@@ -55,7 +55,7 @@ class Console:
         else:
             return temp
 
-    def check_Cluster(self):
+    def check_Cluster(self, uhash):
         if self.uhash == None:
             temp = self.ut.requestString("user::::pass::::uhash",
                                          self.username + "::::" + self.password + "::::" + self.uhash,
