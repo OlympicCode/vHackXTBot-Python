@@ -79,8 +79,16 @@ class Utils:
                 req.add_header('User-agent', 'Dalvik/2.1.0 (Linux; U; Android 6.0.1; Samsung Galaxy S3 Build/MOB31T)')
                 r = urllib2.urlopen(req, context=ssl._create_unverified_context())
                 t = r.read()
-                if t == "15":
+                if t == "5":
+                    print "Check your Internet."
+                elif t == "8":
+                    print "User/Password wrong!"
+                elif t == "10":
+                    print "API is updated."
+                elif t == "15":
                     print "You are Banned sorry :("
+                elif t == "99":
+                    print "Server is down for Maintenance, please be patient."
                 return t
             except:
                 print "Blocked, trying again. Delaying {0} seconds".format(i)
