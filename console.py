@@ -3,31 +3,28 @@
 
 from classes import Passwords
 from utils import Utils
-from update import Update
-from ocr import OCR
 import time
 import json
 from PIL import Image
 import base64
-import pytesseract
-import cStringIO
 import requests
 import re
 import concurrent.futures
 import random
 import sys
 import signal
+
 original_sigint = None
 
 
 class Console:
     ut = Utils()
 
-    def __init__(self, u, p, uhash):
+    def __init__(self, player):
         global original_sigint
-        self.username = u
-        self.password = p
-        self.uhash = uhash
+        self.username = player.username
+        self.password = player.password
+        self.uhash = player.uhash
         original_sigint = signal.getsignal(signal.SIGINT)
         signal.signal(signal.SIGINT, self.exit_gracefully)
 
@@ -48,17 +45,15 @@ class Console:
         passwd = passwd.split("p")
         temp = self.ut.requestString("user::::pass::::port::::target::::uhash",
                                      self.username + "::::" + self.password + "::::" + "0" + "::::" + str(target) + "::::" + self.uhash,
-                                     "vh_trTransfer.php") # passwd[1].strip()
+                                     "vh_trTransfer.php")  # passwd[1].strip()
         result = json.loads(temp)
         if str(result["result"]) == "0":
             return temp
         else:
             return False
 
-
-
     def check_Cluster(self, uhash):
-        if self.uhash == None:
+        if self.uhash is None:
             temp = self.ut.requestString("user::::pass::::uhash",
                                          self.username + "::::" + self.password + "::::" + self.uhash,
                                          "vh_ClusterData.php")
@@ -120,7 +115,7 @@ class Console:
                                      self.username + "::::" + self.password + "::::" + self.uhash,
                                      "vh_update.php")
         if "tournamentActive" in temp:
-            if not "2" in temp.split('tournamentActive":"')[1].split('"')[0]:
+            if "2" not in temp.split('tournamentActive":"')[1].split('"')[0]:
                 return True
             else:
                 return False
@@ -131,7 +126,7 @@ class Console:
 
     def get_main_color(self, file):
         img = Image.open(file)
-        colors = img.getcolors(256) #put a higher value if there are many colors in your image
+        colors = img.getcolors(256)  # put a higher value if there are many colors in your image
         max_occurence, most_present = 0, 0
         try:
             for c in colors:
@@ -142,9 +137,9 @@ class Console:
             raise Exception("Too many colors in the image")
 
     def calc_img(self, ut, imgstring, uhash, hostname, mode):
-        #pic = cStringIO.StringIO()
-        #image_string = cStringIO.StringIO(base64.b64decode(imgstring))
-        #image = Image.open(image_string)
+        # pic = cStringIO.StringIO()
+        # image_string = cStringIO.StringIO(base64.b64decode(imgstring))
+        # image = Image.open(image_string)
 
         # Overlay on white background, see http://stackoverflow.com/a/7911663/1703216
         # bg = Image.new("RGB", image.size, (255,255,255))
@@ -160,8 +155,8 @@ class Console:
             print "Matched FBI"
             return 1, hostname
 
-        else: 
-            #firewall = pytesseract.image_to_string(image).split(":")
+        else:
+            # firewall = pytesseract.image_to_string(image).split(":")
             # print firewall[2].strip()
             try:
                 # if int(firewall[2].strip()) < max:
@@ -171,7 +166,7 @@ class Console:
                                                      + "::::" + str(hostname), "vh_scanHost.php")
 
                         jsons = json.loads(temp)
-                        if not ".vHack.cc" in str(jsons['ipaddress']):
+                        if ".vHack.cc" not in str(jsons['ipaddress']):
                             result = self.attackIP(jsons['ipaddress'], mode)
                             # remove spyware
                             """u = Update(self.username, self.password)
@@ -183,14 +178,14 @@ class Console:
                             return result, jsons['ipaddress']
 
                         # else:
-                        #	temp = self.ut.requestString("user::::pass::::uhash::::hostname", self.username + "::::" + self.password + "::::" + str(uhash) + "::::" + jsons['ipaddress'], "vh_scanHost.php")
-                        #	if not ".vHack.cc" in str(jsons['ipaddress']) and int(jsons['vuln']) == 1:
-                        #		time.sleep(1)
-                        #		self.attackIP(jsons['ipaddress'], max, mode)
+                        #     temp = self.ut.requestString("user::::pass::::uhash::::hostname", self.username + "::::" + self.password + "::::" + str(uhash) + "::::" + jsons['ipaddress'], "vh_scanHost.php")
+                        #     if not ".vHack.cc" in str(jsons['ipaddress']) and int(jsons['vuln']) == 1:
+                        #         time.sleep(1)
+                        #         self.attackIP(jsons['ipaddress'], max, mode)
 
                     except TypeError as e:
                         return 0, 0, "type error" + e
-                #else:
+                # else:
                 #    print "Firewall level is to High"
                 #    return 0, 0
 
@@ -198,8 +193,6 @@ class Console:
                 return 0, 0, "value error"
 
     def getIP(self, blank, max, mode, active_protecte_cluster_ddos):
-
-
         stat_cluster = self.check_Cluster(self.uhash)
         stat_cluster = json.loads(stat_cluster)
         try:
@@ -225,9 +218,8 @@ class Console:
                 list_image.append(imgstring)
                 list_hostname.append(hostname)
 
-            white_list = []
             print "Packing IP list " + str(len(list_image))
-            fd = open("database.txt", "a")
+            # fd = open("database.txt", "a")
 
             with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
                 for i, image in enumerate(list_image):
@@ -238,7 +230,7 @@ class Console:
                     except TypeError:
                         result = False
 
-                    if result == True:
+                    if result:
                         with open("database.text", "a") as f:
                             f.write(ip + "\n")
 
@@ -248,12 +240,12 @@ class Console:
                                      + "::::" + ip, "vh_loadRemoteData.php")
         jsons = json.loads(temp)
 
-        #o = OCR()
-        #imgs = o.getSolution(str(temp))
+        # o = OCR()
+        # imgs = o.getSolution(str(temp))
         imgs = True
-        if imgs != None:
+        if imgs is not None:
             try:
-                user = jsons['username']
+                # user = jsons['username']
                 winchance = jsons['winchance']
             except TypeError:
                 print "error"
@@ -263,16 +255,16 @@ class Console:
                 if winchance:
                     fwlevel = jsons['fw']
                     avlevel = jsons['av']
-                    spamlevel = jsons['spam']
+                    # spamlevel = jsons['spam']
                     sdklevel = jsons['sdk']
                     ipsplevel = jsons['ipsp']
                     money = jsons['money']
                     saving = jsons['savings']
                     anonymous = jsons['anonymous']
                     username = jsons['username']
-                    winlo = jsons['winelo']
+                    # winlo = jsons['winelo']
                     winchance = jsons['winchance']
-                    spywarelevel = jsons['spyware']
+                    # spywarelevel = jsons['spyware']
                 else:
                     avlevel = "????"
                     winchance = 0
@@ -282,16 +274,16 @@ class Console:
             except TypeError:
                 fwlevel = jsons['fw']
                 avlevel = jsons['av']
-                spamlevel = jsons['spam']
+                # spamlevel = jsons['spam']
                 sdklevel = jsons['sdk']
                 ipsplevel = jsons['ipsp']
                 money = jsons['money']
                 saving = jsons['savings']
                 anonymous = jsons['anonymous']
                 username = jsons['username']
-                winlo = jsons['winelo']
+                # winlo = jsons['winelo']
                 winchance = jsons['winchance']
-                spywarelevel = jsons['spyware']
+                # spywarelevel = jsons['spyware']
 
             if type(winchance) == "str":
                 if "?" in winchance:
@@ -305,7 +297,7 @@ class Console:
                     jsons = json.loads(password)
                     if int(jsons["result"]) == 0:
                         try:
-                            if not "?" in str(money) and str(jsons['result']) == 0:
+                            if "?" not in str(money) and str(jsons['result']) == 0:
                                 print "\nYour Money: " + "{:11,}".format(
                                     int(jsons['newmoney'])) + "\n[TargetIP: " + str(
                                     ip) + "]\n\nMade " + "{:11,}".format(
@@ -369,7 +361,7 @@ class Console:
                             return False
 
                         except ValueError as e:
-                            print "error"
+                            print "error: " + e
                             return True
                     else:
                         print "Password Wrong"
@@ -378,13 +370,13 @@ class Console:
                     print "winchance is poor: " + str(winchance)
                     return False
 
-            if not "?" in str(avlevel) and not "?" in str(winchance) and mode == "Secure":
+            if "?" not in str(avlevel) and "?" not in str(winchance) and mode == "Secure":
                 if int(winchance) > 75 and str(anonymous) == "YES":
                     password = self.enterPassword(ip, self.uhash)
                     jsons = json.loads(password)
                     if int(jsons["result"]) == 0:
                         try:
-                            if not "?" in str(money) and str(jsons['result']) == 0:
+                            if "?" not in str(money) and str(jsons['result']) == 0:
                                 print "\nYour Money: " + "{:11,}".format(
                                     int(jsons['newmoney'])) + "\n[TargetIP: " + str(
                                     ip) + "]\n\nMade " + "{:11,}".format(
@@ -443,7 +435,6 @@ class Console:
                                     s.close()
                                 return True
 
-
                         except KeyError:
                             print "Bad attack"
                             return False
@@ -473,7 +464,7 @@ class Console:
 
     def attack(self, obj):
         for i in range(0, (obj.attacks_normal * random.randint(1, 2))):
-            data = self.getIP(True, obj.maxanti_normal, obj.mode, obj.active_cluster_protection)
+            self.getIP(True, obj.maxanti_normal, obj.mode, obj.active_cluster_protection)
             print "wait anti-blocking..."
 
     def exit_gracefully(self, signum, frame):

@@ -2,7 +2,7 @@
 # -*- coding: utf-8
 
 from utils import Utils
-import config
+
 import json
 import logging
 
@@ -11,8 +11,9 @@ class Botnet:
     ut = Utils()
 
     def __init__(self, player):
-        self.username = config.user
-        self.password = config.password
+        self.username = player.username
+        self.password = player.password
+        self.uhash = player.uhash
         self.botNetServers = 3
         self.botnet = []
         self.p = player
@@ -20,7 +21,8 @@ class Botnet:
 
     def _initbot(self):
         """
-        Grab the amount of bots in the bot net and populate and array of Bot class
+        Grab the amount of bots in the botnet
+        and populate and array of Bot class
         :return: none
         """
         data = self._botnetInfo()
@@ -40,17 +42,23 @@ class Botnet:
 
     def getbotnetdata(self):
         """
-        Return an array of bot class. Contains all the bots in the bot net.
+        Return an array of bot class.
+        Contains all the bots in the botnet.
         :return: list of bot class
         """
         return self.botnet
 
     def getInfo(self):
         """
-        Get infor about the entire botnet. Including if you can attack bot net servers etc. Also bot net PC info
-        :return: list of vHack serves that can be hacked. ['1','2','1']. '1' = can be hacked, '2' time not elapsed.
+        Get info about the entire botnet.
+        Including if you can attack bot net servers etc.
+        Also botnet PC info.
+        :return: list of vHack serves that can be hacked.
+                 ['1','2','1']. '1' = can be hacked, '2' time not elapsed.
         """
-        response = self.ut.botnetserverinfo()
+        response = self.ut.requestString("user::::pass::::uhash",
+                                         self.username + "::::" + self.password + "::::" + self.uhash,
+                                         "vh_botnetInfo.php")
         arr = response.split('","canAtt')
         l = []
         for i1 in arr[1:]:
@@ -59,7 +67,9 @@ class Botnet:
 
     def _attackable(self):
         """
-        Retrieve all vhack botnet info. Hack times and botnet pc data. Determine if can attack.
+        Retrieve all vhack botnet info.
+        Hack times and botnet pc data.
+        Determine if can attack.
         :return: none
         """
         t = self.getInfo()
@@ -71,16 +81,29 @@ class Botnet:
 
     def _attackall(self):
         """
-        Determine the amount of vHack servers from the config files, and attack each one.
+        Determine the amount of vHack servers from
+        the config files, and attack each one.
         :return: none
         """
         for i in range(1, self.botNetServers+1):
-            response = self.ut.attackbotnetserver(i)
+            response = self.ut.requestString("user::::pass::::uhash::::cID",
+                                             self.username + "::::" + self.password + "::::" + self.uhash + "::::" + "1",
+                                             "vh_attackCompany.php")
+            self.ut.requestString("user::::pass::::uhash::::cID",
+                                  self.username + "::::" + self.password + "::::" + self.uhash + "::::" + "2",
+                                  "vh_attackCompany2.php")
+            self.ut.requestString("user::::pass::::uhash::::cID",
+                                  self.username + "::::" + self.password + "::::" + self.uhash + "::::" + "3",
+                                  "vh_attackCompany3.php")
+            """temp = self.ut.requestString("user::::pass::::uhash::::cID",
+                                         self.username + "::::" + self.password + "::::" + self.uhash + "::::" + "4",
+                                         "vh_attackCompany4.php")"""
             logging.info("Netcoins gained: {0}  To come....".format(response))
 
     def attack(self):
         """
-        Check if vHack server botnet is attackable, then attack if can.
+        Check if vHack server botnet is attackable,
+        then attack if can.
         :return: none
         """
         self._initbot()
@@ -92,7 +115,8 @@ class Botnet:
 
     def upgradebotnet(self):
         """
-        Check if there is enough money to upgrade a botnet PC. Cycle through and upgrade until no money.
+        Check if there is enough money to upgrade a botnet PC.
+        Cycle through and upgrade until no money.
         :return: None
         """
         logging.info("Attempting to upgrade bot net PC's")
@@ -114,7 +138,9 @@ class Botnet:
         "resethours3":"3","resetminutes3":"15",
         "canAtt1":"2","canAtt2":"2","canAtt3":"2"}'
         """
-        temp = self.ut.botnetserverinfo()
+        temp = self.ut.requestString("user::::pass::::uhash",
+                                     self.username + "::::" + self.password + "::::" + self.uhash,
+                                     "vh_botnetInfo.php")
         return temp
 
     def __repr__(self):
@@ -150,12 +176,15 @@ class Bot:
         """
         Pass in bot class object and call upgrade function based on bot ID.
         details :
-        {u'strength': u'22', u'old': u'30', u'mm': u'68359859', u'money': u'66259859', u'costs': u'2100000',
+        {u'strength': u'22', u'old': u'30', u'mm': u'68359859',
+        u'money': u'66259859', u'costs': u'2100000',
         u'lvl': u'21', u'new': u'22'}
         current lvl, bot number, x, x, upgrade cost, lvl, next lvl
         :return: None
         """
-        response = self.ut.upgradebot(self.id)
+        response = self.ut.requestString("user::::pass::::uhash::::bID",
+                                         self.username + "::::" + self.password + "::::" + self.uhash + "::::" + str(self.id),
+                                         "vh_upgradeBotnet.php")
         details = json.loads(response)
         try:
             self.upgradecost = details['costs']

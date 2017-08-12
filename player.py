@@ -23,7 +23,7 @@ class Player:
         self.email = 0
         self.savedIPs = []
         self.anon_attack = config.anon
-        self._init() # 10 secs
+        self._init()  # 10 secs
 
     def __repr__(self):
         return "Money: {0}, Score: {1}".format(self.money, self.score)
@@ -43,7 +43,10 @@ class Player:
         return self.money
 
     def removespy(self):
-        response = self.ut.removespyware()
+        response = self.ut.requestArray("user::::pass::::uhash:::::",
+                                        self.username + "::::" + self.password + "::::" + self.uhash + ":::::",
+                                        "vh_removeSpyware.php")
+        return response
 
     def _init(self):
         """
@@ -57,22 +60,24 @@ class Player:
         "tournamentActive":"2","boost":"294","actspyware":"0","tos":"1","unreadmsg":"0"}
         :return:
         """
-        data = self.ut.myinfo()
+        data = self.ut.requestString("user::::pass::::uhash::::",
+                                     self.username + "::::" + self.password + "::::" + self.uhash + ":::::",
+                                     "vh_update.php")
         if len(data) == 1:
             logging.warn('Username and password entered in config.py?')
             sys.exit()
         try:
-           j = json.loads(data)
-           self.setmoney(j['money'])
-           self.ip = j['ip']
-           self.score = j['score']
-           self.netcoins = j['netcoins']
-           self.localspyware = j['actspyware']
-           self.rank = j['rank']
-           self.boosters = j['boost']
-           self.remotespyware = j['actadw']
-           self.email = int(j['unreadmsg'])
-           self.uhash = str(j['uhash'])
+            j = json.loads(data)
+            self.setmoney(j['money'])
+            self.ip = j['ip']
+            self.score = j['score']
+            self.netcoins = j['netcoins']
+            self.localspyware = j['actspyware']
+            self.rank = j['rank']
+            self.boosters = j['boost']
+            self.remotespyware = j['actadw']
+            self.email = int(j['unreadmsg'])
+            self.uhash = str(j['uhash'])
         except:
             exit()
 

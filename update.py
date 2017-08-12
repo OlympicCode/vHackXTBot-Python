@@ -5,6 +5,11 @@ import json
 class Update:
     ut = Utils()
 
+    def __init__(self, player):
+        self.username = player.username
+        self.password = player.password
+        self.uhash = player.uhash
+
     def getrunningtasks(self):
         """
         '{"data":[{"type":"sdk","start":"1495356942","end":"1495359788","wto":"1186","taskid":"110610282"}],
@@ -51,7 +56,6 @@ class Update:
         except KeyError:
             return "0"
 
-
     def getTaskIDs(self, tasks=None):
         """
         Return a list of task ids
@@ -77,7 +81,6 @@ class Update:
             return temp.split('result":"')[1].split('"')[0]
         return "2"
 
-
     def fillWithTask(self, type):
         """
         Fill the queue with a task type.
@@ -90,7 +93,6 @@ class Update:
         if "result" in temp:
             return temp.split('result":"')[1].split('"')[0]
         return "2"
-        
 
     def finishTask(self, taskID):
         """
@@ -130,14 +132,7 @@ class Update:
                                      self.username + "::::" + self.password + "::::" + self.uhash + "::::" + name,
                                      "vh_updateInfo.php")
         j = json.loads(temp)
-        if (types == None):
+        if types is None:
             return j["costs"]
         else:
             return j[types]
-
-
-
-    def __init__(self, user, password, uhash):
-        self.username = user
-        self.password = password
-        self.uhash = uhash
