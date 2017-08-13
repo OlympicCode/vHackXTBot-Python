@@ -456,11 +456,11 @@ class Console:
                         # print "passed"
                         return False
             else:
-                if len(str(avlevel)) == 4:
+                if "?" in str(avlevel):
                     print "Cant load User"
                     return False
                 else:
-                    print "Scan to low"
+                    print "Scan to low ("+str(avlevel)+")"
                     return False
         else:
             print "Password Error"
