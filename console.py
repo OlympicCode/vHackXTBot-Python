@@ -15,7 +15,6 @@ import sys
 import signal
 import io
 
-
 original_sigint = None
 
 
@@ -183,23 +182,22 @@ class Console:
                         #         self.attackIP(jsons['ipaddress'], max, mode)
 
                     except TypeError as e:
+                        print e
                         return 0, 0, "type error" + e
                 # else:
                 #    print "Firewall level is to High"
                 #    return 0, 0
 
-            except ValueError:
+            except ValueError as e:
+                print e
                 return 0, 0, "value error"
 
     def getIP(self, blank, max, mode, active_protecte_cluster_ddos):
-        if active_protecte_cluster_ddos:
-            stat_cluster = self.check_Cluster(self.uhash)
-            stat_cluster = json.loads(stat_cluster)
-            try:
-                stat_cluter_blocked = stat_cluster['blocked']
-            except:
-                stat_cluter_blocked = ""
-        else:
+        stat_cluster = self.check_Cluster(self.uhash)
+        stat_cluster = json.loads(stat_cluster)
+        try:
+            stat_cluter_blocked = stat_cluster['blocked']
+        except:
             stat_cluter_blocked = ""
 
         if "Your Cluster is blocked" in stat_cluter_blocked and active_protecte_cluster_ddos:
@@ -226,10 +224,14 @@ class Console:
             with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
                 for i, image in enumerate(list_image):
                     wait_for = executor.submit(self.calc_img, self.ut, list_image[i], self.uhash, list_hostname[i], mode)
+                    
                     try:
                         result, ip = wait_for.result()
-
+                    
                     except TypeError:
+                        result = False
+
+                    except ValueError:
                         result = False
 
                     if result:
@@ -454,7 +456,7 @@ class Console:
                         # print "passed"
                         return False
             else:
-                if len(avlevel) == 4:
+                if len(str(avlevel)) == 4:
                     print "Cant load User"
                     return False
                 else:
