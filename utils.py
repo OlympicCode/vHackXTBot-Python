@@ -7,6 +7,8 @@ import time
 import urllib2
 import config
 import ssl
+import logging
+logger = logging.getLogger(__name__)
 
 
 class Utils:
@@ -78,19 +80,19 @@ class Utils:
                 r = urllib2.urlopen(req, context=ssl._create_unverified_context())
                 t = r.read()
                 if t == "5":
-                    print "Check your Internet."
+                    logger.info("Check your Internet.")
                 elif t == "8":
-                    print "User/Password wrong!"
+                    logger.info("User/Password wrong!")
                 elif t == "10":
-                    print "API is updated."
+                    logger.info("API is updated.")
                 elif t == "15":
-                    print "You are Banned sorry :("
+                    logger.info("You are Banned sorry :(")
                 elif t == "99":
-                    print "Server is down for Maintenance, please be patient."
+                    logger.info("Server is down for Maintenance, please be patient.")
                 return t
             except:
-                print "Blocked, trying again. Delaying {0} seconds".format(i)
-                time.sleep(1+i)
+                logger.info("Blocked, trying again. Delaying {0} seconds".format(i))
+                time.sleep(1 + i)
             i += 1
 
     def requestStringNoWait(self, format, data, php):
@@ -103,12 +105,12 @@ class Utils:
                 # print i1
                 return t
             except Exception as err:
-                print "Error: " + err
+                logger.info("Error: {}".format(err))
                 time.sleep(1)
         return "null"
 
     def printit(self, txt):
-        print txt
+        logger.info(txt)
 
     def requestArray(self, format, data, php):
         temp = self.requestString(format, data, php)

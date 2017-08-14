@@ -14,8 +14,11 @@ import random
 import sys
 import signal
 import io
+import logging
+logger = logging.getLogger(__name__)
 
 original_sigint = None
+DATABASE_ENDPOINT = "https://vhack.olympiccode.ga/database/submit.php"
 
 
 class Console:
@@ -150,12 +153,10 @@ class Console:
         image = self.get_main_color(imgdata)
 
         if image < 13200:
-            print "Matched FBI"
+            logger.info("Matched FBI")
             return 1, hostname
 
         else:
-            # firewall = pytesseract.image_to_string(image).split(":")
-            # print firewall[2].strip()
             try:
                 # if int(firewall[2].strip()) < max:
                     try:
@@ -182,14 +183,14 @@ class Console:
                         #         self.attackIP(jsons['ipaddress'], max, mode)
 
                     except TypeError as e:
-                        print e
+                        logger.error(e)
                         return 0, 0, "type error" + e
                 # else:
                 #    print "Firewall level is to High"
                 #    return 0, 0
 
             except ValueError as e:
-                print e
+                logger.error(e)
                 return 0, 0, "value error"
 
     def getIP(self, blank, max, mode, active_protecte_cluster_ddos):
@@ -201,7 +202,7 @@ class Console:
             stat_cluter_blocked = ""
 
         if "Your Cluster is blocked" in stat_cluter_blocked and active_protecte_cluster_ddos:
-            print "wait 2 minutes" + stat_cluter_blocked
+            logger.info("wait 2 minutes {}".format(stat_cluter_blocked))
             time.sleep(120)
         else:
             temp = self.ut.requestString("user::::pass::::uhash::::by",
@@ -218,7 +219,7 @@ class Console:
                 list_image.append(imgstring)
                 list_hostname.append(hostname)
 
-            print "Packing IP list " + str(len(list_image))
+            logger.info("Packing IP list {}".format(len(list_image)))
             # fd = open("database.txt", "a")
 
             with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
@@ -230,6 +231,8 @@ class Console:
                     
                     except TypeError:
                         result = False
+                    except ValueError:
+                        result = False
 
                     except ValueError:
                         result = False
@@ -240,8 +243,9 @@ class Console:
 
     def attackIP(self, ip, mode):
         temp = self.ut.requestString("user::::pass::::uhash::::target",
-                                     self.username + "::::" + self.password + "::::" + self.uhash
-                                     + "::::" + ip, "vh_loadRemoteData.php")
+                                     self.username + "::::" + self.password +
+                                     "::::" + self.uhash + "::::" + ip,
+                                     "vh_loadRemoteData.php")
         jsons = json.loads(temp)
 
         # o = OCR()
@@ -252,7 +256,7 @@ class Console:
                 # user = jsons['username']
                 winchance = jsons['winchance']
             except TypeError:
-                print "error"
+                logger.error("error")
                 return False
 
             try:
@@ -272,7 +276,7 @@ class Console:
                 else:
                     avlevel = "????"
                     winchance = 0
-                    print "no scan username"
+                    logger.info("no scan username")
                     return False
 
             except TypeError:
@@ -292,7 +296,7 @@ class Console:
             if type(winchance) == "str":
                 if "?" in winchance:
                     winchance = 0
-                    print "no chance"
+                    logger.info("no chance")
                     return False
 
             if mode == "Potator":
@@ -302,15 +306,8 @@ class Console:
                     if int(jsons["result"]) == 0:
                         try:
                             if "?" not in str(money) and str(jsons['result']) == 0:
-                                print "\nYour Money: " + "{:11,}".format(
-                                    int(jsons['newmoney'])) + "\n[TargetIP: " + str(
-                                    ip) + "]\n\nMade " + "{:11,}".format(
-                                    int(jsons['amount'])) + " and " + "{:2d}".format(
-                                    int(jsons['eloch'])) + " Rep." + "\n Antivirus: " + str(
-                                    avlevel) + " Firewall: " + str(fwlevel) + " Sdk: " + str(
-                                    sdklevel) + " TotalMoney: " + "{:11,}".format(
-                                    int(money)) + "\n YourWinChance: " + str(winchance) + " Anonymous: " + str(
-                                    anonymous) + " username: " + str(username) + " saving: " + str(saving) + "\n"
+                                logger.info("\nYour Money: {:11,}$\n[TargetIP: {}]\n\nMade {:11,}$ and {:2d}Rep.\n Antivirus: {} Firewall: {} Sdk: {} TotalMoney: {:11,}$\n YourWinChance: {} Anonymous: {} username: {} saving: {}\n".format(
+                                            jsons['newmoney'], ip, jsons['amount'], jsons['eloch'], avlevel, fwlevel, sdklevel, money, winchance, anonymous, username, saving))
                                 try:
                                     ip = re.search(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}', username).group()
                                 except AttributeError:
@@ -318,27 +315,20 @@ class Console:
                                 # print ip, type(ip), username, type(username)
                                 s = requests.session()
                                 if ip == username:
-                                    print "send to database"
-                                    s.get("https://vhack.olympiccode.ga/database/submit.php?IP=" + str(
+                                    logger.info("send to database")
+                                    s.get(DATABASE_ENDPOINT + "?IP=" + str(
                                         ip) + "&MONEY=" + str(money) + "&IPSP=" + str(ipsplevel) + "&FW=" + str(
-                                        fwlevel) + "&AV=" + str(avlevel))
+                                        fwlevel) + "&AV=" + str(avlevel), timeout=15)
                                     s.close()
                                 else:
-                                    print "send to database"
-                                    s.get("https://vhack.olympiccode.ga/database/submit.php?IP=" + str(
+                                    logger.info("send to database")
+                                    s.get(DATABASE_ENDPOINT + "?IP=" + str(
                                         ip) + "&USR=" + str(username) + "&MONEY=" + str(money) + "&IPSP=" + str(
-                                        ipsplevel) + "&FW=" + str(fwlevel) + "&AV=" + str(avlevel))
+                                        ipsplevel) + "&FW=" + str(fwlevel) + "&AV=" + str(avlevel), timeout=15)
                                     s.close()
                             else:
-                                print "\nYour Money: " + "{:11,}".format(
-                                    int(jsons['newmoney'])) + "\n[TargetIP: " + str(
-                                    ip) + "]\n\nMade " + "{:11,}".format(
-                                    int(jsons['amount'])) + " and " + "{:2d}".format(
-                                    int(jsons['eloch'])) + " Rep." + "\n Antivirus: " + str(
-                                    avlevel) + " Firewall: " + str(fwlevel) + " Sdk: " + str(
-                                    sdklevel) + " TotalMoney: " + str(money) + "\n YourWinChance: " + str(
-                                    winchance) + " Anonymous: " + str(anonymous) + " username: " + str(
-                                    username) + " saving: " + str(saving) + "\n"
+                                logger.info("\nYour Money: {:11,}$\n[TargetIP: {}]\n\nMade {:11,}$ and {:2d}Rep.\n Antivirus: {} Firewall: {} Sdk: {} TotalMoney: {:11,}$\n YourWinChance: {} Anonymous: {} username: {} saving: {}\n".format(
+                                            jsons['newmoney'], ip, jsons['amount'], jsons['eloch'], avlevel, fwlevel, sdklevel, money, winchance, anonymous, username, saving))
                                 try:
                                     ip = re.search(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}', username).group()
                                 except AttributeError:
@@ -346,32 +336,32 @@ class Console:
                                 # print ip, type(ip), username, type(username)
                                 s = requests.session()
                                 if ip == username:
-                                    print "send to database"
-                                    s.get("https://vhack.olympiccode.ga/database/submit.php?IP=" + str(
+                                    logger.info("send to database")
+                                    s.get(DATABASE_ENDPOINT + "?IP=" + str(
                                         ip) + "&MONEY=" + str(money) + "&IPSP=" + str(ipsplevel) + "&FW=" + str(
-                                        fwlevel) + "&AV=" + str(avlevel))
+                                        fwlevel) + "&AV=" + str(avlevel), timeout=15)
                                     s.close()
                                 else:
-                                    print "send to database"
-                                    s.get("https://vhack.olympiccode.ga/database/submit.php?IP=" + str(
+                                    logger.info("send to database")
+                                    s.get(DATABASE_ENDPOINT + "?IP=" + str(
                                         ip) + "&USR=" + str(username) + "&MONEY=" + str(money) + "&IPSP=" + str(
-                                        ipsplevel) + "&FW=" + str(fwlevel) + "&AV=" + str(avlevel))
+                                        ipsplevel) + "&FW=" + str(fwlevel) + "&AV=" + str(avlevel), timeout=15)
                                     s.close()
 
                                 return True
 
                         except KeyError:
-                            print "Bad attack"
+                            logger.info("Bad attack")
                             return False
 
                         except ValueError as e:
-                            print "error: " + e
+                            logger.error("error: {}".format(e))
                             return True
                     else:
-                        print "Password Wrong"
+                        logger.error("Password Wrong")
                         return False
                 else:
-                    print "winchance is poor: " + str(winchance)
+                    logger.info("winchance is poor: {}".format(winchance))
                     return False
 
             if "?" not in str(avlevel) and "?" not in str(winchance) and mode == "Secure":
@@ -381,15 +371,8 @@ class Console:
                     if int(jsons["result"]) == 0:
                         try:
                             if "?" not in str(money) and str(jsons['result']) == 0:
-                                print "\nYour Money: " + "{:11,}".format(
-                                    int(jsons['newmoney'])) + "\n[TargetIP: " + str(
-                                    ip) + "]\n\nMade " + "{:11,}".format(
-                                    int(jsons['amount'])) + " and " + "{:2d}".format(
-                                    int(jsons['eloch'])) + " Rep." + "\n Antivirus: " + str(
-                                    avlevel) + " Firewall: " + str(fwlevel) + " Sdk: " + str(
-                                    sdklevel) + " TotalMoney: " + "{:11,}".format(
-                                    int(money)) + "\n YourWinChance: " + str(winchance) + " Anonymous: " + str(
-                                    anonymous) + " username: " + str(username) + " saving: " + str(saving) + "\n"
+                                logger.info("\nYour Money: {:11,}$\n[TargetIP: {}]\n\nMade {:11,}$ and {:2d}Rep.\n Antivirus: {} Firewall: {} Sdk: {} TotalMoney: {:11,}$\n YourWinChance: {} Anonymous: {} username: {} saving: {}\n".format(
+                                            jsons['newmoney'], ip, jsons['amount'], jsons['eloch'], avlevel, fwlevel, sdklevel, money, winchance, anonymous, username, saving))
                                 try:
                                     ip = re.search(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}', username).group()
                                 except AttributeError:
@@ -397,28 +380,19 @@ class Console:
                                 # print ip, type(ip), username, type(username)
                                 s = requests.session()
                                 if ip == username:
-                                    print "send to database"
-                                    print s.get("https://vhack.olympiccode.ga/database/submit.php?IP=" + str(
-                                        ip) + "&MONEY=" + str(money) + "&IPSP=" + str(ipsplevel) + "&FW=" + str(
-                                        fwlevel) + "&AV=" + str(avlevel))
+                                    logger.info("send to database")
+                                    logger.info(s.get(DATABASE_ENDPOINT + "?IP={}&MONEY={}&IPSP={}&FW={}&AV={}".format(
+                                                      ip, money, ipsplevel, fwlevel, avlevel), timeout=15))
                                     s.close()
                                 else:
-                                    print "send to database"
-                                    print s.get("https://vhack.olympiccode.ga/database/submit.php?IP=" + str(
-                                        ip) + "&USR=" + str(username) + "&MONEY=" + str(money) + "&IPSP=" + str(
-                                        ipsplevel) + "&FW=" + str(fwlevel) + "&AV=" + str(avlevel))
+                                    logger.info("send to database")
+                                    logger.info(s.get(DATABASE_ENDPOINT + "?IP={}&USR={}&MONEY={}&IPSP={}&FW={}&AV={}".format(
+                                                      ip, username, money, ipsplevel, fwlevel, avlevel), timeout=15))
                                     s.close()
                                 return True
                             else:
-                                print "\nYour Money: " + "{:11,}".format(
-                                    int(jsons['newmoney'])) + "\n[TargetIP: " + str(
-                                    ip) + "]\n\nMade " + "{:11,}".format(
-                                    int(jsons['amount'])) + " and " + "{:2d}".format(
-                                    int(jsons['eloch'])) + " Rep." + "\n Antivirus: " + str(
-                                    avlevel) + " Firewall: " + str(fwlevel) + " Sdk: " + str(
-                                    sdklevel) + " TotalMoney: " + str(money) + "\n YourWinChance: " + str(
-                                    winchance) + " Anonymous: " + str(anonymous) + " username: " + str(
-                                    username) + " saving: " + str(saving) + "\n"
+                                logger.info("\nYour Money: {:11,}$\n[TargetIP: {}]\n\nMade {:11,}$ and {:2d}Rep.\n Antivirus: {} Firewall: {} Sdk: {} TotalMoney: {:11,}$\n YourWinChance: {} Anonymous: {} username: {} saving: {}\n".format(
+                                            jsons['newmoney'], ip, jsons['amount'], jsons['eloch'], avlevel, fwlevel, sdklevel, money, winchance, anonymous, username, saving))
                                 try:
                                     ip = re.search(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}', username).group()
                                 except AttributeError:
@@ -426,50 +400,48 @@ class Console:
                                 # print ip, type(ip), username, type(username)
                                 s = requests.session()
                                 if ip == username:
-                                    print "send to database"
-                                    s.get("https://vhack.olympiccode.ga/database/submit.php?IP=" + str(
-                                        ip) + "&MONEY=" + str(money) + "&IPSP=" + str(ipsplevel) + "&FW=" + str(
-                                        fwlevel) + "&AV=" + str(avlevel))
+                                    logger.info("send to database")
+                                    logger.info(s.get(DATABASE_ENDPOINT + "?IP={}&MONEY={}&IPSP={}&FW={}&AV={}".format(
+                                                      ip, money, ipsplevel, fwlevel, avlevel), timeout=15))
                                     s.close()
                                 else:
-                                    print "send to database"
-                                    s.get("https://vhack.olympiccode.ga/database/submit.php?IP=" + str(
-                                        ip) + "&USR=" + str(username) + "&MONEY=" + str(money) + "&IPSP=" + str(
-                                        ipsplevel) + "&FW=" + str(fwlevel) + "&AV=" + str(avlevel))
+                                    logger.info("send to database")
+                                    logger.info(s.get(DATABASE_ENDPOINT + "?IP={}&USR={}&MONEY={}&IPSP={}&FW={}&AV={}".format(
+                                                      ip, username, money, ipsplevel, fwlevel, avlevel), timeout=15))
                                     s.close()
                                 return True
 
                         except KeyError:
-                            print "Bad attack"
+                            logger.error("Bad attack")
                             return False
                     else:
-                        print "Password Incorrect"
+                        logger.error("Password Incorrect")
                         return False
                 else:
                     # print "\n"
                     if int(winchance) < 75:
-                        print "winchance is poor: " + str(winchance)
+                        logger.info("winchance is poor: {}".format(winchance))
                         # print "passed"
                         return False
                     if str(anonymous) == "NO":
-                        print "Hack Anonymous is needed"
+                        logger.info("Hack Anonymous is needed")
                         # print "passed"
                         return False
             else:
                 if "?" in str(avlevel):
-                    print "Cant load User"
+                    logger.info("Cant load User")
                     return False
                 else:
-                    print "Scan to low ("+str(avlevel)+")"
+                    logger.error("Scan to low ({})".format(avlevel))
                     return False
         else:
-            print "Password Error"
+            logger.info("Password Error")
             return False
 
     def attack(self, obj):
         for i in range(0, (obj.attacks_normal * random.randint(1, 2))):
             self.getIP(True, obj.maxanti_normal, obj.mode, obj.active_cluster_protection)
-            print "wait anti-blocking..."
+            logger.info("wait anti-blocking...")
 
     def exit_gracefully(self, signum, frame):
         # restore the original signal handler as otherwise evil things will happen
@@ -481,7 +453,7 @@ class Console:
                 sys.exit(1)
 
         except KeyboardInterrupt:
-            print("Ok ok, quitting")
+            logger.info("Ok ok, quitting")
             sys.exit(1)
 
         # restore the exit gracefully handler here

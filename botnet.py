@@ -5,6 +5,7 @@ from utils import Utils
 
 import json
 import logging
+logger = logging.getLogger(__name__)
 
 
 class Botnet:
@@ -38,7 +39,7 @@ class Botnet:
         :return: None
         """
         for bot in self.botnet:
-            print bot
+            logger.info(bot)
 
     def getbotnetdata(self):
         """
@@ -85,7 +86,7 @@ class Botnet:
         the config files, and attack each one.
         :return: none
         """
-        for i in range(1, self.botNetServers+1):
+        for i in range(1, self.botNetServers + 1):
             response = self.ut.requestString("user::::pass::::uhash::::cID",
                                              self.username + "::::" + self.password + "::::" + self.uhash + "::::" + "1",
                                              "vh_attackCompany.php")
@@ -98,7 +99,7 @@ class Botnet:
             """temp = self.ut.requestString("user::::pass::::uhash::::cID",
                                          self.username + "::::" + self.password + "::::" + self.uhash + "::::" + "4",
                                          "vh_attackCompany4.php")"""
-            logging.info("Netcoins gained: {0}  To come....".format(response))
+            logger.info("Netcoins gained: {0}  To come....".format(response))
 
     def attack(self):
         """
@@ -107,11 +108,11 @@ class Botnet:
         :return: none
         """
         self._initbot()
-        logging.info("Trying Bot Net")
+        logger.info("Trying Bot Net")
         if self._attackable():
             self._attackall()
         else:
-            logging.info("Botnet not hackable as yet")
+            logger.info("Botnet not hackable as yet")
 
     def upgradebotnet(self):
         """
@@ -119,7 +120,7 @@ class Botnet:
         Cycle through and upgrade until no money.
         :return: None
         """
-        logging.info("Attempting to upgrade bot net PC's")
+        logger.info("Attempting to upgrade bot net PC's")
         for i in self.botnet:
             if i.botupgradable():
                 while int(self.p.getmoney()) > int(i.nextlevelcost()):
@@ -191,16 +192,14 @@ class Bot:
         details = json.loads(response)
         try:
             self.upgradecost = details['costs']
-            logging.info("Bot # {0} upgraded to level {1} at a cost of {2}".format(details['old'], details['lvl'],
-                                                                                   details['costs']))
-            print "Bot # {0} upgraded to level {1} at a cost of {2} $".format(details['old'], details['lvl'], details['costs'])
+            logger.info("Bot # {0} upgraded to level {1} at a cost of {2} $".format(details['old'], details['lvl'], details['costs']))
         except TypeError as e:
-            logging.info("Bot fully upgraded, should not get this error. Fix me! {0}".format(e))
+            logger.info("Bot fully upgraded, should not get this error. Fix me! {0}".format(e))
             return None
         try:
             return details['money']
         except TypeError as e:
-            logging.info("Error in upgradesinglebot: {0}".format(e))
+            logger.info("Error in upgradesinglebot: {0}".format(e))
             return None
 
     def __repr__(self):

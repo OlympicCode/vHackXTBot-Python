@@ -1,6 +1,8 @@
 import requests
 import json
 import datetime
+import logging
+logger = logging.getLogger(__name__)
 
 
 class Dictlist(dict):
@@ -24,13 +26,13 @@ def main():
     results = [x for x in database['data']]
     data = sorted(results, key=lambda x: x[2])
 
-    print ("{:>2} {:>2} {:>2} {:>2} {:>2} {:>2} {:>2}".format("IP".rjust(15),
-                                                              "Username".rjust(15),
-                                                              "Money".rjust(15),
-                                                              "IPSP".rjust(15),
-                                                              "Firewall".rjust(15),
-                                                              "Antivirus".rjust(15),
-                                                              "Add Date".rjust(15)))
+    logger.info("{:>2} {:>2} {:>2} {:>2} {:>2} {:>2} {:>2}".format("IP".rjust(15),
+                                                                   "Username".rjust(15),
+                                                                   "Money".rjust(15),
+                                                                   "IPSP".rjust(15),
+                                                                   "Firewall".rjust(15),
+                                                                   "Antivirus".rjust(15),
+                                                                   "Add Date".rjust(15)))
     # list_argent = []
     # list_ip = []
     list_total = {}
@@ -41,7 +43,7 @@ def main():
     year = d.year
 
     for i, data2 in enumerate(data):
-        if "unknown" not in data2[1] and str(year)+"-"+str(month)+"-"+str(day) in data2[6]:
+        if "unknown" not in data2[1] and str(year) + "-" + str(month) + "-" + str(day) in data2[6]:
             """print ("{:>2} {:>2} {:>2} {:>2} {:>2} {:>2} {:>2}".format(
                                                               str(data2[0]).rjust(15),
                                                               str(data2[1]).rjust(15),
@@ -56,14 +58,14 @@ def main():
     data = sorted(results, key=lambda x: int(x[2]), reverse=True)
 
     for i, data2 in enumerate(data):
-        print ("{:>2} {:>2} {:>2} {:>2} {:>2} {:>2} {:>2}".format(
-                                                              str(data2[0]).rjust(15),
-                                                              str(data2[1]).rjust(15),
-                                                              str(data2[2]).rjust(15),
-                                                              str(data2[3]).rjust(15),
-                                                              str(data2[4]).rjust(15),
-                                                              str(data2[5]).rjust(15),
-                                                              str(data2[6]).rjust(15)))
+        logger.info("{:>2} {:>2} {:>2} {:>2} {:>2} {:>2} {:>2}".format(
+                    str(data2[0]).rjust(15),
+                    str(data2[1]).rjust(15),
+                    str(data2[2]).rjust(15),
+                    str(data2[3]).rjust(15),
+                    str(data2[4]).rjust(15),
+                    str(data2[5]).rjust(15),
+                    str(data2[6]).rjust(15)))
 
 
 if __name__ == "__main__":
