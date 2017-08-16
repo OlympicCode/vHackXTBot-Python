@@ -33,23 +33,17 @@ class Console:
         signal.signal(signal.SIGINT, self.exit_gracefully)
 
     def myinfo(self):
-        temp = self.ut.requestString("user::::pass::::gcm::::uhash",
-                                     self.username + "::::" + self.password + "::::" + "eW7lxzLY9bE:APA91bEO2sZd6aibQerL3Uy-wSp3gM7zLs93Xwoj4zIhnyNO8FLyfcODkIRC1dc7kkDymiWxy_dTQ-bXxUUPIhN6jCUBVvGqoNXkeHhRvEtqAtFuYJbknovB_0gItoXiTev7Lc5LJgP2" + "::::" + self.uhash,
-                                     "vh_update.php")
+        temp = self.ut.requestString(self.username, self.password, self.uhash, "vh_update.php", gcm="eW7lxzLY9bE:APA91bEO2sZd6aibQerL3Uy-wSp3gM7zLs93Xwoj4zIhnyNO8FLyfcODkIRC1dc7kkDymiWxy_dTQ-bXxUUPIhN6jCUBVvGqoNXkeHhRvEtqAtFuYJbknovB_0gItoXiTev7Lc5LJgP2")
         return temp
 
     def requestPassword(self, ip):
-        arr = self.ut.requestArray("user::::pass::::target",
-                                   self.username + "::::" + self.password + "::::" + ip,
-                                   "vh_vulnScan.php")
+        arr = self.ut.requestArray(self.username, self.password, "vh_vulnScan.php", target=ip)
         imgs = Passwords(arr)
         return imgs
 
     def enterPassword(self, target, passwd):
         passwd = passwd.split("p")
-        temp = self.ut.requestString("user::::pass::::port::::target::::uhash",
-                                     self.username + "::::" + self.password + "::::" + "0" + "::::" + str(target) + "::::" + self.uhash,
-                                     "vh_trTransfer.php")  # passwd[1].strip()
+        temp = self.ut.requestString(self.username, self.password, self.uhash, "vh_trTransfer.php", target=str(target), port="0")  # passwd[1].strip()
         result = json.loads(temp)
         if str(result["result"]) == "0":
             return temp
@@ -58,66 +52,47 @@ class Console:
 
     def check_Cluster(self, uhash):
         if self.uhash is None:
-            temp = self.ut.requestString("user::::pass::::uhash",
-                                         self.username + "::::" + self.password + "::::" + self.uhash,
-                                         "vh_ClusterData.php")
+            temp = self.ut.requestString(self.username, self.password, self.uhash, "vh_ClusterData.php")
         else:
-            temp = self.ut.requestString("user::::pass::::uhash",
-                                         self.username + "::::" + self.password + "::::" + self.uhash,
-                                         "vh_ClusterData.php")
+            temp = self.ut.requestString(self.username, self.password, self.uhash, "vh_ClusterData.php")
         return temp
 
     def scanUser(self):
-        arr = self.ut.requestArray("user::::pass::::uhash",
-                                   self.username + "::::" + self.password + "::::" + self.uhash, "vh_scanHost.php")
+        arr = self.ut.requestArray(self.username, self.password, self.uhash, "vh_scanHost.php")
         return arr
 
     def GetTournamentPosition(self):
-        temp = self.ut.requestString("user::::pass::::uhash",
-                                     self.username + "::::" + self.password + "::::" + self.uhash,
-                                     "vh_tournamentData.php")
+        temp = self.ut.requestString(self.username, self.password, self.uhash, "vh_tournamentData.php")
         return temp
 
     def AttackCluster(self, tag):
-        temp = self.ut.requestString("user::::pass::::uhash::::ctag",
-                                     self.username + "::::" + self.password + "::::" + self.uhash + "::::" + str(
-                                         tag), "vh_startDDoS.php")
+        temp = self.ut.requestString(self.username, self.password, self.uhash, "vh_startDDoS.php", ctag=str(tag))
         return temp
 
     def ScanCluster(self, tag):
-        temp = self.ut.requestString("user::::pass::::uhash::::ctag",
-                                     self.username + "::::" + self.password + "::::" + self.uhash + "::::" + str(
-                                         tag), "vh_scanTag.php")
+        temp = self.ut.requestString(self.username, self.password, self.uhash, "vh_scanTag.php")
         return temp
 
     def transferMoney(self, ip):
-        arr = self.ut.requestArray("user::::pass::::target",
-                                   self.username + "::::" + self.password + "::::" + ip,
-                                   "vh_trTransfer.php")
+        arr = self.ut.requestArray(self.username, self.password, self.uhash, "vh_trTransfer.php", target=ip)
         return arr
 
     def clearLog(self, ip):
-        s = self.ut.requestString("user::::pass::::target",
-                                  self.username + "::::" + self.password + "::::" + ip,
-                                  "vh_clearAccessLogs.php")
+        s = self.ut.requestString(self.username, self.password, self.uhash, "vh_clearAccessLogs.php", target=ip)
         if s == "0":
             return True
         else:
             return False
 
     def uploadSpyware(self, ip):
-        s = self.ut.requestString("user::::pass::::target",
-                                  self.username + "::::" + self.password + "::::" + ip,
-                                  "vh_spywareUpload.php")
+        s = self.ut.requestString(self.username, self.password, self.uhash, "vh_spywareUpload.php", target=ip)
         if s == "0":
             return True
         else:
             return False
 
     def getTournament(self):
-        temp = self.ut.requestString("user::::pass::::uhash",
-                                     self.username + "::::" + self.password + "::::" + self.uhash,
-                                     "vh_update.php")
+        temp = self.ut.requestString(self.username, self.password, self.uhash, "vh_update.php")
         if "tournamentActive" in temp:
             if "2" not in temp.split('tournamentActive":"')[1].split('"')[0]:
                 return True
@@ -160,9 +135,7 @@ class Console:
             try:
                 # if int(firewall[2].strip()) < max:
                     try:
-                        temp = self.ut.requestString("user::::pass::::uhash::::hostname",
-                                                     self.username + "::::" + self.password + "::::" + self.uhash
-                                                     + "::::" + str(hostname), "vh_scanHost.php")
+                        temp = self.ut.requestString(self.username, self.password, self.uhash, "vh_scanHost.php", hostname=str(hostname))
 
                         jsons = json.loads(temp)
                         if ".vHack.cc" not in str(jsons['ipaddress']):
@@ -205,9 +178,7 @@ class Console:
             logger.info("wait 2 minutes {}".format(stat_cluter_blocked))
             time.sleep(120)
         else:
-            temp = self.ut.requestString("user::::pass::::uhash::::by",
-                                         self.username + "::::" + self.password + "::::" + str(
-                                             self.uhash) + "::::" + str(random.randint(0, 1)), "vh_getImg.php")
+            temp = self.ut.requestString(self.username, self.password, self.uhash, "vh_getImg.php", by=str(random.randint(0, 1)))
             jsons = json.loads(temp)
             list_image = []
             list_hostname = []
@@ -242,10 +213,7 @@ class Console:
                             f.write(ip + "\n")
 
     def attackIP(self, ip, mode):
-        temp = self.ut.requestString("user::::pass::::uhash::::target",
-                                     self.username + "::::" + self.password +
-                                     "::::" + self.uhash + "::::" + ip,
-                                     "vh_loadRemoteData.php")
+        temp = self.ut.requestString(self.username, self.password, self.uhash, "vh_loadRemoteData.php", target=ip)
         jsons = json.loads(temp)
 
         # o = OCR()

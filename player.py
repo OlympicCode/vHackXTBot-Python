@@ -43,9 +43,7 @@ class Player:
         return self.money
 
     def removespy(self):
-        response = self.ut.requestArray("user::::pass::::uhash:::::",
-                                        self.username + "::::" + self.password + "::::" + self.uhash + ":::::",
-                                        "vh_removeSpyware.php")
+        response = self.ut.requestArray(self.username, self.password, self.uhash, "vh_removeSpyware.php")
         return response
 
     def _init(self):
@@ -60,9 +58,7 @@ class Player:
         "tournamentActive":"2","boost":"294","actspyware":"0","tos":"1","unreadmsg":"0"}
         :return:
         """
-        data = self.ut.requestString("user::::pass::::uhash::::",
-                                     self.username + "::::" + self.password + "::::" + self.uhash + ":::::",
-                                     "vh_update.php")
+        data = self.ut.requestString(self.username, self.password, self.uhash, "vh_update.php")
         if len(data) == 1:
             logging.warn('Username and password entered in config.py?')
             sys.exit()

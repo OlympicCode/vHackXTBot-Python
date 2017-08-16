@@ -57,9 +57,7 @@ class Botnet:
         :return: list of vHack serves that can be hacked.
                  ['1','2','1']. '1' = can be hacked, '2' time not elapsed.
         """
-        response = self.ut.requestString("user::::pass::::uhash",
-                                         self.username + "::::" + self.password + "::::" + self.uhash,
-                                         "vh_botnetInfo.php")
+        response = self.ut.requestString(self.username, self.password, self.uhash, "vh_botnetInfo.php")
         arr = response.split('","canAtt')
         l = []
         for i1 in arr[1:]:
@@ -87,15 +85,9 @@ class Botnet:
         :return: none
         """
         for i in range(1, self.botNetServers + 1):
-            response = self.ut.requestString("user::::pass::::uhash::::cID",
-                                             self.username + "::::" + self.password + "::::" + self.uhash + "::::" + "1",
-                                             "vh_attackCompany.php")
-            self.ut.requestString("user::::pass::::uhash::::cID",
-                                  self.username + "::::" + self.password + "::::" + self.uhash + "::::" + "2",
-                                  "vh_attackCompany2.php")
-            self.ut.requestString("user::::pass::::uhash::::cID",
-                                  self.username + "::::" + self.password + "::::" + self.uhash + "::::" + "3",
-                                  "vh_attackCompany3.php")
+            response = self.ut.requestString(self.username, self.password, self.uhash, "vh_attackCompany.php", cID="1")
+            self.ut.requestString(self.username, self.password, self.uhash, "vh_attackCompany2.php", cID="2")
+            self.ut.requestString(self.username, self.password, self.uhash, "vh_attackCompany3.php", cID="3")
             """temp = self.ut.requestString("user::::pass::::uhash::::cID",
                                          self.username + "::::" + self.password + "::::" + self.uhash + "::::" + "4",
                                          "vh_attackCompany4.php")"""
@@ -139,9 +131,7 @@ class Botnet:
         "resethours3":"3","resetminutes3":"15",
         "canAtt1":"2","canAtt2":"2","canAtt3":"2"}'
         """
-        temp = self.ut.requestString("user::::pass::::uhash",
-                                     self.username + "::::" + self.password + "::::" + self.uhash,
-                                     "vh_botnetInfo.php")
+        temp = self.ut.requestString(self.username, self.password, self.uhash, "vh_botnetInfo.php")
         return temp
 
     def __repr__(self):
@@ -186,9 +176,7 @@ class Bot:
         current lvl, bot number, x, x, upgrade cost, lvl, next lvl
         :return: None
         """
-        response = self.ut.requestString("user::::pass::::uhash::::bID",
-                                         self.username + "::::" + self.password + "::::" + self.uhash + "::::" + str(self.id),
-                                         "vh_upgradeBotnet.php")
+        response = self.ut.requestString(self.username, self.password, self.uhash, "vh_upgradeBotnet.php", bID=str(self.id))
         details = json.loads(response)
         try:
             self.upgradecost = details['costs']
