@@ -192,6 +192,7 @@ class Bot:
         details = json.loads(response)
         try:
             self.upgradecost = details['costs']
+            self.lvl = details['new']
             logger.info("Bot # {0} upgraded to level {1} at a cost of {2} $".format(details['old'], details['lvl'], details['costs']))
         except TypeError as e:
             logger.info("Bot fully upgraded, should not get this error. Fix me! {0}".format(e))
