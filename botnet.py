@@ -28,6 +28,7 @@ class Botnet:
         """
         data = self._botnetInfo()
         bots = json.loads(data)
+        self.botnet = []
         if int(bots['count']) > 0:
             for i in bots['data']:
                 bot = Bot(i['bID'], i['bLVL'], i['bPRICE'], self.username, self.password, self.uhash)
@@ -85,9 +86,9 @@ class Botnet:
         :return: none
         """
         for i in range(1, self.botNetServers + 1):
-            response = self.ut.requestString(self.username, self.password, self.uhash, "vh_attackCompany.php", cID="1")
-            self.ut.requestString(self.username, self.password, self.uhash, "vh_attackCompany2.php", cID="2")
-            self.ut.requestString(self.username, self.password, self.uhash, "vh_attackCompany3.php", cID="3")
+            response = self.ut.requestString(self.username, self.password, self.uhash, "vh_attackCompany.php", company="1")
+            self.ut.requestString(self.username, self.password, self.uhash, "vh_attackCompany2.php", company="2")
+            self.ut.requestString(self.username, self.password, self.uhash, "vh_attackCompany3.php", company="3")
             """temp = self.ut.requestString("user::::pass::::uhash::::cID",
                                          self.username + "::::" + self.password + "::::" + self.uhash + "::::" + "4",
                                          "vh_attackCompany4.php")"""
@@ -119,6 +120,8 @@ class Botnet:
                     new_bal = i.upgradesinglebot()
                     if new_bal is not None:
                         self.p.setmoney(new_bal)
+                logger.debug("#{}({}) not enough money".format(i.id, i.lvl))
+            logger.debug("#{}({}) not upgradeable".format(i.id, i.lvl))
 
     def _botnetInfo(self):
         """
