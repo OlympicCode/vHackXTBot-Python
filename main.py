@@ -104,21 +104,18 @@ class run:
             # task = self.u.doTasks(self.wait_load)
             if self.booster and self.running_all > 1:
                 try:
-                    usebooster = self.u.getTasks()
-                    logger.info(usebooster)
-                    # usebooster = None
-                    json_data = json.loads(usebooster)
+                    vtasks = self.u.getrunningtasks()
+                    json_data = json.loads(vtasks)
                     while len(json_data["data"]) > 1:
                         if int(json_data["boost"]) > 5:
-                            self.u.useBooster()
-                            logger.info("Using booster on rest {}".format(json_data["boost"] - 1))
+                            json_data = json.loads(self.u.useBooster())
+                            logger.info("Using booster on rest {}".format(json_data["boost"]))
+                            if int(json_data['fAllCosts']) < 50:
+                                break
                         # UPDATE Value
                         else:
                             logger.info("you have < 5 boost.")
                             break
-                        # usebooster = self.u.getTasks()
-                        usebooster = None
-                        json_data = json.loads(usebooster)
                 except Exception as e:
                     logger.error("Connection Error try again...{0}".format(e))
                     pass
