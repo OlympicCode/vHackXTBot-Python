@@ -59,40 +59,12 @@ class Botnet:
                  ['1','2','1']. '1' = can be hacked, '2' time not elapsed.
         """
         response = self.ut.requestString(self.username, self.password, self.uhash, "vh_botnetInfo.php")
-        arr = response.split('","canAtt')
+        response = json.loads(response)
         l = []
-        for i1 in arr[1:]:
-            l.append(i1.split(':')[1].split('"')[1])
+        l.append(response['canAtt1'])
+        l.append(response['canAtt2'])
+        l.append(response['canAtt3'])
         return l
-
-    def _attackable(self):
-        """
-        Retrieve all vhack botnet info.
-        Hack times and botnet pc data.
-        Determine if can attack.
-        :return: none
-        """
-        t = self.getInfo()
-        attack = False
-        for i1 in t:
-            if "1" in i1:
-                attack = True
-        return attack
-
-    def _attackall(self):
-        """
-        Determine the amount of vHack servers from
-        the config files, and attack each one.
-        :return: none
-        """
-        for i in range(1, self.botNetServers + 1):
-            response = self.ut.requestString(self.username, self.password, self.uhash, "vh_attackCompany.php", company="1")
-            self.ut.requestString(self.username, self.password, self.uhash, "vh_attackCompany2.php", company="2")
-            self.ut.requestString(self.username, self.password, self.uhash, "vh_attackCompany3.php", company="3")
-            """temp = self.ut.requestString("user::::pass::::uhash::::cID",
-                                         self.username + "::::" + self.password + "::::" + self.uhash + "::::" + "4",
-                                         "vh_attackCompany4.php")"""
-            logger.info("Netcoins gained: {0}  To come....".format(response))
 
     def attack(self):
         """
@@ -102,10 +74,18 @@ class Botnet:
         """
         self._initbot()
         logger.info("Trying Bot Net")
-        if self._attackable():
-            self._attackall()
-        else:
-            logger.info("Botnet not hackable as yet")
+        cinfo = self.getInfo()
+        
+        for i in range(1, self.botNetServers + 1):
+            if cinfo[i-1] == '1':
+                response = self.ut.requestString(self.username, self.password, self.uhash, "vh_attackCompany" + str(i) + ".php", company=str(i))
+                logger.debug('attack #{} response {}'.format(i, response))
+                if response == '0':
+                    logger.info('#{} Netcoins gained'.format(i))
+                else:
+                    logger.info('#{} Failed! No netcoins...'.format(i))
+            else:
+                logger.info("Botnet #{} not hackable as yet".format(i))
 
     def upgradebotnet(self):
         """
