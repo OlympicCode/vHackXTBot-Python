@@ -196,10 +196,10 @@ class Console:
             with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
                 for i, image in enumerate(list_image):
                     wait_for = executor.submit(self.calc_img, self.ut, list_image[i], self.uhash, list_hostname[i], mode)
-                    
+
                     try:
                         result, ip = wait_for.result()
-                    
+
                     except TypeError:
                         result = False
                     except ValueError:
