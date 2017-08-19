@@ -61,9 +61,10 @@ class Botnet:
         response = self.ut.requestString(self.username, self.password, self.uhash, "vh_botnetInfo.php")
         response = json.loads(response)
         l = []
-        l.append(response['canAtt1'])
-        l.append(response['canAtt2'])
-        l.append(response['canAtt3'])
+        l.append(str(response['canAtt1']))
+        l.append(str(response['canAtt2']))
+        l.append(str(response['canAtt3']))
+        logger.debug('getInfo:\n{}'.format(l))
         return l
 
     def attack(self):
@@ -78,7 +79,11 @@ class Botnet:
         
         for i in range(1, self.botNetServers + 1):
             if cinfo[i-1] == '1':
-                response = self.ut.requestString(self.username, self.password, self.uhash, "vh_attackCompany" + str(i) + ".php", company=str(i))
+                logger.debug('attacking #{}'.format(i))
+                if i == 1:
+                    response = self.ut.requestString(self.username, self.password, self.uhash, "vh_attackCompany.php", company=str(i))
+                else:
+                    response = self.ut.requestString(self.username, self.password, self.uhash, "vh_attackCompany" + str(i) + ".php", company=str(i))
                 logger.debug('attack #{} response {}'.format(i, response))
                 if response == '0':
                     logger.info('#{} Netcoins gained'.format(i))
