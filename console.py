@@ -346,17 +346,17 @@ class Console:
                                 except AttributeError:
                                     pass
                                 # print ip, type(ip), username, type(username)
-                                s = requests.session()
+                                # s = requests.session()
                                 if ip == username:
-                                    logger.info("send to database")
-                                    logger.info(s.get(DATABASE_ENDPOINT + "?IP={}&MONEY={}&IPSP={}&FW={}&AV={}".format(
-                                                      ip, money, ipsplevel, fwlevel, avlevel), timeout=15))
-                                    s.close()
+                                    logger.info("send to database (disabled)")
+                                    # logger.info(s.get(DATABASE_ENDPOINT + "?IP={}&MONEY={}&IPSP={}&FW={}&AV={}".format(
+                                    #                  ip, money, ipsplevel, fwlevel, avlevel), timeout=15))
+                                    # s.close()
                                 else:
-                                    logger.info("send to database")
-                                    logger.info(s.get(DATABASE_ENDPOINT + "?IP={}&USR={}&MONEY={}&IPSP={}&FW={}&AV={}".format(
-                                                      ip, username, money, ipsplevel, fwlevel, avlevel), timeout=15))
-                                    s.close()
+                                    logger.info("send to database (disabled)")
+                                    # logger.info(s.get(DATABASE_ENDPOINT + "?IP={}&USR={}&MONEY={}&IPSP={}&FW={}&AV={}".format(
+                                    #                  ip, username, money, ipsplevel, fwlevel, avlevel), timeout=15))
+                                    # s.close()
                                 return True
                             else:
                                 logger.info("\nYour Money: {:11,}$\n[TargetIP: {}]\n\nMade {:11,}$ and {:2d}Rep.\n Antivirus: {} Firewall: {} Sdk: {} TotalMoney: {:11,}$\n YourWinChance: {} Anonymous: {} username: {} saving: {}\n".format(
@@ -368,15 +368,15 @@ class Console:
                                 # print ip, type(ip), username, type(username)
                                 s = requests.session()
                                 if ip == username:
-                                    logger.info("send to database")
-                                    logger.info(s.get(DATABASE_ENDPOINT + "?IP={}&MONEY={}&IPSP={}&FW={}&AV={}".format(
-                                                      ip, money, ipsplevel, fwlevel, avlevel), timeout=15))
-                                    s.close()
+                                     logger.info("send to database (disabled)")
+                                    # logger.info(s.get(DATABASE_ENDPOINT + "?IP={}&MONEY={}&IPSP={}&FW={}&AV={}".format(
+                                    #                   ip, money, ipsplevel, fwlevel, avlevel), timeout=15))
+                                    # s.close()
                                 else:
-                                    logger.info("send to database")
-                                    logger.info(s.get(DATABASE_ENDPOINT + "?IP={}&USR={}&MONEY={}&IPSP={}&FW={}&AV={}".format(
-                                                      ip, username, money, ipsplevel, fwlevel, avlevel), timeout=15))
-                                    s.close()
+                                    logger.info("send to database (disable)")
+                                    # logger.info(s.get(DATABASE_ENDPOINT + "?IP={}&USR={}&MONEY={}&IPSP={}&FW={}&AV={}".format(
+                                    #                  ip, username, money, ipsplevel, fwlevel, avlevel), timeout=15))
+                                    # s.close()
                                 return True
 
                         except KeyError:
