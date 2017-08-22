@@ -74,7 +74,7 @@ USER_AGENT = ['Dalvik/2.1.0 (Linux; U; Android 5.0.1; GT-I9508V Build/LRX22C)',
 class Utils:
     def __init__(self):
         self.secret = "aeffI"
-        self.url = "https://api.vhack.cc/v/10/"
+        self.url = "https://api.vhack.cc/v/11/"
         self.username = config.user
         self.password = config.password
         self.user_agent = ""
@@ -133,6 +133,7 @@ class Utils:
         return n
 
     def requestString(self, username, password, uhash, php, **kwargs):
+        logger.debug("Request: {}".format(php))
         self.user_agent = self.generateUA(username + password)
         time.sleep(1)
         t = None
@@ -143,8 +144,9 @@ class Utils:
             try:
                 req = urllib2.Request(self.generateURL(username, password, uhash, php, **kwargs))
                 req.add_header('User-agent', self.user_agent)
-                r = urllib2.urlopen(req, context=ssl._create_unverified_context())
+                r = urllib2.urlopen(req, context=ssl._create_unverified_context(), timeout=15)
                 t = r.read()
+                logger.debug("Response:\n{}\n".format(t))
                 if t == "5":
                     logger.info("Check your Internet.")
                 elif t == "8":
@@ -156,7 +158,12 @@ class Utils:
                 elif t == "99":
                     logger.info("Server is down for Maintenance, please be patient.")
                 return t
-            except:
+            except urllib2.URLError as e:
+                logger.error('Error: {}'.format(e))
+                logger.info('Timeout while requesting "{}"'.format(php))
+                time.sleep(1 + i)
+            except Exception as e:
+                logger.error('Error: {}'.format(e))
                 logger.info("Blocked, trying again. Delaying {0} seconds".format(i))
                 time.sleep(1 + i)
             i += 1
@@ -167,12 +174,12 @@ class Utils:
             try:
                 req = urllib2.Request(self.generateURL(username, password, uhash, php, **kwargs))
                 req.add_header('User-agent', self.user_agent)
-                r = urllib2.urlopen(req, context=ssl._create_unverified_context())
+                r = urllib2.urlopen(req, context=ssl._create_unverified_context(), timeout=15)
                 t = r.read()
                 # print i1
                 return t
-            except Exception as err:
-                logger.info("Error: {}".format(err))
+            except Exception as e:
+                logger.error('Error: {}'.format(e))
                 time.sleep(1)
         return "null"
 

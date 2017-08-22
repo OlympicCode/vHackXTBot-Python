@@ -100,12 +100,10 @@ class Botnet:
         """
         logger.info("Attempting to upgrade bot net PC's")
         for i in self.botnet:
-            if i.botupgradable():
-                while int(self.p.getmoney()) > int(i.nextlevelcost()):
-                    new_bal = i.upgradesinglebot()
-                    if new_bal is not None:
-                        self.p.setmoney(new_bal)
-                logger.debug("#{}({}) not enough money".format(i.id, i.lvl))
+            while (int(self.p.getmoney()) > int(i.nextlevelcost()) and i.botupgradable()):
+                new_bal = i.upgradesinglebot()
+                if new_bal is not None:
+                    self.p.setmoney(new_bal)
             logger.debug("#{}({}) not upgradeable".format(i.id, i.lvl))
 
     def _botnetInfo(self):
@@ -171,12 +169,12 @@ class Bot:
             self.lvl = details['new']
             logger.info("Bot # {0} upgraded to level {1} at a cost of {2} $".format(details['old'], details['lvl'], details['costs']))
         except TypeError as e:
-            logger.info("Bot fully upgraded, should not get this error. Fix me! {0}".format(e))
+            logger.error("Bot fully upgraded, should not get this error. Fix me! {0}".format(e))
             return None
         try:
             return details['money']
         except TypeError as e:
-            logger.info("Error in upgradesinglebot: {0}".format(e))
+            logger.error("Error in upgradesinglebot: {0}".format(e))
             return None
 
     def __repr__(self):
