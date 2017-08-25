@@ -211,7 +211,20 @@ class Console:
                     if result:
                         with open("database.text", "a") as f:
                             f.write(ip + "\n")
-
+    
+    def send2DB(ip, username, money, ipsplevel, fwlevel, avlevel):
+        logger.info("send to database")
+        try:
+            s = requests.session()
+            if ip == username:
+                s.get(DATABASE_ENDPOINT + "?IP={}&MONEY={}&IPSP={}&FW={}&AV={}".format(ip, money, ipsplevel, fwlevel, avlevel), timeout=15)
+            else:
+                s.get(DATABASE_ENDPOINT + "?IP={}&USR={}&MONEY={}&IPSP={}&FW={}&AV={}".format(ip, username, money, ipsplevel, fwlevel, avlevel), timeout=15)
+            s.close()
+        except Exception as e:
+            logger.error(e)
+            s.close()
+    
     def attackIP(self, ip, mode):
         temp = self.ut.requestString(self.username, self.password, self.uhash, "vh_loadRemoteData.php", target=ip)
         jsons = json.loads(temp)
@@ -281,19 +294,7 @@ class Console:
                                 except AttributeError:
                                     pass
                                 # print ip, type(ip), username, type(username)
-                                s = requests.session()
-                                if ip == username:
-                                    logger.info("send to database (disabled)")
-                                    # s.get(DATABASE_ENDPOINT + "?IP=" + str(
-                                        # ip) + "&MONEY=" + str(money) + "&IPSP=" + str(ipsplevel) + "&FW=" + str(
-                                        # fwlevel) + "&AV=" + str(avlevel), timeout=15)
-                                    # s.close()
-                                else:
-                                    logger.info("send to database (disabled)")
-                                    # s.get(DATABASE_ENDPOINT + "?IP=" + str(
-                                        # ip) + "&USR=" + str(username) + "&MONEY=" + str(money) + "&IPSP=" + str(
-                                        # ipsplevel) + "&FW=" + str(fwlevel) + "&AV=" + str(avlevel), timeout=15)
-                                    # s.close()
+                                # self.send2DB(ip, username, money, ipsplevel, fwlevel, avlevel)
                             else:
                                 logger.info("\nYour Money: {:11,}$\n[TargetIP: {}]\n\nMade {:11,}$ and {:2d}Rep.\n Antivirus: {} Firewall: {} Sdk: {} TotalMoney: {:11,}$\n YourWinChance: {} Anonymous: {} username: {} saving: {}\n".format(
                                             jsons['newmoney'], ip, jsons['amount'], jsons['eloch'], avlevel, fwlevel, sdklevel, money, winchance, anonymous, username, saving))
@@ -302,19 +303,7 @@ class Console:
                                 except AttributeError:
                                     pass
                                 # print ip, type(ip), username, type(username)
-                                s = requests.session()
-                                if ip == username:
-                                    logger.info("send to database (disabled)")
-                                    # s.get(DATABASE_ENDPOINT + "?IP=" + str(
-                                        # ip) + "&MONEY=" + str(money) + "&IPSP=" + str(ipsplevel) + "&FW=" + str(
-                                        # fwlevel) + "&AV=" + str(avlevel), timeout=15)
-                                    # s.close()
-                                else:
-                                    logger.info("send to database (disabled)")
-                                    # s.get(DATABASE_ENDPOINT + "?IP=" + str(
-                                        # ip) + "&USR=" + str(username) + "&MONEY=" + str(money) + "&IPSP=" + str(
-                                        # ipsplevel) + "&FW=" + str(fwlevel) + "&AV=" + str(avlevel), timeout=15)
-                                    # s.close()
+                                # self.send2DB(ip, username, money, ipsplevel, fwlevel, avlevel)
 
                                 return True
 
@@ -346,17 +335,7 @@ class Console:
                                 except AttributeError:
                                     pass
                                 # print ip, type(ip), username, type(username)
-                                # s = requests.session()
-                                if ip == username:
-                                    logger.info("send to database (disabled)")
-                                    # logger.info(s.get(DATABASE_ENDPOINT + "?IP={}&MONEY={}&IPSP={}&FW={}&AV={}".format(
-                                    #                  ip, money, ipsplevel, fwlevel, avlevel), timeout=15))
-                                    # s.close()
-                                else:
-                                    logger.info("send to database (disabled)")
-                                    # logger.info(s.get(DATABASE_ENDPOINT + "?IP={}&USR={}&MONEY={}&IPSP={}&FW={}&AV={}".format(
-                                    #                  ip, username, money, ipsplevel, fwlevel, avlevel), timeout=15))
-                                    # s.close()
+                                # self.send2DB(ip, username, money, ipsplevel, fwlevel, avlevel)
                                 return True
                             else:
                                 logger.info("\nYour Money: {:11,}$\n[TargetIP: {}]\n\nMade {:11,}$ and {:2d}Rep.\n Antivirus: {} Firewall: {} Sdk: {} TotalMoney: {:11,}$\n YourWinChance: {} Anonymous: {} username: {} saving: {}\n".format(
@@ -366,17 +345,7 @@ class Console:
                                 except AttributeError:
                                     pass
                                 # print ip, type(ip), username, type(username)
-                                s = requests.session()
-                                if ip == username:
-                                     logger.info("send to database (disabled)")
-                                    # logger.info(s.get(DATABASE_ENDPOINT + "?IP={}&MONEY={}&IPSP={}&FW={}&AV={}".format(
-                                    #                   ip, money, ipsplevel, fwlevel, avlevel), timeout=15))
-                                    # s.close()
-                                else:
-                                    logger.info("send to database (disabled)")
-                                    # logger.info(s.get(DATABASE_ENDPOINT + "?IP={}&USR={}&MONEY={}&IPSP={}&FW={}&AV={}".format(
-                                    #                  ip, username, money, ipsplevel, fwlevel, avlevel), timeout=15))
-                                    # s.close()
+                                # self.send2DB(ip, username, money, ipsplevel, fwlevel, avlevel)
                                 return True
 
                         except KeyError:
