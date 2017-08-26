@@ -72,7 +72,7 @@ class Player:
             self.rank = j['rank']
             self.boosters = j['boost']
             self.remotespyware = j['actadw']
-            self.email = int(j['unreadmsg'])
+            self.email = int(j['urmail'])
             self.uhash = str(j['uhash'])
         except:
             exit()
