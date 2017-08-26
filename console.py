@@ -211,7 +211,7 @@ class Console:
                     if result:
                         with open("database.text", "a") as f:
                             f.write(ip + "\n")
-    
+
     def send2DB(ip, username, money, ipsplevel, fwlevel, avlevel):
         logger.info("send to database")
         try:
@@ -224,7 +224,7 @@ class Console:
         except Exception as e:
             logger.error(e)
             s.close()
-    
+
     def attackIP(self, ip, mode):
         temp = self.ut.requestString(self.username, self.password, self.uhash, "vh_loadRemoteData.php", target=ip)
         jsons = json.loads(temp)
@@ -246,7 +246,7 @@ class Console:
                     avlevel = jsons['av']
                     # spamlevel = jsons['spam']
                     sdklevel = jsons['sdk']
-                    ipsplevel = jsons['ipsp']
+                    # ipsplevel = jsons['ipsp']
                     money = jsons['money']
                     saving = jsons['savings']
                     anonymous = jsons['anonymous']
@@ -265,7 +265,7 @@ class Console:
                 avlevel = jsons['av']
                 # spamlevel = jsons['spam']
                 sdklevel = jsons['sdk']
-                ipsplevel = jsons['ipsp']
+                # ipsplevel = jsons['ipsp']
                 money = jsons['money']
                 saving = jsons['savings']
                 anonymous = jsons['anonymous']
