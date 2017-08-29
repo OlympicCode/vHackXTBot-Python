@@ -76,9 +76,9 @@ class Botnet:
         self._initbot()
         logger.info("Trying Bot Net")
         cinfo = self.getInfo()
-        
+
         for i in range(1, self.botNetServers + 1):
-            if cinfo[i-1] == '1':
+            if cinfo[i - 1] == '1':
                 logger.debug('attacking #{}'.format(i))
                 if i == 1:
                     response = self.ut.requestString(self.username, self.password, self.uhash, "vh_attackCompany.php", company=str(i))

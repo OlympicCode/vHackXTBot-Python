@@ -4,11 +4,12 @@
 from console import Console
 from update import Update
 from botnet import Botnet
+from player import Player
+from mails import Mails
 import time
 import json
 import config
 import ddos
-from player import Player
 import logging
 logger = logging.getLogger(__name__)
 FORMAT = '%(asctime)s [%(threadName)10s][%(module)10s][%(levelname)8s] %(message)s'
@@ -40,6 +41,7 @@ class run:
         self.u = Update(self.player)
         self.b = Botnet(self.player)
         self.ddos = ddos.Ddos(self.player)
+        self.m = Mails(self.player)
         self.init()
 
     def init(self):
@@ -125,6 +127,11 @@ class run:
                     self.u.finishAll()
                     self.player.refreshinfo()  # update player info
                     logger.info("I used Netcoins for finish all task.")
+            if self.player.email > 0:
+                time.sleep(self.wait_load)
+                logger.info('Reading mails...')
+                self.m.read_mails()
+
             # attack players
             self.c.attack(self)
 
