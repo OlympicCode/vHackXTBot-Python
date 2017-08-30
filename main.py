@@ -98,8 +98,12 @@ class run:
             self.ddos.run_ddos()
             if self.BotNet_update:
                 self.b.upgradebotnet()
+
             # attack botnet
-            self.b.attack()
+            number_botnet = json.loads(self.b._botnetInfo())
+            if int(number_botnet['count']) > 0:
+                self.b.attack()
+
             if self.joinTournament and self.c.getTournament():
                 self.mode = "Potator"
                 logger.info("** Force Mode to 'Potator' for Tournament **")
