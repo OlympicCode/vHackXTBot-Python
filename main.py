@@ -6,6 +6,7 @@ from update import Update
 from botnet import Botnet
 from player import Player
 from mails import Mails
+from random import randint
 import time
 import json
 import config
@@ -131,10 +132,11 @@ class run:
                     self.u.finishAll()
                     self.player.refreshinfo()  # update player info
                     logger.info("I used Netcoins for finish all task.")
-            if self.player.email > 0:
+            if (randint(1, 3) == 1 and self.player.email > 0):
                 time.sleep(self.wait_load)
                 logger.info('Reading mails...')
                 self.m.read_mails()
+                self.player.refreshinfo()
 
             # attack players
             self.c.attack(self)

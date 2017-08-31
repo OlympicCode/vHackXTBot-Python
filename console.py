@@ -50,11 +50,8 @@ class Console:
         else:
             return False
 
-    def check_Cluster(self, uhash):
-        if self.uhash is None:
-            temp = self.ut.requestString(self.username, self.password, self.uhash, "vh_ClusterData.php")
-        else:
-            temp = self.ut.requestString(self.username, self.password, self.uhash, "vh_ClusterData.php")
+    def check_Cluster(self):
+        temp = self.ut.requestString(self.username, self.password, self.uhash, "vh_ClusterData.php")
         return temp
 
     def scanUser(self):
@@ -167,7 +164,7 @@ class Console:
                 return 0, 0, "value error"
 
     def getIP(self, blank, max, mode, active_protecte_cluster_ddos):
-        stat_cluster = self.check_Cluster(self.uhash)
+        stat_cluster = self.check_Cluster()
         stat_cluster = json.loads(stat_cluster)
         try:
             stat_cluter_blocked = stat_cluster['blocked']
