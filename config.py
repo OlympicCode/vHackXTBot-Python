@@ -34,7 +34,7 @@ BotNet_update = False
 ddos_cluster = False
 
 # change auto mode Potator for tournament
-tournament_potator = false
+tournament_potator = False
 
 AttackTournamentDB = False
 Max_point_tournament = 1300
