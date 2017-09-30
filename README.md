@@ -5,6 +5,8 @@ vHackXT Bot written in Python 2.7.
 [![GITHUB issue](https://img.shields.io/github/issues/OlympicCode/vHackAPI-Python.svg?style=flat-square&raw=true)](https://github.com/OlympicCode/vHackAPI-Python/issues)
 [![TRAVIS CI](https://travis-ci.org/OlympicCode/vHackXTBot-Python.svg?branch=master)](https://travis-ci.org/OlympicCode/vHackXTBot-Python)
 
+[![DiscordBig](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqIgbcCpiwO-V04gZWfGRZl-qrmIbgKXZtHCDjhV9nF_l3tD0g9w)](https://discord.gg/EZNjh7t)
+
 #### Thanx to FluffySteamCat who recorded the bot  
 [![vHackBot video here](https://img.youtube.com/vi/7Ot4xqhh4T8/1.jpg)](https://www.youtube.com/watch?v=ccWs7Fa9GUI&feature=youtu.be) [![vHackBot video here](https://img.youtube.com/vi/vNp_T7h990s/1.jpg)](https://www.youtube.com/watch?v=vNp_T7h990s&feature=youtu.be) [![vHackBot video here](https://img.youtube.com/vi/eTw3DOeJjWw/1.jpg)](https://www.youtube.com/watch?v=eTw3DOeJjWw) [![vHackBot video here](https://img.youtube.com/vi/xI5IFJ9qMeY/1.jpg)](https://www.youtube.com/watch?v=xI5IFJ9qMeY)
 
