@@ -74,7 +74,7 @@ USER_AGENT = ['Dalvik/2.1.0 (Linux; U; Android 5.0.1; GT-I9508V Build/LRX22C)',
 class Utils:
     def __init__(self):
         self.secret = "aeffI"
-        self.url = "https://api.vhack.cc/v/11/"
+        self.url = "https://api.vhack.cc/v/12/"
         self.username = config.user
         self.password = config.password
         self.user_agent = ""
