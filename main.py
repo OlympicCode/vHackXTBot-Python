@@ -40,7 +40,8 @@ class run:
         self.wait_load = config.wait_load
         self.c = Console(self.player)
         self.u = Update(self.player)
-        self.b = Botnet(self.player)
+        # disbale for > api v13
+        #self.b = Botnet(self.player)
         self.ddos = ddos.Ddos(self.player)
         self.m = Mails(self.player)
         self.init()
