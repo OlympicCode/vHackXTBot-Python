@@ -6,7 +6,6 @@ from update import Update
 from botnet import Botnet
 from player import Player
 from mails import Mails
-from random import randint
 import time
 import json
 import config
@@ -40,7 +39,7 @@ class run:
         self.wait_load = config.wait_load
         self.c = Console(self.player)
         self.u = Update(self.player)
-        # disbale for > api v13
+        # disable botnet for > api v13
         #self.b = Botnet(self.player)
         self.ddos = ddos.Ddos(self.player)
         self.m = Mails(self.player)
@@ -99,12 +98,13 @@ class run:
 
             self.ddos.run_ddos()
             if self.BotNet_update:
-                self.b.upgradebotnet()
+                pass
+                #self.b.upgradebotnet()
 
             # attack botnet
-            number_botnet = json.loads(self.b._botnetInfo())
-            if int(number_botnet['count']) > 0:
-                self.b.attack()
+            #number_botnet = json.loads(self.b._botnetInfo())
+            #if int(number_botnet['count']) > 0:
+            #    self.b.attack()
 
             if self.joinTournament and self.c.getTournament():
                 self.mode = "Potator"
@@ -133,11 +133,10 @@ class run:
                     self.u.finishAll()
                     self.player.refreshinfo()  # update player info
                     logger.info("I used Netcoins for finish all task.")
-            if (randint(1, 3) == 1 and self.player.email > 0):
+            if self.player.email > 0:
                 time.sleep(self.wait_load)
                 logger.info('Reading mails...')
                 self.m.read_mails()
-                self.player.refreshinfo()
 
             # attack players
             self.c.attack(self)
