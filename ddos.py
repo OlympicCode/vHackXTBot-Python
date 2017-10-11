@@ -6,6 +6,8 @@ import operator
 import os
 import time
 import console
+import logging
+logger = logging.getLogger(__name__)
 
 
 class Ddos:
@@ -34,7 +36,7 @@ class Ddos:
                     pass
 
                 tournament_left = re.findall('\d+', TournamentPosition["tleft"])
-                print "Tournament star finish in " + str(TournamentPosition["tleft"])
+                logger.info("Tournament star finish in {}".format(TournamentPosition["tleft"]))
                 try:
                     tournament_hour = tournament_left[0]
                     tournament_minute = tournament_left[1]
@@ -60,7 +62,7 @@ class Ddos:
 
                         checkcluster = json.loads(self.c.check_Cluster())
                         if "DDoS not ready" in checkcluster["ddosready"]:
-                            print checkcluster["ddosready"]
+                            logger.info(checkcluster["ddosready"])
                             break
                         else:
                             try:
@@ -72,8 +74,7 @@ class Ddos:
                                 scan_cluster["ddoschance"] = scan_cluster["ddoschance"].split("%")
                                 ddoschance = re.findall('\d+', scan_cluster["ddoschance"][0])
                                 if int(ddoschance[0]) > 50:
-                                    print "attack " + Cluster_name + "(" + str(Cluster_point) + ")" + " Your chance is " + \
-                                          scan_cluster["ddoschance"][0] + "%"
+                                    logger.info("attack {}({}) Your chance is {}%".format(Cluster_name, Cluster_point, scan_cluster["ddoschance"][0]))
                                     result = json.loads(self.c.AttackCluster(Cluster_name))
                                     os.remove(self.database)
                                     if result['result'] == 6:
@@ -104,14 +105,13 @@ class Ddos:
                         data2[str(i.encode("utf-8")).strip()] = int(data.count(i))
                     newA = sorted(data2.iteritems(), key=operator.itemgetter(1), reverse=True)[0:nb]
 
-                    print "best list for tournament :"
+                    logger.info("best list for tournament :")
                     final_data = {}
                     for i in range(0, len(newA)):
                         Cluster_name = newA[i][0]
                         Cluster_pepole = newA[i][1]
-                        print " cluster : " + Cluster_name.decode("utf-8") + " | people on cluster : " + str(
-                            Cluster_pepole) + " | Points in clusters = " + str(
-                            point[Cluster_name.decode("utf-8")] / Cluster_pepole)
+                        logger.info(" cluster : {} | people on cluster : {} | Points in clusters = {}".format(
+                                    Cluster_name.decode("utf-8"), Cluster_pepole, point[Cluster_name.decode("utf-8")] / Cluster_pepole))
                         final_data[Cluster_name.decode("utf-8")] = int(point[Cluster_name.decode("utf-8")] * Cluster_pepole)
 
                     newA = sorted(final_data.iteritems(), key=operator.itemgetter(1), reverse=True)[0:len(newA)]
@@ -125,7 +125,7 @@ class Ddos:
                             #     scan_cluster = json.loads(self.c.ScanCluster(Cluster_name.encode("utf-8")))
 
                             count = count + 1
-                            print "if attack " + Cluster_name + "(" + str(Cluster_point) + ")"
+                            logger.info("if attack {}({})".format(Cluster_name, Cluster_point))
                             Cluster = [(0, Cluster_name, str(Cluster_point))]
                             cursor.executemany("INSERT INTO Cluster VALUES (?,?,?)", Cluster)
                             db.commit()
@@ -141,7 +141,7 @@ class Ddos:
                                 #     scan_cluster = json.loads(self.c.ScanCluster(Cluster_name.encode("utf-8")))
 
                                 count = count + 1
-                                print "if attack " + Cluster_name + "(" + str(Cluster_point) + ")"
+                                logger.info("if attack {}({})".format(Cluster_name, Cluster_point))
                                 Cluster = [(0, Cluster_name, str(Cluster_point))]
                                 cursor.executemany("INSERT INTO Cluster VALUES (?,?,?)", Cluster)
                                 db.commit()
@@ -174,7 +174,7 @@ class Ddos:
                         data2[str(i.encode("utf-8")).strip()] = int(data.count(i))
                     newA = sorted(data2.iteritems(), key=operator.itemgetter(1), reverse=True)[0:nb]
 
-                    print "best list for tournament :"
+                    logger.info("best list for tournament :")
                     final_data = {}
                     for i in range(0, len(newA)):
                         Cluster_name = newA[i][0]
@@ -190,7 +190,7 @@ class Ddos:
                             checkcluster = json.loads(self.c.check_Cluster())
                             test = "no"
                             if "DDoS not ready" in checkcluster["ddosready"] and test == "no":
-                                print checkcluster["ddosready"]
+                                logger.info(checkcluster["ddosready"])
                                 break
                             else:
                                 try:
@@ -201,15 +201,13 @@ class Ddos:
                                     scan_cluster["ddoschance"] = scan_cluster["ddoschance"].split("%")
                                     ddoschance = re.findall('\d+', scan_cluster["ddoschance"][0])
                                     if int(ddoschance[0]) > 50:
-                                        print "attack " + Cluster_name + "(" + str(
-                                            Cluster_point) + ")" + " Your chance is " + scan_cluster["ddoschance"][0] + "%"
+                                        logger.info("attack {}({}) Your chance is {}%".format(Cluster_name, Cluster_point, scan_cluster["ddoschance"][0]))
                                         result = json.loads(self.c.AttackCluster(Cluster_name))
                                         if result['result'] == 6:
                                             pass
                                         else:
                                             break
                                     else:
-                                        print "no attack possible to " + Cluster_name + " (" + str(
-                                            Cluster_point) + ")" + " Your chance is " + scan_cluster["ddoschance"][0] + "%"
+                                        logger.info("no attack possible to {}({}) Your chance is {}%".format(Cluster_name, Cluster_point, scan_cluster["ddoschance"][0]))
                 else:
-                    print "next tournament in " + TournamentPosition['nexttournament']
+                    logger.info("next tournament in ".format(TournamentPosition['nexttournament']))

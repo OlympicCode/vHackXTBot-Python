@@ -5,6 +5,7 @@ from utils import Utils
 
 import json
 import logging
+logger = logging.getLogger(__name__)
 
 
 class Botnet:
@@ -27,6 +28,7 @@ class Botnet:
         """
         data = self._botnetInfo()
         bots = json.loads(data)
+        self.botnet = []
         if int(bots['count']) > 0:
             for i in bots['data']:
                 bot = Bot(i['bID'], i['bLVL'], i['bPRICE'], self.username, self.password, self.uhash)
@@ -38,7 +40,7 @@ class Botnet:
         :return: None
         """
         for bot in self.botnet:
-            print bot
+            logger.info(bot)
 
     def getbotnetdata(self):
         """
@@ -56,49 +58,14 @@ class Botnet:
         :return: list of vHack serves that can be hacked.
                  ['1','2','1']. '1' = can be hacked, '2' time not elapsed.
         """
-        response = self.ut.requestString("user::::pass::::uhash",
-                                         self.username + "::::" + self.password + "::::" + self.uhash,
-                                         "vh_botnetInfo.php")
-        arr = response.split('","canAtt')
+        response = self.ut.requestString(self.username, self.password, self.uhash, "vh_botnetInfo.php")
+        response = json.loads(response)
         l = []
-        for i1 in arr[1:]:
-            l.append(i1.split(':')[1].split('"')[1])
+        l.append(str(response['canAtt1']))
+        l.append(str(response['canAtt2']))
+        l.append(str(response['canAtt3']))
+        logger.debug('getInfo:\n{}'.format(l))
         return l
-
-    def _attackable(self):
-        """
-        Retrieve all vhack botnet info.
-        Hack times and botnet pc data.
-        Determine if can attack.
-        :return: none
-        """
-        t = self.getInfo()
-        attack = False
-        for i1 in t:
-            if "1" in i1:
-                attack = True
-        return attack
-
-    def _attackall(self):
-        """
-        Determine the amount of vHack servers from
-        the config files, and attack each one.
-        :return: none
-        """
-        for i in range(1, self.botNetServers+1):
-            response = self.ut.requestString("user::::pass::::uhash::::cID",
-                                             self.username + "::::" + self.password + "::::" + self.uhash + "::::" + "1",
-                                             "vh_attackCompany.php")
-            self.ut.requestString("user::::pass::::uhash::::cID",
-                                  self.username + "::::" + self.password + "::::" + self.uhash + "::::" + "2",
-                                  "vh_attackCompany2.php")
-            self.ut.requestString("user::::pass::::uhash::::cID",
-                                  self.username + "::::" + self.password + "::::" + self.uhash + "::::" + "3",
-                                  "vh_attackCompany3.php")
-            """temp = self.ut.requestString("user::::pass::::uhash::::cID",
-                                         self.username + "::::" + self.password + "::::" + self.uhash + "::::" + "4",
-                                         "vh_attackCompany4.php")"""
-            logging.info("Netcoins gained: {0}  To come....".format(response))
 
     def attack(self):
         """
@@ -107,11 +74,23 @@ class Botnet:
         :return: none
         """
         self._initbot()
-        logging.info("Trying Bot Net")
-        if self._attackable():
-            self._attackall()
-        else:
-            logging.info("Botnet not hackable as yet")
+        logger.info("Trying Bot Net")
+        cinfo = self.getInfo()
+
+        for i in range(1, self.botNetServers + 1):
+            if cinfo[i - 1] == '1':
+                logger.debug('attacking #{}'.format(i))
+                if i == 1:
+                    response = self.ut.requestString(self.username, self.password, self.uhash, "vh_attackCompany.php", company=str(i))
+                else:
+                    response = self.ut.requestString(self.username, self.password, self.uhash, "vh_attackCompany" + str(i) + ".php", company=str(i))
+                logger.debug('attack #{} response {}'.format(i, response))
+                if response == '0':
+                    logger.info('#{} Netcoins gained'.format(i))
+                else:
+                    logger.info('#{} Failed! No netcoins...'.format(i))
+            else:
+                logger.info("Botnet #{} not hackable as yet".format(i))
 
     def upgradebotnet(self):
         """
@@ -119,13 +98,13 @@ class Botnet:
         Cycle through and upgrade until no money.
         :return: None
         """
-        logging.info("Attempting to upgrade bot net PC's")
+        logger.info("Attempting to upgrade bot net PC's")
         for i in self.botnet:
-            if i.botupgradable():
-                while int(self.p.getmoney()) > int(i.nextlevelcost()):
-                    new_bal = i.upgradesinglebot()
-                    if new_bal is not None:
-                        self.p.setmoney(new_bal)
+            while (int(self.p.getmoney()) > int(i.nextlevelcost()) and i.botupgradable()):
+                new_bal = i.upgradesinglebot()
+                if new_bal is not None:
+                    self.p.setmoney(new_bal)
+            logger.debug("#{}({}) not upgradeable".format(i.id, i.lvl))
 
     def _botnetInfo(self):
         """
@@ -138,9 +117,7 @@ class Botnet:
         "resethours3":"3","resetminutes3":"15",
         "canAtt1":"2","canAtt2":"2","canAtt3":"2"}'
         """
-        temp = self.ut.requestString("user::::pass::::uhash",
-                                     self.username + "::::" + self.password + "::::" + self.uhash,
-                                     "vh_botnetInfo.php")
+        temp = self.ut.requestString(self.username, self.password, self.uhash, "vh_botnetInfo.php")
         return temp
 
     def __repr__(self):
@@ -185,22 +162,19 @@ class Bot:
         current lvl, bot number, x, x, upgrade cost, lvl, next lvl
         :return: None
         """
-        response = self.ut.requestString("user::::pass::::uhash::::bID",
-                                         self.username + "::::" + self.password + "::::" + self.uhash + "::::" + str(self.id),
-                                         "vh_upgradeBotnet.php")
+        response = self.ut.requestString(self.username, self.password, self.uhash, "vh_upgradeBotnet.php", bID=str(self.id))
         details = json.loads(response)
         try:
             self.upgradecost = details['costs']
-            logging.info("Bot # {0} upgraded to level {1} at a cost of {2}".format(details['old'], details['lvl'],
-                                                                                   details['costs']))
-            print "Bot # {0} upgraded to level {1} at a cost of {2} $".format(details['old'], details['lvl'], details['costs'])
+            self.lvl = details['new']
+            logger.info("Bot # {0} upgraded to level {1} at a cost of {2} $".format(details['old'], details['lvl'], details['costs']))
         except TypeError as e:
-            logging.info("Bot fully upgraded, should not get this error. Fix me! {0}".format(e))
+            logger.error("Bot fully upgraded, should not get this error. Fix me! {0}".format(e))
             return None
         try:
             return details['money']
         except TypeError as e:
-            logging.info("Error in upgradesinglebot: {0}".format(e))
+            logger.error("Error in upgradesinglebot: {0}".format(e))
             return None
 
     def __repr__(self):

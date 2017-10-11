@@ -22,9 +22,7 @@ class Update:
          {u'start': u'1495357175', u'end': u'1495360024', u'type': u'sdk', u'taskid': u'110612494', u'wto': u'1187'}]
         :return: string, as above if tasks.
         """
-        temp = self.ut.requestString("user::::pass::::uhash",
-                                     self.username + "::::" + self.password + "::::" + self.uhash,
-                                     "vh_tasks.php")
+        temp = self.ut.requestString(self.username, self.password, self.uhash, "vh_tasks.php")
         return temp
 
     def SpywareInfo(self):
@@ -32,15 +30,11 @@ class Update:
         < type 'list' >: ['local:0', 'data:[{av:392', 'fw:417', 'money:42793029', 'spam:467', 'user:ShittyGame',
                            'ip:23.93.18.103', 'next:now.}]', 'remote:1', 'result:0']
         """
-        arr = self.ut.requestArray("user::::pass::::uhash:::::",
-                                   self.username + "::::" + self.password + "::::" + self.uhash + ":::::",
-                                   "vh_spywareInfo.php")
+        arr = self.ut.requestArray(self.username, self.password, self.uhash, "vh_spywareInfo.php")
         return arr
 
     def removeSpyware(self):
-        arr = self.ut.requestArray("user::::pass::::uhash:::::",
-                                   self.username + "::::" + self.password + "::::" + self.uhash + ":::::",
-                                   "vh_removeSpyware.php")
+        arr = self.ut.requestArray(self.username, self.password, self.uhash, "vh_removeSpyware.php")
         return arr
 
     def runningtasks(self, tasks=None):
@@ -74,9 +68,7 @@ class Update:
         :param type: string variable of task type, "adw","fw" etc. See config file.
         :return:
         """
-        temp = self.ut.requestString("user::::pass::::uhash::::utype",
-                                     self.username + "::::" + self.password + "::::" + self.uhash + "::::" + type,
-                                     "vh_addUpdate.php")
+        temp = self.ut.requestString(self.username, self.password, self.uhash, "vh_addUpdate.php", utype=type)
         if "result" in temp:
             return temp.split('result":"')[1].split('"')[0]
         return "2"
@@ -87,9 +79,7 @@ class Update:
         :param type: string variable of task type, "adw","fw" etc. See config file.
         :return:
         """
-        temp = self.ut.requestString("user::::pass::::uhash::::utype",
-                                     self.username + "::::" + self.password + "::::" + self.uhash + "::::" + type,
-                                     "vh_fillTasks.php")
+        temp = self.ut.requestString(self.username, self.password, self.uhash, "vh_fillTasks.php", utype=type)
         if "result" in temp:
             return temp.split('result":"')[1].split('"')[0]
         return "2"
@@ -100,9 +90,7 @@ class Update:
         :param taskID:
         :return:
         """
-        temp = self.ut.requestString("user::::pass::::uhash::::taskid",
-                                     self.username + "::::" + self.password + "::::" + self.uhash + "::::" + taskID,
-                                     "vh_finishTask.php")
+        temp = self.ut.requestString(self.username, self.password, self.uhash, "vh_finishTask.php", taskid=taskID)
         if "4" in temp:
             return True
         else:
@@ -113,24 +101,18 @@ class Update:
         Finish all tasks currently running.
         :return:
         """
-        temp = self.ut.requestString("user::::pass::::uhash",
-                                     self.username + "::::" + self.password + "::::" + self.uhash,
-                                     "vh_finishAll.php")
+        temp = self.ut.requestString(self.username, self.password, self.uhash, "vh_finishAll.php")
         if "0" in temp:
             return True
         else:
             return False
 
     def useBooster(self):
-        temp = self.ut.requestString("user::::pass::::uhash::::boost",
-                                     self.username + "::::" + self.password + "::::" + self.uhash + "::::" + "1",
-                                     "vh_tasks.php")
+        temp = self.ut.requestString(self.username, self.password, self.uhash, "vh_tasks.php", boost="1")
         return temp
 
     def infoUpdate(self, name, types=None):
-        temp = self.ut.requestString("user::::pass::::uhash::::utype",
-                                     self.username + "::::" + self.password + "::::" + self.uhash + "::::" + name,
-                                     "vh_updateInfo.php")
+        temp = self.ut.requestString(self.username, self.password, self.uhash, "vh_updateInfo.php", utype=name)
         j = json.loads(temp)
         if types is None:
             return j["costs"]
