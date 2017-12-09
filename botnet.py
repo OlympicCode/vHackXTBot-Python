@@ -91,7 +91,7 @@ class Botnet:
             else:
                 logger.info("Botnet #{} not hackable as yet".format(i))
 
-    def upgradebotnet(self, hostname):
+    def upgradebotnet(self, hostname, running):
         """
         Check if there is enough money to upgrade a botnet PC.
         Cycle through and upgrade until no money.
@@ -101,10 +101,13 @@ class Botnet:
         logger.info("Attempting to upgrade bot net PC's "+ hostname + " [" + ofwhat + "]")
         for i in self.botnet:
             while (int(self.p.getmoney()) > int(i.nextlevelcostenergy()) and i.botupgradable()):
-                new_bal = i.upgradesinglebot(hostname, ofwhat)
-                if new_bal is not None:
+                new_bal = i.upgradesinglebot(hostname, ofwhat, running)
+                if new_bal is not None and new_bal == True:
                     logger.info("wait botnet update working for " + hostname + "...")
                     self.p.setmoney(new_bal)
+                else:
+                    logger.info("your are not energy for update " + hostname + " :(")
+                    break
             logger.debug("#{} not upgradeable".format(hostname))
 
     def _botnetInfo(self):
@@ -160,7 +163,7 @@ class Bot:
             yield obj
             stream = stream[idx:].lstrip()
 
-    def upgradesinglebot(self, hostname, ofwhat):
+    def upgradesinglebot(self, hostname, ofwhat, running):
         """
         Pass in bot class object and call upgrade function based on bot ID.
         details :
@@ -170,10 +173,12 @@ class Bot:
         current lvl, bot number, x, x, upgrade cost, lvl, next lvl
         :return: None
         """
-        if self.running == 0:
+        if running == 0:
             response = self.ut.requestString(self.username, self.password, self.uhash, "vh_upgradePC.php", hostname=hostname, ofwhat=ofwhat)
             # not loads the json bug python... try to resolve
             return True
+        else:
+            return False
 
     def __repr__(self):
         return "Bot details: id: {0}, Level: {1}, Next Cost: {2}".format(self.id, self.lvl, self.upgradecost)
