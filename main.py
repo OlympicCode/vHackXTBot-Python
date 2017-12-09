@@ -109,9 +109,6 @@ class run:
                     if int(botnet['energy']) == 0:
                         logger.info("You are not energy for update botnet {}".format(i['hostname'])
 
-
-
-
             # attack botnet
             #number_botnet = json.loads(self.b._botnetInfo())
             #if int(number_botnet['count']) > 0:
