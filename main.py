@@ -101,7 +101,7 @@ class run:
                 botnet = json.loads(self.b._botnetInfo())
                 if int(botnet['count']) > 0:
                     for i in botnet['data']:
-                        self.b.upgradebotnet(i['hostname'])
+                        self.b.upgradebotnet(i['hostname'], i['running'])
 
             # attack botnet
             #number_botnet = json.loads(self.b._botnetInfo())
