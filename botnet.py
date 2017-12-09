@@ -97,12 +97,13 @@ class Botnet:
         Cycle through and upgrade until no money.
         :return: None
         """
-
-        logger.info("Attempting to upgrade bot net PC's "+ hostname)
+        ofwhat = self.ofwhat[random.randint(0,3)]
+        logger.info("Attempting to upgrade bot net PC's "+ hostname + " [" + ofwhat + "]")
         for i in self.botnet:
             while (int(self.p.getmoney()) > int(i.nextlevelcostenergy()) and i.botupgradable()):
-                new_bal = i.upgradesinglebot(hostname, self.ofwhat[random.randint(0,3)])
+                new_bal = i.upgradesinglebot(hostname, ofwhat)
                 if new_bal is not None:
+                    logger.info("wait botnet update working for " + hostname + "...")
                     self.p.setmoney(new_bal)
             logger.debug("#{} not upgradeable".format(hostname))
 
