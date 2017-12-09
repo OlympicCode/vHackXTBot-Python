@@ -5,6 +5,7 @@ from utils import Utils
 
 import json
 import logging
+import random
 logger = logging.getLogger(__name__)
 
 
@@ -18,6 +19,7 @@ class Botnet:
         self.botNetServers = 3
         self.botnet = []
         self.p = player
+        self.ofwhat = ["fw", "av", "smash", "mwk"]
         self._initbot()
 
     def _initbot(self):
@@ -31,8 +33,10 @@ class Botnet:
         self.botnet = []
         if int(bots['count']) > 0:
             for i in bots['data']:
-                bot = Bot(i['bID'], i['bLVL'], i['bPRICE'], self.username, self.password, self.uhash)
-                self.botnet.append(bot)
+                self.energy = bots['energy']
+                if self.energy > 0:
+                    bot = Bot(i['running'], self.ofwhat[random.randint(0,3)], self.energy, self.username, self.password, self.uhash)
+                    self.botnet.append(bot)
 
     def printbots(self):
         """
@@ -60,12 +64,7 @@ class Botnet:
         """
         response = self.ut.requestString(self.username, self.password, self.uhash, "vh_botnetInfo.php")
         response = json.loads(response)
-        l = []
-        l.append(str(response['canAtt1']))
-        l.append(str(response['canAtt2']))
-        l.append(str(response['canAtt3']))
-        logger.debug('getInfo:\n{}'.format(l))
-        return l
+        return response
 
     def attack(self):
         """
@@ -92,19 +91,20 @@ class Botnet:
             else:
                 logger.info("Botnet #{} not hackable as yet".format(i))
 
-    def upgradebotnet(self):
+    def upgradebotnet(self, hostname):
         """
         Check if there is enough money to upgrade a botnet PC.
         Cycle through and upgrade until no money.
         :return: None
         """
-        logger.info("Attempting to upgrade bot net PC's")
+
+        logger.info("Attempting to upgrade bot net PC's "+ hostname)
         for i in self.botnet:
-            while (int(self.p.getmoney()) > int(i.nextlevelcost()) and i.botupgradable()):
-                new_bal = i.upgradesinglebot()
+            while (int(self.p.getmoney()) > int(i.nextlevelcostenergy()) and i.botupgradable()):
+                new_bal = i.upgradesinglebot(hostname, self.ofwhat[random.randint(0,3)])
                 if new_bal is not None:
                     self.p.setmoney(new_bal)
-            logger.debug("#{}({}) not upgradeable".format(i.id, i.lvl))
+            logger.debug("#{} not upgradeable".format(hostname))
 
     def _botnetInfo(self):
         """
@@ -127,32 +127,39 @@ class Botnet:
 class Bot:
     ut = Utils()
 
-    def __init__(self, botid, botlvl, price, username, password, uhash):
-        self.id = int(botid)
-        self.lvl = int(botlvl)
+    def __init__(self, running, ofwhat, energy, username, password, uhash):
         self.username = username
         self.uhash = uhash
         self.password = password
-        self.upgradecost = int(price)
+        self.running = int(running)
+        self.ofwhat = ofwhat
+        self.energy = energy
 
     def botupgradable(self):
         """
         Determine if botnet PC is at max level or not.
         :return: Bool
         """
-        if self.lvl < 100:
+        if self.running == 0:
             return True
         else:
             return False
 
-    def nextlevelcost(self):
+    def nextlevelcostenergy(self):
         """
         Return the cost of upgrading bot to the next level
         :return:int
         """
-        return self.upgradecost
+        return self.energy
 
-    def upgradesinglebot(self):
+    def parse_json_stream(self, stream):
+        decoder = json.JSONDecoder()
+        while stream:
+            obj, idx = decoder.raw_decode(stream)
+            yield obj
+            stream = stream[idx:].lstrip()
+
+    def upgradesinglebot(self, hostname, ofwhat):
         """
         Pass in bot class object and call upgrade function based on bot ID.
         details :
@@ -162,20 +169,10 @@ class Bot:
         current lvl, bot number, x, x, upgrade cost, lvl, next lvl
         :return: None
         """
-        response = self.ut.requestString(self.username, self.password, self.uhash, "vh_upgradeBotnet.php", bID=str(self.id))
-        details = json.loads(response)
-        try:
-            self.upgradecost = details['costs']
-            self.lvl = details['new']
-            logger.info("Bot # {0} upgraded to level {1} at a cost of {2} $".format(details['old'], details['lvl'], details['costs']))
-        except TypeError as e:
-            logger.error("Bot fully upgraded, should not get this error. Fix me! {0}".format(e))
-            return None
-        try:
-            return details['money']
-        except TypeError as e:
-            logger.error("Error in upgradesinglebot: {0}".format(e))
-            return None
+        if self.running == 0:
+            response = self.ut.requestString(self.username, self.password, self.uhash, "vh_upgradePC.php", hostname=hostname, ofwhat=ofwhat)
+            # not loads the json bug python... try to resolve
+            return True
 
     def __repr__(self):
         return "Bot details: id: {0}, Level: {1}, Next Cost: {2}".format(self.id, self.lvl, self.upgradecost)
