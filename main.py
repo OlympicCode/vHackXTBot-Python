@@ -40,7 +40,7 @@ class run:
         self.c = Console(self.player)
         self.u = Update(self.player)
         # disable botnet for > api v13
-        #self.b = Botnet(self.player)
+        self.b = Botnet(self.player)
         self.ddos = ddos.Ddos(self.player)
         self.m = Mails(self.player)
         self.init()
@@ -98,8 +98,10 @@ class run:
 
             self.ddos.run_ddos()
             if self.BotNet_update:
-                pass
-                #self.b.upgradebotnet()
+                botnet = json.loads(self.b._botnetInfo())
+                if int(botnet['count']) > 0:
+                    for i in botnet['data']:
+                        self.b.upgradebotnet(i['hostname'])
 
             # attack botnet
             #number_botnet = json.loads(self.b._botnetInfo())
