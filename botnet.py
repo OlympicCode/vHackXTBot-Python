@@ -20,6 +20,7 @@ class Botnet:
         self.botnet = []
         self.p = player
         self.ofwhat = ["fw", "av", "smash", "mwk"]
+        self.energy = 0
         self._initbot()
 
     def _initbot(self):
@@ -100,9 +101,9 @@ class Botnet:
         ofwhat = self.ofwhat[random.randint(0,3)]
         logger.info("Attempting to upgrade bot net PC's "+ hostname + " [" + ofwhat + "]")
         for i in self.botnet:
-            while (int(self.p.getmoney()) > int(i.nextlevelcostenergy()) and i.botupgradable()):
+            while (int(self.p.getmoney()) >= int(i.nextlevelcostenergy())):
                 new_bal = i.upgradesinglebot(hostname, ofwhat, running)
-                if new_bal is not None and new_bal == True:
+                if new_bal == True:
                     logger.info("wait botnet update working for " + hostname + "...")
                     self.p.setmoney(new_bal)
                 else:
@@ -139,12 +140,12 @@ class Bot:
         self.ofwhat = ofwhat
         self.energy = energy
 
-    def botupgradable(self):
+    def botupgradable(self, running):
         """
         Determine if botnet PC is at max level or not.
         :return: Bool
         """
-        if self.running == 0:
+        if running == 0:
             return True
         else:
             return False
