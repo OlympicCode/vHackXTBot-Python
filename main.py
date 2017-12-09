@@ -99,9 +99,18 @@ class run:
             self.ddos.run_ddos()
             if self.BotNet_update:
                 botnet = json.loads(self.b._botnetInfo())
-                if int(botnet['count']) > 0:
+                if int(botnet['count']) > 0 and int(botnet['energy']) > 0:
                     for i in botnet['data']:
                         self.b.upgradebotnet(i['hostname'], int(i['running']))
+                else:
+                    if int(botnet['count']) == 0:
+                        logger.info("You are not botnet")
+                    
+                    if int(botnet['energy']) == 0:
+                        logger.info("You are not energy for update botnet {}".format(i['hostname'])
+
+
+
 
             # attack botnet
             #number_botnet = json.loads(self.b._botnetInfo())
