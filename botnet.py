@@ -36,7 +36,7 @@ class Botnet:
             for i in bots['data']:
                 self.energy = bots['energy']
                 if self.energy > 0:
-                    bot = Bot(i['running'], self.ofwhat[random.randint(0,3)], self.energy, self.username, self.password, self.uhash)
+                    bot = Bot(i['running'], self.ofwhat[random.randint(0,3)], self.energy, i['hostname'],  self.username, self.password, self.uhash)
                     self.botnet.append(bot)
 
     def printbots(self):
@@ -101,7 +101,7 @@ class Botnet:
         ofwhat = self.ofwhat[random.randint(0,3)]
         logger.info("Attempting to upgrade bot net PC's "+ hostname + " [" + ofwhat + "]")
         for i in self.botnet:
-            while (int(self.p.getmoney()) >= int(i.nextlevelcostenergy())):
+            while (int(self.p.getmoney()) >= int(i.nextlevelcostenergy()) and running != 1):
                 new_bal = i.upgradesinglebot(hostname, ofwhat, running)
                 if new_bal == True:
                     logger.info("wait botnet update working for " + hostname + "...")
@@ -109,6 +109,8 @@ class Botnet:
                 else:
                     logger.info("your are not energy for update " + hostname + " :(")
                     break
+            else:
+                logger.info(hostname + " running update please wait...")
             logger.debug("#{} not upgradeable".format(hostname))
 
     def _botnetInfo(self):
@@ -132,13 +134,14 @@ class Botnet:
 class Bot:
     ut = Utils()
 
-    def __init__(self, running, ofwhat, energy, username, password, uhash):
+    def __init__(self, running, ofwhat, energy, hostname, username, password, uhash):
         self.username = username
         self.uhash = uhash
         self.password = password
         self.running = int(running)
         self.ofwhat = ofwhat
         self.energy = energy
+        self.hostname = hostname
 
     def botupgradable(self, running):
         """
@@ -182,4 +185,4 @@ class Bot:
             return False
 
     def __repr__(self):
-        return "Bot details: id: {0}, Level: {1}, Next Cost: {2}".format(self.id, self.lvl, self.upgradecost)
+        return "Bot details: running: {0}, energy: {1}, upgrade: {2}, botname: {3}".format(self.running, self.energy, self.ofwhat, self.hostname)
