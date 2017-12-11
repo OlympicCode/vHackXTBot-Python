@@ -100,8 +100,8 @@ class run:
             if self.BotNet_update:
                 botnet = json.loads(self.b._botnetInfo())
                 if int(botnet['count']) > 0 and int(botnet['energy']) > 0:
-                    for i in botnet['data']:
-                        self.b.upgradebotnet(i['hostname'], int(i['running']))
+                    for count, i in enumerate(botnet['data']):
+                        self.b.upgradebotnet(i['hostname'], int(i['running']), count)
                 else:
                     if int(botnet['count']) == 0:
                         logger.info("You are not botnet")
