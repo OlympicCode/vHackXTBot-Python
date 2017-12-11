@@ -34,10 +34,8 @@ class Botnet:
         self.botnet = []
         if int(bots['count']) > 0:
             for i in bots['data']:
-                self.energy = bots['energy']
-                if self.energy > 0:
-                    bot = Bot(i['running'], self.ofwhat[random.randint(0,3)], self.energy, i['hostname'],  self.username, self.password, self.uhash)
-                    self.botnet.append(bot)
+                bot = Bot(i['running'], self.ofwhat[random.randint(0,3)], self.energy, i['hostname'],  self.username, self.password, self.uhash)
+                self.botnet.append(bot)
 
     def printbots(self):
         """
@@ -92,7 +90,7 @@ class Botnet:
             else:
                 logger.info("Botnet #{} not hackable as yet".format(i))
 
-    def upgradebotnet(self, hostname, running):
+    def upgradebotnet(self, hostname, running, count):
         """
         Check if there is enough money to upgrade a botnet PC.
         Cycle through and upgrade until no money.
@@ -100,18 +98,20 @@ class Botnet:
         """
         ofwhat = self.ofwhat[random.randint(0,3)]
         logger.info("Attempting to upgrade bot net PC's "+ hostname + " [" + ofwhat + "]")
-        for i in self.botnet:
-            while (int(self.p.getmoney()) >= int(i.nextlevelcostenergy()) and running != 1):
-                new_bal = i.upgradesinglebot(hostname, ofwhat, running)
-                if new_bal == True:
-                    logger.info("wait botnet update working for " + hostname + "...")
-                    self.p.setmoney(new_bal)
-                else:
-                    logger.info("your are not energy for update " + hostname + " :(")
-                    break
+        get_infobot = self.getInfo()
+        if (int(get_infobot['data'][count]['running']) == 0): 
+            new_bal = self.upgradesinglebot(hostname, ofwhat)
+            if new_bal:
+                logger.info("wait botnet update working for " + hostname + "...")
+                return True
             else:
-                logger.info(hostname + " running update please wait...")
-            logger.debug("#{} not upgradeable".format(hostname))
+                logger.info("your are not energy for update " + hostname + " :(")
+                return False
+        else:
+            logger.info(hostname + " running update please wait...")
+            return False
+        logger.debug("#{} not upgradeable".format(hostname))
+        return False
 
     def _botnetInfo(self):
         """
@@ -126,6 +126,21 @@ class Botnet:
         """
         temp = self.ut.requestString(self.username, self.password, self.uhash, "vh_botnetInfo.php")
         return temp
+	
+    def upgradesinglebot(self, hostname, ofwhat):
+        """
+        Pass in bot class object and call upgrade function based on bot ID.
+        details :
+        {u'strength': u'22', u'old': u'30', u'mm': u'68359859',
+        u'money': u'66259859', u'costs': u'2100000',
+        u'lvl': u'21', u'new': u'22'}
+        current lvl, bot number, x, x, upgrade cost, lvl, next lvl
+        :return: None 
+        """
+        response = self.ut.requestString(self.username, self.password, self.uhash, "vh_upgradePC.php", hostname=hostname, ofwhat=ofwhat)
+        # not loads the json bug python... try to resolve
+        print(type(response))
+        return True
 
     def __repr__(self):
         return "Botnet details: vHackServers: {0}, Bot Net PC's: {1}".format(self.botNetServers, self.botnet)
@@ -167,7 +182,7 @@ class Bot:
             yield obj
             stream = stream[idx:].lstrip()
 
-    def upgradesinglebot(self, hostname, ofwhat, running):
+    def upgradesinglebot(self, hostname, ofwhat):
         """
         Pass in bot class object and call upgrade function based on bot ID.
         details :
@@ -177,12 +192,12 @@ class Bot:
         current lvl, bot number, x, x, upgrade cost, lvl, next lvl
         :return: None
         """
-        if running == 0:
-            response = self.ut.requestString(self.username, self.password, self.uhash, "vh_upgradePC.php", hostname=hostname, ofwhat=ofwhat)
-            # not loads the json bug python... try to resolve
-            return True
-        else:
-            return False
+        response = self.ut.requestString(self.username, self.password, self.uhash, "vh_upgradePC.php", hostname=hostname, ofwhat=ofwhat)
+        # not loads the json bug python... try to resolve
+        print(type(response))
+        return True
+
 
     def __repr__(self):
+	    
         return "Bot details: running: {0}, energy: {1}, upgrade: {2}, botname: {3}".format(self.running, self.energy, self.ofwhat, self.hostname)
