@@ -97,8 +97,13 @@ class Botnet:
         :return: None
         """
         ofwhat = self.ofwhat[random.randint(0,3)]
-        logger.info("Attempting to upgrade bot net PC's "+ hostname + " [" + ofwhat + "]")
+        logger.info("Prepare attempting to upgrade bot net PC's "+ hostname + " [" + ofwhat + "]")
         get_infobot = self.getInfo()
+
+        if (int(get_infobot['data'][count]['strength']) == 3000):
+            logger.info("bot is complet [max strength 3000] " + hostname)
+            return True
+
         if (int(get_infobot['data'][count]['running']) == 0): 
             new_bal = self.upgradesinglebot(hostname, ofwhat)
             if new_bal:
@@ -126,7 +131,7 @@ class Botnet:
         """
         temp = self.ut.requestString(self.username, self.password, self.uhash, "vh_botnetInfo.php")
         return temp
-	
+    
     def upgradesinglebot(self, hostname, ofwhat):
         """
         Pass in bot class object and call upgrade function based on bot ID.
@@ -139,7 +144,6 @@ class Botnet:
         """
         response = self.ut.requestString(self.username, self.password, self.uhash, "vh_upgradePC.php", hostname=hostname, ofwhat=ofwhat)
         # not loads the json bug python... try to resolve
-        print(type(response))
         return True
 
     def __repr__(self):
@@ -199,5 +203,5 @@ class Bot:
 
 
     def __repr__(self):
-	    
+        
         return "Bot details: running: {0}, energy: {1}, upgrade: {2}, botname: {3}".format(self.running, self.energy, self.ofwhat, self.hostname)
