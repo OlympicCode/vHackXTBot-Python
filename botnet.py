@@ -143,7 +143,9 @@ class Botnet:
         :return: None 
         """
         response = self.ut.requestString(self.username, self.password, self.uhash, "vh_upgradePC.php", hostname=hostname, ofwhat=ofwhat)
-        # not loads the json bug python... try to resolve
+        response = response.split('}{')[0] + '}'
+        jsons = json.loads(response)
+        logger.info(jsons)
         return True
 
     def __repr__(self):
@@ -197,8 +199,9 @@ class Bot:
         :return: None
         """
         response = self.ut.requestString(self.username, self.password, self.uhash, "vh_upgradePC.php", hostname=hostname, ofwhat=ofwhat)
-        # not loads the json bug python... try to resolve
-        print(type(response))
+        response = response.split('}{')[0] + '}'
+        jsons = json.loads(response)
+        logger.info(jsons)
         return True
 
 
