@@ -201,7 +201,7 @@ class Bot:
         response = self.ut.requestString(self.username, self.password, self.uhash, "vh_upgradePC.php", hostname=hostname, ofwhat=ofwhat)
         response = response.split('}{')[0] + '}'
         jsons = json.loads(response)
-        logger.info(jsons)
+        #logger.info(jsons)
         return True
 
 
