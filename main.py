@@ -35,6 +35,7 @@ class run:
         self.maxanti_normal = config.maxanti_normal
         self.active_cluster_protection = config.active_cluster_protection
         self.mode = config.mode
+        self.min_energy_botnet = config.minimal_energy_botnet_upgrade
         self.stat = "0"
         self.wait_load = config.wait_load
         self.c = Console(self.player)
@@ -99,7 +100,7 @@ class run:
             self.ddos.run_ddos()
             if self.BotNet_update:
                 botnet = json.loads(self.b._botnetInfo())
-                if int(botnet['count']) > 0 and int(botnet['energy']) > 0:
+                if int(botnet['count']) > 0 and int(botnet['energy']) > self.min_energy_botnet:
                     for count, i in enumerate(botnet['data']):
                         self.b.upgradebotnet(i['hostname'], int(i['running']), count)
                 else:

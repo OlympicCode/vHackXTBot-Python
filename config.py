@@ -1,7 +1,7 @@
 from random import uniform
 
-user = "username"
-password = "password"
+user = ""
+password = ""
 
 # Enter Max Antivir to attack in normal mode
 maxanti_normal = 3000
@@ -10,7 +10,7 @@ maxanti_normal = 3000
 active_cluster_protection = True
 
 # Use booster
-booster = False
+booster = True
 
 # Finish all task by netcoins
 Use_netcoins = True
@@ -18,17 +18,20 @@ Use_netcoins = True
 # Enter Max Antivir to attack tournament
 maxanti_tournament = 3000
 
+# Enter the minimal energy for update botnet
+minimal_energy_botnet_upgrade = 0
+
 # Enter Amount of Attacks normal
-attacks_normal = 3
+attacks_normal = 2
 
 # Enter Amount of Attacks in tournament
-attacks_tournament = 2
+attacks_tournament = 30
 
 # define the initial mode
 mode = "Secure"
 
 # update botnet auto
-BotNet_update = False
+BotNet_update = True
 
 # check list of more player in tournament and ddos the cluster.
 ddos_cluster = False
@@ -39,16 +42,16 @@ tournament_potator = False
 AttackTournamentDB = False
 Max_point_tournament = 1300
 # Enter Updates (inet, hdd, cpu, ram, fw, av, sdk, ipsp, spam, scan, adw)
-updates = ["ipsp", "adw", "fw", "scan", "sdk", "av"]
+updates = ["ipsp", "fw", "scan", "sdk", "av"]
 # updates = ["fw"]
 # updates = ["ipsp",  "sdk"]
 
 # Do you want to attack during tournament [True, False]
-joinTournament = False
+joinTournament = True
 
 # Time to wait between each cycle in seconds
 wait = round(uniform(0, 1), 2)
-wait_load = round(uniform(1, 3), 2)
+wait_load = round(uniform(0, 3), 2)
 updatecount = 0
 attackneeded = False
 database = 'database.db'
