@@ -142,11 +142,13 @@ class Botnet:
         current lvl, bot number, x, x, upgrade cost, lvl, next lvl
         :return: None 
         """
-        response = self.ut.requestString(self.username, self.password, self.uhash, "vh_upgradePC.php", hostname=hostname, ofwhat=ofwhat)
-        response = response.split('}{')[0] + '}'
+        response = self.ut.requestString(self.username, self.password, self.uhash, "vh_upgradePC.php", hostname=hostname, ofwhat=ofwhat, inst="0", much="1")
         jsons = json.loads(response)
-        logger.info(jsons)
-        return True
+        if int(jsons['result']) == 0:
+            return True
+        else:
+            logger.error("Upgrade " + hostname + " Failed !")
+            return False
 
     def __repr__(self):
         return "Botnet details: vHackServers: {0}, Bot Net PC's: {1}".format(self.botNetServers, self.botnet)
