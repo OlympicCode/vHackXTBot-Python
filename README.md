@@ -19,7 +19,7 @@ Minimal Configuration required
   
 - CPU i3, i5, ARM64, 4 thread Minimum or (4 core for amd).  
 - Ram 128Mo.  
-- OS: Windows 7, Win10,  Linux ALL version, Android 4.4 or Highter.  
+- OS: Windows 7, Win10,  Linux ALL version, Android 4.4 or Higher.  
 - Network speed: ADSL Minimal (100ko/s for download).
 
 
@@ -58,32 +58,7 @@ For centos/redhat
 >$ pip install futures  
 >$ pip install Pillow 
 
-Info 
-Original script [![vHackBot-Install](https://github.com/AtjonTV/vHackBot-install)]  
-I do not guarantee that any script works accept Debian/Ubuntu
-
-Steps to install
-1. Download or copy the Script you need
-2. Execute the script
-3. Edit the `~/vhack-bot/config.py`
-4. Start the bot `python ~/vhack-bot/main.py`
-5. Have fun with your bot!
-
-Install on Debian
->$ cd ~/Downloads  
->$ wget https://raw.githubusercontent.com/AtjonTV/vHackBot-install/master/install-debian.sh  
->$ sudo sh install-debian.sh  
->$ vim ~/vhack-bot/config.py  
->$ python ~/vhack-bot/main.py
-
-Install on Ubuntu
->$ cd ~/Downloads  
->$ wget https://raw.githubusercontent.com/AtjonTV/vHackBot-install/master/install-ubuntu.sh  
->$ sudo sh install-ubuntu.sh  
->$ vim ~/vhack-bot/config.py  
->$ python ~/vhack-bot/main.py
-
-
+### You can find installation scripts at [vHackBot-Install](https://github.com/AtjonTV/vHackBot-install)  
 
 **New Mode Available !**  
 "**Potator**" or "**Secure**" on line 39 in main.py (edit line)
