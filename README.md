@@ -52,13 +52,15 @@ External dependencies you'll need include:
  
  
 To install these on Linux:  
+
+For centos/redhat
 >$ pip install requests   
 >$ pip install futures  
->$ pip install Pillow  
->$ ~~pip install pytesseract~~  
->$ ~~pip install beautifulsoup4~~   
->or  
->$ ~~pip install tesseract~~  
+>$ pip install Pillow 
+
+For Ubuntu 
+>$ chmod +x install.sh  
+>$ ./install.sh  
 
 For launching on Linux distros:  
 >$ python main.py  
