@@ -81,9 +81,10 @@ class run:
                             if int(totaltask) == int(self.get_max_update):
                                 stat = "1"
                         else:
-                            stat = self.u.startTask(self.updates[self.updatecount])
+                            stat, levelupdates = self.u.startTask(self.updates[self.updatecount])
+                            print(levelupdates)
                             if "3" in stat or "0" in stat:
-                                logger.info("updating {} level +1".format(self.updates[self.updatecount]))
+                                logger.info("updating {} level {}".format(self.updates[self.updatecount], levelupdates))
                                 # print "Started Update
                                 logger.info("Waiting... in update")
                                 # u.useBooster()
@@ -100,7 +101,7 @@ class run:
             self.ddos.run_ddos()
             if self.BotNet_update:
                 botnet = json.loads(self.b._botnetInfo())
-                if int(botnet['count']) > 0 and int(botnet['energy']) > self.min_energy_botnet:
+                if int(botnet['count']) > 0 and int(botnet['energy']) >= self.min_energy_botnet:
                     for count, i in enumerate(botnet['data']):
                         self.b.upgradebotnet(i['hostname'], int(i['running']), count)
                 else:
