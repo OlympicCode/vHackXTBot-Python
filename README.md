@@ -83,12 +83,8 @@ Install on Ubuntu
 >$ vim ~/vhack-bot/config.py  
 >$ python ~/vhack-bot/main.py
 
-For Windows:
-```
-Just run the main.exe enter your username and the password and launch
-the password is blank is normal for security. Just press enter for end typing
-```
-  
+
+```  
 **New Mode Available !**  
 "**Potator**" or "**Secure**" on line 39 in main.py (edit line)
 
