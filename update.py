@@ -69,9 +69,10 @@ class Update:
         :return:
         """
         temp = self.ut.requestString(self.username, self.password, self.uhash, "vh_addUpdate.php", utype=type)
+        j = json.loads(temp)
         if "result" in temp:
-            return temp.split('result":"')[1].split('"')[0]
-        return "2"
+            return temp.split('result":"')[1].split('"')[0], j[j['type']]
+        return "2", False
 
     def fillWithTask(self, type):
         """
