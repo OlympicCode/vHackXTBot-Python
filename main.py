@@ -81,10 +81,9 @@ class run:
                             if int(totaltask) == int(self.get_max_update):
                                 stat = "1"
                         else:
-                            stat, levelupdates = self.u.startTask(self.updates[self.updatecount])
-                            print(levelupdates)
+                            (stat, levelupdates) = self.u.startTask(self.updates[self.updatecount])
                             if "3" in stat or "0" in stat:
-                                logger.info("updating {} level {}".format(self.updates[self.updatecount], levelupdates))
+                                logger.info("updating {} level {}".format(self.updates[self.updatecount], int(levelupdates)+1))
                                 # print "Started Update
                                 logger.info("Waiting... in update")
                                 # u.useBooster()
