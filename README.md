@@ -59,7 +59,7 @@ For centos/redhat
 >$ pip install Pillow 
 
 Info 
-Original script [![vHackBot-Install](https://github.com/AtjonTV/vHackBot-install)
+Original script [![vHackBot-Install](https://github.com/AtjonTV/vHackBot-install)]  
 I do not guarantee that any script works accept Debian/Ubuntu
 
 Steps to install
