@@ -84,7 +84,7 @@ Install on Ubuntu
 >$ python ~/vhack-bot/main.py
 
 
-```  
+
 **New Mode Available !**  
 "**Potator**" or "**Secure**" on line 39 in main.py (edit line)
 
