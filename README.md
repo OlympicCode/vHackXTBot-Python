@@ -58,27 +58,25 @@ For centos/redhat
 >$ pip install futures  
 >$ pip install Pillow 
 
-# vHackBot-install
-This is a Script to install vHackBotXT-Python by OlympicCode
-
-## Info
+Info 
+Original script [![vHackBot-Install](https://github.com/AtjonTV/vHackBot-install)
 I do not guarantee that any script works accept Debian/Ubuntu
 
-## Steps to install
+Steps to install
 1. Download or copy the Script you need
 2. Execute the script
 3. Edit the `~/vhack-bot/config.py`
 4. Start the bot `python ~/vhack-bot/main.py`
 5. Have fun with your bot!
 
-## Install on Debian
+Install on Debian
 >$ cd ~/Downloads  
 >$ wget https://raw.githubusercontent.com/AtjonTV/vHackBot-install/master/install-debian.sh  
 >$ sudo sh install-debian.sh  
 >$ vim ~/vhack-bot/config.py  
 >$ python ~/vhack-bot/main.py
 
-## Install on Ubuntu
+Install on Ubuntu
 >$ cd ~/Downloads  
 >$ wget https://raw.githubusercontent.com/AtjonTV/vHackBot-install/master/install-ubuntu.sh  
 >$ sudo sh install-ubuntu.sh  
