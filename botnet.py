@@ -134,34 +134,21 @@ class Botnet:
     
     def upgradesinglebot(self, hostname, ofwhat):
         """
-        Check if there is enough money to upgrade a botnet PC.
-        Cycle through and upgrade until no money.
-        :return: None
+        Pass in bot class object and call upgrade function based on bot ID.
+        details :
+        {u'strength': u'22', u'old': u'30', u'mm': u'68359859',
+        u'money': u'66259859', u'costs': u'2100000',
+        u'lvl': u'21', u'new': u'22'}
+        current lvl, bot number, x, x, upgrade cost, lvl, next lvl
+        :return: None 
         """
-        ofwhat = self.ofwhat[random.randint(0,3)]
-        logger.info("Prepare attempting to upgrade bot net PC's "+ hostname + " [" + ofwhat + "]")
-        get_infobot = self.getInfo()
-        
-        if (int(get_infobot['data'][count]['strength']) == 3000):
-            logger.info("bot is complet [max strength 3000] " + hostname)
+        response = self.ut.requestString(self.username, self.password, self.uhash, "vh_upgradePC.php", hostname=hostname, ofwhat=ofwhat, inst="0", much="1")
+        jsons = json.loads(response)
+        if int(jsons['result']) == 0:
             return True
-
-        if (int(get_infobot['data'][count]['running']) == 0 and int(get_infobot['energy']) > 0): 
-            new_bal = self.upgradesinglebot(hostname, ofwhat)
-            if new_bal:
-                logger.info("wait botnet update working for " + hostname + "...")
-                return True
-
-        elif (int(get_infobot['energy']) > 0):
-            logger.info("your are not energy for update " + hostname + " :(")
+        else:
+            logger.error("Upgrade " + hostname + " Failed !")
             return False
-
-        elif (int(get_infobot['data'][count]['running']) == 1):
-            logger.info(hostname + " running update please wait...")
-            return False
-
-        logger.debug("#{} not upgradeable".format(hostname))
-        return False
 
     def __repr__(self):
         return "Botnet details: vHackServers: {0}, Bot Net PC's: {1}".format(self.botNetServers, self.botnet)
