@@ -153,7 +153,7 @@ class run:
             # attack players
             self.c.attack(self)
 
-            # reinitialise your profil money, email ...
+            # recheck your profil money, email ... 
             run.__init__(self)
 
 if __name__ == "__main__":
