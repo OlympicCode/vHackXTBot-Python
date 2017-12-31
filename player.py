@@ -4,6 +4,10 @@ import json
 import logging
 import sys
 
+logger = logging.getLogger(__name__)
+FORMAT = '%(asctime)s [%(threadName)10s][%(module)10s][%(levelname)8s] %(message)s'
+logging.basicConfig(level=logging.INFO, format=FORMAT)
+
 
 class Player:
     ut = Utils()
@@ -74,6 +78,7 @@ class Player:
             self.remotespyware = j['actadw']
             self.email = int(j['urmail'])
             self.uhash = str(j['uhash'])
+            logger.info("\n Your profile :\n\n Your IP: {0}, Your Score:  {1}, Your netcoins {2}, \n Your rank: {3}, Your Booster: {4}, Active Spyware {5} \n\n".format(j['ip'], j['score'], j['netcoins'], j['rank'], j['boost'], j['actspyware']))
         except:
             exit()
 
