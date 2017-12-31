@@ -21,6 +21,7 @@ class run:
         """
         Pull all variables from config.py file.
         """
+
         self.player = Player()
         self.database = config.database
         self.Max_point_tournament = config.Max_point_tournament
@@ -49,7 +50,6 @@ class run:
     def init(self):
         while True:
             # update the player
-
             time.sleep(self.wait_load)
             stat = "0"
             # prepare account
@@ -144,6 +144,7 @@ class run:
                     self.u.finishAll()
                     self.player.refreshinfo()  # update player info
                     logger.info("I used Netcoins for finish all task.")
+                    
             if self.player.email > 0:
                 time.sleep(self.wait_load)
                 logger.info('Reading mails...')
@@ -152,6 +153,8 @@ class run:
             # attack players
             self.c.attack(self)
 
+            # reinitialise your profil money, email ...
+            run.__init__(self)
 
 if __name__ == "__main__":
     r = run()
