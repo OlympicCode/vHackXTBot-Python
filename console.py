@@ -106,9 +106,10 @@ class Console:
         max_occurence, most_present = 0, 0
         try:
             for c in colors:
-                if c[0] > max_occurence:
-                    (max_occurence, most_present) = c
-                    return max_occurence
+                if c[1][0] == 136:
+                    FBI = True
+                    return FBI
+
         except TypeError:
             raise Exception("Too many colors in the image")
 
@@ -124,7 +125,7 @@ class Console:
         imgdata = base64.b64decode(imgstring)
         image = self.get_main_color(imgdata)
 
-        if image < 13200:
+        if image:
             logger.info("Matched FBI")
             return 1, hostname
 
