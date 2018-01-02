@@ -143,7 +143,7 @@ class Console:
                             spyware = self.ut.requestArray(self.username, self.password, self.uhash, "vh_spywareInfo.php")
                             if int(spyware[0].split(":")[-1]) > 0 and not int(spyware[0].split(":")[-1]) == 0:
                                 self.ut.requestArray(self.username, self.password, self.uhash, "vh_removeSpyware.php")
-                                print "I will remove " + str(spyware[0].split(":")[-1]) + " Spyware for your account."
+                                logger.info("I will remove {} Spyware for your account.".format(str(spyware[0].split(":")[-1])))
                             return result, jsons['ipaddress']
 
                         # else:
