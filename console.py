@@ -137,13 +137,12 @@ class Console:
                         jsons = json.loads(temp)
                         if ".vHack.cc" not in str(jsons['ipaddress']):
                             result = self.attackIP(jsons['ipaddress'], mode)
-                            # remove spyware
-                            """u = Update(self.username, self.password)
-                            spyware = u.SpywareInfo()
-                            if int(spyware[0].split(":")[-1]) > 0 and not int(spyware[0].split(":")[-1]) == 0:
-                                u.removeSpyware()
-                                print "I will remove " + str(spyware[0].split(":")[-1]) + " Spyware for your account."""
 
+                            # remove spyware
+                            spyware = self.ut.requestArray(self.username, self.password, self.uhash, "vh_spywareInfo.php")
+                            if int(spyware[0].split(":")[-1]) > 0 and not int(spyware[0].split(":")[-1]) == 0:
+                                self.ut.requestArray(self.username, self.password, self.uhash, "vh_removeSpyware.php")
+                                print "I will remove " + str(spyware[0].split(":")[-1]) + " Spyware for your account."
                             return result, jsons['ipaddress']
 
                         # else:
