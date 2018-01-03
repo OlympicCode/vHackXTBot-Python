@@ -56,8 +56,18 @@ To install these on Linux:
 For centos/redhat
 >$ pip install requests   
 >$ pip install futures  
->$ pip install Pillow 
+>$ pip install Pillow  
 
+Install Pillow on Android 6.x  
+>$ pkg install python python-dev libjpeg-turbo-dev ndk-sysroot clang  
+>$ python -m pip install wheel  
+>$ LDFLAGS="-L/system/lib/" CFLAGS="-I/data/data/com.termux/files/usr/include/"  python -m pip install pillow  
+
+Install Pillow on Android 7.x  
+>$ pkg install python python-dev libjpeg-turbo-dev ndk-sysroot clang  
+>$ python2 -m pip install wheel  
+>$ LDFLAGS="-L/system/lib/" CFLAGS="-I/data/data/com.termux/files/usr/include/"  python2 -m pip install pillow  
+  
 ### You can find installation scripts at [vHackBot-Install](https://github.com/AtjonTV/vHackBot-install)  
 
 **New Mode Available !**  
