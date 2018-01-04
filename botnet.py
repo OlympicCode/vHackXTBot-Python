@@ -136,7 +136,6 @@ class Botnet:
                     print(int(get_infobot['data'][count][self.ofwhat[i-remove]]), self.ofwhat[i-remove])
                 
             ofwhat = self.ofwhat[random.randint(0,(len(self.ofwhat)-1))]
-            print(self.ofwhat)
 
             new_bal = self.upgradesinglebot(hostname, ofwhat)
             if new_bal:
