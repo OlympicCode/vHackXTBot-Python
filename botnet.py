@@ -129,10 +129,9 @@ class Botnet:
 
             for a, i in enumerate(range(0, 3)):
                 if int(get_infobot['data'][count][self.ofwhat[i]]) == int(maxofwhat):
-                    self.ofwhat.remove(i)
-                    ofwhat = self.ofwhat[random.randint(0,len(self.ofwhat))]
-                else:
-                    ofwhat = self.ofwhat[random.randint(0,(len(self.ofwhat)-1))]
+                    self.ofwhat.remove(self.ofwhat[i])
+            
+            ofwhat = self.ofwhat[random.randint(0,(len(self.ofwhat)-1))]
 
             new_bal = self.upgradesinglebot(hostname, ofwhat)
             if new_bal:
