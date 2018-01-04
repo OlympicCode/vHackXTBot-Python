@@ -129,11 +129,13 @@ class Botnet:
 
             remove = 0
 
-            for a, i in enumerate(xrange(0, 3)):
+            for a, i in enumerate(xrange(0, 4)):
                 if int(get_infobot['data'][count][unicode(self.ofwhat[i-remove])]) == int(maxofwhat):
                     self.ofwhat.remove(self.ofwhat[i-remove])
-                    remove = remove +1
-                    
+                    remove = remove + 1
+                if i == 3:
+                    break
+
             ofwhat = self.ofwhat[random.randint(0,(len(self.ofwhat)-1))]
 
             new_bal = self.upgradesinglebot(hostname, ofwhat)
@@ -141,7 +143,7 @@ class Botnet:
                 logger.info("wait botnet update working for " + hostname + ", [" + ofwhat + "]")
                 return True
 
-        elif (int(get_infobot['energy']) > 0):
+        elif (int(get_infobot['energy']) == 0):
             logger.info("your are not energy for update " + hostname + " :(")
             return False
 
