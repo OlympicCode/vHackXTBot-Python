@@ -96,25 +96,57 @@ class Botnet:
         Cycle through and upgrade until no money.
         :return: None
         """
-        ofwhat = self.ofwhat[random.randint(0,3)]
-        logger.info("Prepare attempting to upgrade bot net PC's "+ hostname + " [" + ofwhat + "]")
+        logger.info("Prepare attempting to upgrade bot net PC's "+ hostname)
         get_infobot = self.getInfo()
 
-        if (int(get_infobot['data'][count]['strength']) == 3000):
-            logger.info("bot is complet [max strength 3000] " + hostname)
-            return True
+        if (int(get_infobot['data'][count]['strength']) == 1120 and int(get_infobot['data'][count]['stars']) == 4):
+            logger.info("bot is complet [max strength 1120] " + hostname + " for level " + str(get_infobot['data'][count]['stars']))
+            return  False
 
-        if (int(get_infobot['data'][count]['running']) == 0): 
+        elif (int(get_infobot['data'][count]['strength']) == 840 and int(get_infobot['data'][count]['stars']) == 3):
+            logger.info("bot is complet [max strength 840] " + hostname + " for level " + str(get_infobot['data'][count]['stars']))
+            return False
+
+        elif (int(get_infobot['data'][count]['strength']) == 600 and int(get_infobot['data'][count]['stars']) == 2):
+            logger.info("bot is complet [max strength 600] " + hostname + " for level " + str(get_infobot['data'][count]['stars']))
+            return False
+
+        elif (int(get_infobot['data'][count]['strength']) == 400 and int(get_infobot['data'][count]['stars']) == 1):
+            logger.info("bot is complet [max strength 400] " + hostname + " for level " + str(get_infobot['data'][count]['stars']))
+            return False
+
+        elif (int(get_infobot['data'][count]['strength']) == 3000 and int(get_infobot['data'][count]['stars']) == 0):
+            logger.info("bot is complet [max strength 3000] " + hostname + " for level " + str(get_infobot['data'][count]['stars']))
+            return False
+
+        if (int(get_infobot['data'][count]['running']) == 0 and int(get_infobot['energy']) > 0):
+
+            if int(get_infobot['data'][count]['stars']) > 0:
+                maxofwhat = 20 + (5*int(get_infobot['data'][count]['stars']))
+            
+            elif int(get_infobot['data'][count]['stars']) == 0:
+                maxofwhat = 250
+
+            for a, i in enumerate(range(0, 3)):
+                if int(get_infobot['data'][count][self.ofwhat[i]]) == int(maxofwhat):
+                    self.ofwhat.remove(i)
+                    ofwhat = self.ofwhat[random.randint(0,len(self.ofwhat))]
+                else:
+                    ofwhat = self.ofwhat[random.randint(0,(len(self.ofwhat)-1))]
+
             new_bal = self.upgradesinglebot(hostname, ofwhat)
             if new_bal:
-                logger.info("wait botnet update working for " + hostname + "...")
+                logger.info("wait botnet update working for " + hostname + ", [" + ofwhat + "]")
                 return True
-            else:
-                logger.info("your are not energy for update " + hostname + " :(")
-                return False
-        else:
+
+        elif (int(get_infobot['energy']) > 0):
+            logger.info("your are not energy for update " + hostname + " :(")
+            return False
+
+        elif (int(get_infobot['data'][count]['running']) == 1):
             logger.info(hostname + " running update please wait...")
             return False
+
         logger.debug("#{} not upgradeable".format(hostname))
         return False
 
@@ -201,9 +233,10 @@ class Bot:
         :return: None
         """
         response = self.ut.requestString(self.username, self.password, self.uhash, "vh_upgradePC.php", hostname=hostname, ofwhat=ofwhat)
-        #response = response.split('}{')[0] + '}'
-        #jsons = json.loads(response)
-        #logger.info(jsons)
+        response = response.split('}{')[0] + '}'
+        print(response)
+        jsons = json.loads(response)
+        logger.info(jsons)
         return True
 
 
