@@ -91,12 +91,13 @@ class Botnet:
             else:
                 logger.info("Botnet #{} not hackable as yet".format(i))
 
-        def upgradebotnet(self, hostname, running, count):
+    def upgradebotnet(self, hostname, running, count):
         """
         Check if there is enough money to upgrade a botnet PC.
         Cycle through and upgrade until no money.
         :return: None
         """
+        
         ofwhat = self.ofwhat[random.randint(0,len(self.ofwhat)-1)]
         logger.info("Prepare attempting to upgrade bot net PC '"+ hostname +"'")
         get_infobot = self.getInfo()
