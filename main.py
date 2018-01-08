@@ -48,6 +48,8 @@ class run:
         self.init()
 
     def init(self):
+        if(self.updates == "ALL"):
+            self.updates = ["inet","hdd","cpu","ram","fw","av","sdk","ipsp","spam","scan","adw"]
         while True:
             # update the player
             time.sleep(self.wait_load)

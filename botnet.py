@@ -6,6 +6,7 @@ from utils import Utils
 import json
 import logging
 import random
+import config
 logger = logging.getLogger(__name__)
 
 
@@ -19,7 +20,7 @@ class Botnet:
         self.botNetServers = 3
         self.botnet = []
         self.p = player
-        self.ofwhat = ["fw", "av", "smash", "mwk"]
+        self.ofwhat = config.BotNet_updates
         self.energy = 0
         self._initbot()
 
@@ -29,12 +30,14 @@ class Botnet:
         and populate and array of Bot class
         :return: none
         """
+        if(self.ofwhat == "ALL"):
+            self.ofwhat = ["fw", "av", "smash", "mwk"]
         data = self._botnetInfo()
         bots = json.loads(data)
         self.botnet = []
         if int(bots['count']) > 0:
             for i in bots['data']:
-                bot = Bot(i['running'], self.ofwhat[random.randint(0,3)], self.energy, i['hostname'],  self.username, self.password, self.uhash)
+                bot = Bot(i['running'], self.ofwhat[random.randint(0,len(self.ofwhat)-1)], self.energy, i['hostname'],  self.username, self.password, self.uhash)
                 self.botnet.append(bot)
 
     def printbots(self):
@@ -77,18 +80,18 @@ class Botnet:
 
         for i in range(1, self.botNetServers + 1):
             if cinfo[i - 1] == '1':
-                logger.debug('attacking #{}'.format(i))
+                logger.debug('I am attacking #{}'.format(i))
                 if i == 1:
                     response = self.ut.requestString(self.username, self.password, self.uhash, "vh_attackCompany.php", company=str(i))
                 else:
                     response = self.ut.requestString(self.username, self.password, self.uhash, "vh_attackCompany" + str(i) + ".php", company=str(i))
-                logger.debug('attack #{} response {}'.format(i, response))
+                logger.debug('I attacked #{} with response {}'.format(i, response))
                 if response == '0':
                     logger.info('#{} Netcoins gained'.format(i))
                 else:
                     logger.info('#{} Failed! No netcoins...'.format(i))
             else:
-                logger.info("Botnet #{} not hackable as yet".format(i))
+                logger.info("Botnet #{} not hackable yet".format(i))
 
     def upgradebotnet(self, hostname, running, count):
         """
@@ -96,27 +99,28 @@ class Botnet:
         Cycle through and upgrade until no money.
         :return: None
         """
-        logger.info("Prepare attempting to upgrade bot net PC's "+ hostname)
+        ofwhat = self.ofwhat[random.randint(0,len(self.ofwhat)-1)]
+        logger.info("Prepare attempting to upgrade bot net PC '"+ hostname +"'")
         get_infobot = self.getInfo()
 
         if (int(get_infobot['data'][count]['strength']) == 1120 and int(get_infobot['data'][count]['stars']) == 4):
-            logger.info("bot is complet [max strength 1120] " + hostname + " for level " + str(get_infobot['data'][count]['stars']))
+            logger.info("Bot '"+hostname+"' has max strength [1120] for level " + str(get_infobot['data'][count]['stars']))
             return  False
 
         elif (int(get_infobot['data'][count]['strength']) == 840 and int(get_infobot['data'][count]['stars']) == 3):
-            logger.info("bot is complet [max strength 840] " + hostname + " for level " + str(get_infobot['data'][count]['stars']))
+            logger.info("Bot '"+hostname+"' has max strength [840] for level " + str(get_infobot['data'][count]['stars']))
             return False
 
         elif (int(get_infobot['data'][count]['strength']) == 600 and int(get_infobot['data'][count]['stars']) == 2):
-            logger.info("bot is complet [max strength 600] " + hostname + " for level " + str(get_infobot['data'][count]['stars']))
+            logger.info("Bot '"+hostname+"' has max strength [600] for level " + str(get_infobot['data'][count]['stars']))
             return False
 
         elif (int(get_infobot['data'][count]['strength']) == 400 and int(get_infobot['data'][count]['stars']) == 1):
-            logger.info("bot is complet [max strength 400] " + hostname + " for level " + str(get_infobot['data'][count]['stars']))
+            logger.info("Bot '"+hostname+"' has max strength [400] for level " + str(get_infobot['data'][count]['stars']))
             return False
 
         elif (int(get_infobot['data'][count]['strength']) == 3000 and int(get_infobot['data'][count]['stars']) == 0):
-            logger.info("bot is complet [max strength 3000] " + hostname + " for level " + str(get_infobot['data'][count]['stars']))
+            logger.info("Bot '"+hostname+"' has max strength [3000] for level " + str(get_infobot['data'][count]['stars']))
             return False
 
         if (int(get_infobot['data'][count]['running']) == 0 and int(get_infobot['energy']) > 0):
@@ -129,7 +133,7 @@ class Botnet:
 
             remove = 0
 
-            for a, i in enumerate(xrange(0, 4)):
+            for a, i in enumerate(xrange(0, len(self.ofwhat)-1)):
                 if int(get_infobot['data'][count][unicode(self.ofwhat[i-remove])]) == int(maxofwhat):
                     self.ofwhat.remove(self.ofwhat[i-remove])
                     remove = remove + 1
@@ -140,18 +144,18 @@ class Botnet:
 
             new_bal = self.upgradesinglebot(hostname, ofwhat)
             if new_bal:
-                logger.info("wait botnet update working for " + hostname + ", [" + ofwhat + "]")
+                logger.info("Waiting! Doing updates for bot '" + hostname + "', [" + ofwhat + "]")
                 return True
 
         elif (int(get_infobot['energy']) == 0):
-            logger.info("your are not energy for update " + hostname + " :(")
+            logger.info("You don't have enough energy to upgrade '" + hostname + "'! :(")
             return False
 
         elif (int(get_infobot['data'][count]['running']) == 1):
-            logger.info(hostname + " running update please wait...")
+            logger.info("Waiting! Doing updates for bot '" + hostname + "', [" + ofwhat + "]")
             return False
 
-        logger.debug("#{} not upgradeable".format(hostname))
+        logger.debug("The bot '{}' is not upgradeable".format(hostname))
         return False
 
     def _botnetInfo(self):
@@ -183,7 +187,7 @@ class Botnet:
         if int(jsons['result']) == 0:
             return True
         else:
-            logger.error("Upgrade " + hostname + " Failed !")
+            logger.error("Upgrades on " + hostname + " Failed !")
             return False
 
     def __repr__(self):
@@ -237,10 +241,9 @@ class Bot:
         :return: None
         """
         response = self.ut.requestString(self.username, self.password, self.uhash, "vh_upgradePC.php", hostname=hostname, ofwhat=ofwhat)
-        response = response.split('}{')[0] + '}'
-        print(response)
-        jsons = json.loads(response)
-        logger.info(jsons)
+        #response = response.split('}{')[0] + '}'
+        #jsons = json.loads(response)
+        #logger.info(jsons)
         return True
 
 

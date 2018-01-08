@@ -13,7 +13,7 @@ active_cluster_protection = True
 booster = True
 
 # Finish all task by netcoins
-Use_netcoins = True
+Use_netcoins = False
 
 # Enter Max Antivir to attack tournament
 maxanti_tournament = 3000
@@ -33,6 +33,10 @@ mode = "Secure"
 # update botnet auto
 BotNet_update = True
 
+# Enter Updates (fw, av, smash, mwk)
+BotNet_updates = ["fw", "av", "smash", "mwk"]
+#BotNet_updates = "ALL" # Makes all updates
+
 # check list of more player in tournament and ddos the cluster.
 ddos_cluster = False
 
@@ -43,11 +47,10 @@ AttackTournamentDB = False
 Max_point_tournament = 1300
 # Enter Updates (inet, hdd, cpu, ram, fw, av, sdk, ipsp, spam, scan, adw)
 updates = ["ipsp", "fw", "scan", "sdk", "av"]
-# updates = ["fw"]
-# updates = ["ipsp",  "sdk"]
+#updates = "ALL" # Makes all updates
 
 # Do you want to attack during tournament [True, False]
-joinTournament = True
+joinTournament = False
 
 # Time to wait between each cycle in seconds
 wait = round(uniform(0, 1), 2)
