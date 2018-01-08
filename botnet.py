@@ -30,6 +30,8 @@ class Botnet:
         and populate and array of Bot class
         :return: none
         """
+        if(self.ofwhat == "ALL"):
+            self.ofwhat = ["fw", "av", "smash", "mwk"]
         data = self._botnetInfo()
         bots = json.loads(data)
         self.botnet = []
@@ -78,18 +80,18 @@ class Botnet:
 
         for i in range(1, self.botNetServers + 1):
             if cinfo[i - 1] == '1':
-                logger.debug('attacking #{}'.format(i))
+                logger.debug('I am attacking #{}'.format(i))
                 if i == 1:
                     response = self.ut.requestString(self.username, self.password, self.uhash, "vh_attackCompany.php", company=str(i))
                 else:
                     response = self.ut.requestString(self.username, self.password, self.uhash, "vh_attackCompany" + str(i) + ".php", company=str(i))
-                logger.debug('attack #{} response {}'.format(i, response))
+                logger.debug('I attacked #{} with response {}'.format(i, response))
                 if response == '0':
                     logger.info('#{} Netcoins gained'.format(i))
                 else:
                     logger.info('#{} Failed! No netcoins...'.format(i))
             else:
-                logger.info("Botnet #{} not hackable as yet".format(i))
+                logger.info("Botnet #{} not hackable yet".format(i))
 
     def upgradebotnet(self, hostname, running, count):
         """
@@ -97,7 +99,6 @@ class Botnet:
         Cycle through and upgrade until no money.
         :return: None
         """
-        
         ofwhat = self.ofwhat[random.randint(0,len(self.ofwhat)-1)]
         logger.info("Prepare attempting to upgrade bot net PC '"+ hostname +"'")
         get_infobot = self.getInfo()
@@ -151,7 +152,7 @@ class Botnet:
             return False
 
         elif (int(get_infobot['data'][count]['running']) == 1):
-            logger.info("Waiting! Doing updates for bot '" + hostname + "' ..")
+            logger.info("Waiting! Doing updates for bot '" + hostname + "', [" + ofwhat + "]")
             return False
 
         logger.debug("The bot '{}' is not upgradeable".format(hostname))
@@ -186,7 +187,7 @@ class Botnet:
         if int(jsons['result']) == 0:
             return True
         else:
-            logger.error("Upgrade " + hostname + " Failed !")
+            logger.error("Upgrades on " + hostname + " Failed !")
             return False
 
     def __repr__(self):
@@ -240,10 +241,9 @@ class Bot:
         :return: None
         """
         response = self.ut.requestString(self.username, self.password, self.uhash, "vh_upgradePC.php", hostname=hostname, ofwhat=ofwhat)
-        response = response.split('}{')[0] + '}'
-        print(response)
-        jsons = json.loads(response)
-        logger.info(jsons)
+        #response = response.split('}{')[0] + '}'
+        #jsons = json.loads(response)
+        #logger.info(jsons)
         return True
 
 
