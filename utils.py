@@ -74,7 +74,7 @@ USER_AGENT = ['Dalvik/2.1.0 (Linux; U; Android 5.0.1; GT-I9508V Build/LRX22C)',
 class Utils:
     def __init__(self):
         self.secret = "aeffI"
-        self.url = "https://api.vhack.cc/v/15/"
+        self.url = "https://api.vhack.cc/v/16/"
         self.username = config.user
         self.password = config.password
         self.user_agent = ""
@@ -135,7 +135,7 @@ class Utils:
     def requestString(self, username, password, uhash, php, **kwargs):
         logger.debug("Request: {}".format(php))
         self.user_agent = self.generateUA(username + password)
-        time.sleep(1)
+        time.sleep(0.3)
         t = None
         i = 0
         while t is None:
