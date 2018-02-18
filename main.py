@@ -36,6 +36,7 @@ class run:
         self.maxanti_normal = config.maxanti_normal
         self.active_cluster_protection = config.active_cluster_protection
         self.mode = config.mode
+        self.number_task = config.number_task
         self.min_energy_botnet = config.minimal_energy_botnet_upgrade
         self.stat = "0"
         self.wait_load = config.wait_load
@@ -48,20 +49,21 @@ class run:
         self.init()
 
     def init(self):
-        if(self.updates == "ALL"):
-            self.updates = ["inet","hdd","cpu","ram","fw","av","sdk","ipsp","spam","scan","adw"]
         while True:
             # update the player
             time.sleep(self.wait_load)
             stat = "0"
             # prepare account
-            self.get_max_update = int(self.u.infoUpdate("ram", "new")) - 1
+            if self.number_task:
+                self.get_max_update = int(self.number_task)
+            else:
+                self.get_max_update = int(self.u.infoUpdate("ram", "new")) - 1
             self.running_all = self.u.runningtasks()
             logger.info("you are running {}/{} tasks".format(self.running_all, self.get_max_update))
 
             if int(self.running_all) < int(self.get_max_update):
                 while "0" in stat or "3" in stat:
-                    if int(self.u.runningtasks()) < int(self.u.infoUpdate("ram", "new")) - 1:
+                    if int(self.u.runningtasks()) < int(self.u.infoUpdate("ram", "new")) - 1 or int(self.u.runningtasks()) < int(self.get_max_update):
                         try:
                             moneyforupdate = int(self.u.infoUpdate(self.updates[self.updatecount]))
                         except IndexError:
@@ -155,7 +157,7 @@ class run:
             # attack players
             self.c.attack(self)
 
-            # recheck your profil money, email ... 
+            # reinitialise your profil money, email ...
             run.__init__(self)
 
 if __name__ == "__main__":
