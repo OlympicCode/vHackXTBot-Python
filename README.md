@@ -69,7 +69,7 @@ start for Android 6.x
 >$ python main.py  
 
 Install Pillow on Android 7.x  
->$ pkg install python python-dev libjpeg-turbo-dev ndk-sysroot clang  
+>$ pkg install python python2-dev libjpeg-turbo-dev ndk-sysroot clang  
 >$ python2 -m pip install wheel  
 >$ LDFLAGS="-L/system/lib/" CFLAGS="-I/data/data/com.termux/files/usr/include/"  python2 -m pip install pillow    
 >$ python2 -m pip install request  
